@@ -1,0 +1,6 @@
+# Emacs
+\#*\#
+*_flymake.*
+
+# macOS
+.DS_Store
