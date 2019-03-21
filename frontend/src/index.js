@@ -9,14 +9,14 @@ import Create from './Create';
 import NotFound from './NotFound';
 
 const routing = (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={App} />
-        <Route path="/browse" component={Browse} />
-        <Route path="/create" component={Create} />
-        <Route component={NotFound}/>
-      </Switch>
-    </Router>
+  <Router>
+    <Switch>
+      <Route exact path="/" component={App} />
+      <Route path="/browse" component={Browse} />
+      <Route path="/create" component={Create} />
+      <Route component={NotFound} />
+    </Switch>
+  </Router>
 );
 
 ReactDOM.render(routing, document.getElementById('root'));
