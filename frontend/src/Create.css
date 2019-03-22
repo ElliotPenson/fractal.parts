@@ -1,0 +1,14 @@
+.Create {
+  padding: 4em;
+}
+
+.Create textarea {
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+  font-size: 2.7em;
+  line-height: 1.23;
+}
+
+.Create button {
+  margin: 0 0.15em;
+}
