@@ -3,20 +3,22 @@
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App h2 {
-  color: white;
+.App h1 {
+  font-size: calc(40px + 3vmin);
+  margin-bottom: 0.3em;
+}
+
+.App p {
+  font-size: 2vmin;
 }
 
 .App button {
-  margin: 0 5px;
+  margin: 0 0.3em;
 }
