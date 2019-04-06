@@ -1,0 +1,40 @@
+Graphics UML Diagram
+
+            +------------+
+            | Controller |
+            +------------+
+            |composition |
+            |add(Shape)  |
+            +------------+
+                   ▲
+                   ▼
+                   |
+                   |
+             +----------+
+             | Template |
+             +----------+
+             |shapes    |
+             |draw()    |
+             +----------+
+                   ▲
+                   ▼
+                   |
+                   |
+            +-------------+
+            |    Shape    |
+            +-------------+
+            |draw()       |
+            +-------------+
+                   |
+                   |
+    +--------------▲-------------+
+    |              |             |
++---------+     +------+     +--------+
+|Rectangle|     |Circle|     |Triangle|
++---------+     +------+     +--------+
+
+KEY:
+* Association: ---
+* Aggregation: ◁ ▷-
+* Composition: ◀ ▶-
+* Inheritance: ▲--
