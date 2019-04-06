@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Typography, Button } from 'antd';
 
 import Canvas from './Canvas';
+import { Controller } from '../graphics/Controller';
 
 import './Create.css';
 
@@ -17,7 +18,13 @@ class Create extends Component {
     this.setState({ title });
   };
 
-  handleCanvas = () => {};
+  handleCanvas = canvas => {
+    this.controller = new Controller(canvas);
+  };
+
+  handleNew = () => {
+    this.controller.add();
+  };
 
   render() {
     return (
@@ -27,7 +34,9 @@ class Create extends Component {
         </Title>
         <Canvas width="750" height="750" onRef={this.handleCanvas} />
         <div>
-          <Button size="large">New</Button>
+          <Button size="large" onClick={this.handleNew}>
+            New
+          </Button>
         </div>
       </div>
     );

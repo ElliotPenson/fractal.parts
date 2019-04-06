@@ -6,7 +6,6 @@ export class Controller {
     this.canvas = canvas;
     this.template = new Template(canvas);
     this.render();
-    this.attachEvents();
   }
 
   add() {
