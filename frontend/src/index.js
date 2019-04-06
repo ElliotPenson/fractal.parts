@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import './index.css';
-import App from './App';
-import Browse from './Browse';
-import Create from './Create';
-import NotFound from './NotFound';
+import App from './components/App';
+import Browse from './components/Browse';
+import Create from './components/Create';
+import NotFound from './components/NotFound';
 
 const routing = (
   <Router>
