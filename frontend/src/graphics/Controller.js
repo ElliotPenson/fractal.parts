@@ -6,7 +6,11 @@ export class Controller {
     this.canvas = canvas;
     this.template = new Template(canvas);
     this.render();
-    this.attachEvents();
+    this.attachListeners();
+  }
+
+  render() {
+    this.template.draw();
   }
 
   add() {
@@ -15,29 +19,30 @@ export class Controller {
     this.render();
   }
 
-  render() {
-    this.template.draw();
-  }
-
-  attachEvents() {
-    window.addEventListener('mousedown', event => {
-      const x = event.pageX - this.canvas.offsetLeft;
-      const y = event.pageY - this.canvas.offsetTop;
+  attachListeners() {
+    this.on('mousedown', event => {
+      const { x, y } = findPosition(event, this.canvas);
       this.template.pressMouse(x, y);
-      this.render();
     });
-    window.addEventListener('mousemove', event => {
+    this.on('mousemove', event => {
       this.template.moveMouse(event.movementX, event.movementY);
-      this.render();
     });
-    window.addEventListener('mouseup', event => {
+    this.on('mouseup', () => {
       this.template.liftMouse();
-      this.render();
     });
-    window.addEventListener('keydown', event => {
+    this.on('keydown', event => {
       if (isDeletion(event.key)) {
         this.template.delete();
       }
+    });
+    this.on('copy', () => this.template.copy());
+    this.on('paste', () => this.template.paste());
+    this.on('cut', () => this.template.cut());
+  }
+
+  on(eventType, reaction) {
+    window.addEventListener(eventType, event => {
+      reaction(event);
       this.render();
     });
   }
@@ -45,4 +50,10 @@ export class Controller {
 
 function isDeletion(key) {
   return ['backspace', 'clear', 'delete', 'del'].includes(key.toLowerCase());
+}
+
+function findPosition(event, canvas) {
+  const x = event.pageX - canvas.offsetLeft;
+  const y = event.pageY - canvas.offsetTop;
+  return { x, y };
 }

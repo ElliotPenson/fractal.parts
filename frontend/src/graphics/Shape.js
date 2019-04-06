@@ -10,6 +10,10 @@ export class Shape {
     throw new Error('Not implemented');
   }
 
+  clone() {
+    throw new Error('Not implemented');
+  }
+
   pressMouse(x, y, consumed) {
     if (!consumed && this.isTouching(x, y)) {
       this.isClicked = true;
@@ -60,6 +64,10 @@ export class Rectangle extends Shape {
     context.lineWidth = 2;
     context.fillStyle = 'black';
     context.strokeRect(x, y, width, height);
+  }
+
+  clone() {
+    return new Rectangle(this.x + 10, this.y + 10, this.width, this.width);
   }
 
   isTouching(x, y) {

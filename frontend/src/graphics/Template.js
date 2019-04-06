@@ -5,6 +5,7 @@ export class Template {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.shapes = [];
+    this.clipboard = null;
   }
 
   add(shape) {
@@ -24,6 +25,25 @@ export class Template {
     const { context, canvas } = this;
     context.fillStyle = 'white';
     context.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  copy() {
+    const target = this.shapes.find(shape => shape.isClicked);
+    if (target) {
+      this.clipboard = target.clone();
+    }
+  }
+
+  paste() {
+    if (this.clipboard) {
+      this.add(this.clipboard);
+      this.clipboard = this.clipboard.clone();
+    }
+  }
+
+  cut() {
+    this.copy();
+    this.delete();
   }
 
   pressMouse(x, y) {
