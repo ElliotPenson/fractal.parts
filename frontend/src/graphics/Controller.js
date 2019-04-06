@@ -34,5 +34,15 @@ export class Controller {
       this.template.liftMouse();
       this.render();
     });
+    window.addEventListener('keydown', event => {
+      if (isDeletion(event.key)) {
+        this.template.delete();
+      }
+      this.render();
+    });
   }
+}
+
+function isDeletion(key) {
+  return ['backspace', 'clear', 'delete', 'del'].includes(key.toLowerCase());
 }

@@ -11,6 +11,10 @@ export class Template {
     this.shapes.push(shape);
   }
 
+  delete() {
+    this.shapes = this.shapes.filter(shape => !shape.isClicked);
+  }
+
   draw() {
     this.clear();
     this.shapes.forEach(shape => shape.draw(this.context));
