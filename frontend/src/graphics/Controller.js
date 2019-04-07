@@ -1,5 +1,5 @@
 import { Template } from './Template';
-import { Rectangle } from './Shape';
+import { Rectangle } from './Rectangle';
 import { colors } from './colors';
 
 export class Controller {
