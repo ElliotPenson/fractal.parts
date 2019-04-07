@@ -1,7 +1,6 @@
-const color = 'rgb(0, 116, 217, 0.8)';
-
 export class Shape {
-  constructor() {
+  constructor(color) {
+    this.color = color;
     this.isClicked = false;
     this.isDragging = false;
   }
@@ -38,8 +37,8 @@ export class Shape {
 }
 
 export class Rectangle extends Shape {
-  constructor(x, y, width, height) {
-    super();
+  constructor(x, y, width, height, color) {
+    super(color);
     this.x = x;
     this.y = y;
     this.width = width;
@@ -55,7 +54,7 @@ export class Rectangle extends Shape {
 
   drawFill(context) {
     const { x, y, width, height } = this;
-    context.fillStyle = color;
+    context.fillStyle = this.color;
     context.fillRect(x, y, width, height);
   }
 

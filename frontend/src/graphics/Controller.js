@@ -1,5 +1,6 @@
 import { Template } from './Template';
 import { Rectangle } from './Shape';
+import { colors } from './colors';
 
 export class Controller {
   constructor(canvas) {
@@ -7,6 +8,7 @@ export class Controller {
     this.template = new Template(canvas);
     this.render();
     this.attachListeners();
+    this.colors = colors();
   }
 
   render() {
@@ -14,7 +16,9 @@ export class Controller {
   }
 
   add() {
-    const shape = new Rectangle(100, 100, 100, 100);
+    // TODO: Move colors into the Template class.
+    const color = this.colors.next().value;
+    const shape = new Rectangle(100, 100, 150, 150, color);
     this.template.add(shape);
     this.render();
   }
