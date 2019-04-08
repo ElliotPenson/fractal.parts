@@ -22,8 +22,16 @@ class Create extends Component {
     this.controller = new Controller(canvas);
   };
 
-  handleNew = () => {
-    this.controller.add();
+  handleRectangle = () => {
+    this.controller.addRectangle();
+  };
+
+  handleTriangle = () => {
+    this.controller.addTriangle();
+  };
+
+  handleEllipse = () => {
+    this.controller.addEllipse();
   };
 
   render() {
@@ -34,8 +42,14 @@ class Create extends Component {
         </Title>
         <Canvas width="750" height="750" onRef={this.handleCanvas} />
         <div>
-          <Button size="large" onClick={this.handleNew}>
-            New
+          <Button size="large" onClick={this.handleRectangle}>
+            New Rectangle
+          </Button>
+          <Button size="large" onClick={this.handleTriangle}>
+            New Triangle
+          </Button>
+          <Button size="large" onClick={this.handleEllipse}>
+            New Ellipse
           </Button>
         </div>
       </div>

@@ -10,11 +10,12 @@ import {
 } from './Handle';
 
 export class Shape {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, color) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
+    this.color = color;
     this.isClicked = false;
     this.isDragging = false;
     this.handles = this.createHandles();

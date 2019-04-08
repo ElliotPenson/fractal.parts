@@ -1,5 +1,7 @@
 import { Template } from './Template';
 import { Rectangle } from './Rectangle';
+import { Triangle } from './Triangle';
+import { Ellipse } from './Ellipse';
 import { colors } from './colors';
 
 export class Controller {
@@ -15,10 +17,24 @@ export class Controller {
     this.template.draw();
   }
 
-  add() {
-    // TODO: Move colors into the Template class.
+  // TODO: Combine these methods when the user chooses a shape.
+  addRectangle() {
     const color = this.colors.next().value;
     const shape = new Rectangle(100, 100, 150, 150, color);
+    this.template.add(shape);
+    this.render();
+  }
+
+  addTriangle() {
+    const color = this.colors.next().value;
+    const shape = new Triangle(100, 100, 150, 150, color);
+    this.template.add(shape);
+    this.render();
+  }
+
+  addEllipse() {
+    const color = this.colors.next().value;
+    const shape = new Ellipse(100, 100, 150, 150, color);
     this.template.add(shape);
     this.render();
   }

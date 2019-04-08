@@ -1,15 +1,19 @@
 import { Shape } from './Shape';
 
-export class Rectangle extends Shape {
+export class Triangle extends Shape {
   draw(context) {
     const { x, y, width, height } = this;
     context.fillStyle = this.color;
-    context.fillRect(x, y, width, height);
+    context.beginPath();
+    context.moveTo(x + 0.5 * width, y);
+    context.lineTo(x + width, y + height);
+    context.lineTo(x, y + height);
+    context.fill();
     super.draw(context);
   }
 
   clone() {
-    return new Rectangle(
+    return new Triangle(
       this.x + 10,
       this.y + 10,
       this.width,
