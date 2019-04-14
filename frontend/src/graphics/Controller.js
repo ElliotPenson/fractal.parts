@@ -45,7 +45,8 @@ export class Controller {
       this.template.pressMouse(x, y);
     });
     this.on('mousemove', event => {
-      this.template.moveMouse(event.movementX, event.movementY);
+      const { x, y } = findPosition(event, this.canvas);
+      this.template.moveMouse(event.movementX, event.movementY, x, y);
     });
     this.on('mouseup', () => {
       this.template.liftMouse();

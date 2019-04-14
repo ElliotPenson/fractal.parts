@@ -169,11 +169,12 @@ export class RotationHandle extends Handle {
     return { x: parent.x + parent.width * 0.5, y: parent.y - offset };
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(deltaX, deltaY, x, y) {
     if (this.isDragging) {
-      const opposite = deltaX;
-      const adjacent = this.parent.height * 0.5 + this.offset + deltaY;
-      this.parent.rotation += convertToDegrees(math.atan(opposite / adjacent));
+      const [centerX, centerY] = this.parent.center;
+      const opposite = x - centerX;
+      const adjacent = centerY - y;
+      this.parent.rotation = convertToDegrees(Math.atan2(opposite, adjacent));
     }
   }
 }

@@ -56,7 +56,7 @@ export class Template {
     this.shapes.forEach(shape => shape.liftMouse());
   }
 
-  moveMouse(deltaX, deltaY) {
-    this.shapes.forEach(shape => shape.moveMouse(deltaX, deltaY));
+  moveMouse(deltaX, deltaY, x, y) {
+    this.shapes.forEach(shape => shape.moveMouse(deltaX, deltaY, x, y));
   }
 }

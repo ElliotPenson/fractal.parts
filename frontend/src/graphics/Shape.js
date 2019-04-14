@@ -72,12 +72,12 @@ export class Shape {
     this.handles.forEach(handle => handle.liftMouse());
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(deltaX, deltaY, x, y) {
     if (this.isDragging) {
       this.x += deltaX;
       this.y += deltaY;
     }
-    this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY));
+    this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY, x, y));
   }
 
   createHandles() {
