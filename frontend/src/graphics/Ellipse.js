@@ -1,7 +1,7 @@
 import { Shape } from './Shape';
 
 export class Ellipse extends Shape {
-  draw(context) {
+  drawBody(context) {
     const { x, y, width, height } = this;
     context.fillStyle = this.color;
     context.beginPath();
@@ -9,7 +9,6 @@ export class Ellipse extends Shape {
     const radius = { x: 0.5 * width, y: 0.5 * height };
     context.ellipse(center.x, center.y, radius.x, radius.y, 0, 0, 2 * Math.PI);
     context.fill();
-    super.draw(context);
   }
 
   clone() {

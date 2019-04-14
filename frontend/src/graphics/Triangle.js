@@ -1,7 +1,7 @@
 import { Shape } from './Shape';
 
 export class Triangle extends Shape {
-  draw(context) {
+  drawBody(context) {
     const { x, y, width, height } = this;
     context.fillStyle = this.color;
     context.beginPath();
@@ -9,7 +9,6 @@ export class Triangle extends Shape {
     context.lineTo(x + width, y + height);
     context.lineTo(x, y + height);
     context.fill();
-    super.draw(context);
   }
 
   clone() {

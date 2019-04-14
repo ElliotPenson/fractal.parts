@@ -1,11 +1,10 @@
 import { Shape } from './Shape';
 
 export class Rectangle extends Shape {
-  draw(context) {
+  drawBody(context) {
     const { x, y, width, height } = this;
     context.fillStyle = this.color;
     context.fillRect(x, y, width, height);
-    super.draw(context);
   }
 
   clone() {

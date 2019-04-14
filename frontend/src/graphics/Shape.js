@@ -1,3 +1,4 @@
+import { Transformation } from './Transformation';
 import {
   LeftHandle,
   RightHandle,
@@ -10,28 +11,38 @@ import {
 } from './Handle';
 
 export class Shape {
-  constructor(x, y, width, height, color) {
+  constructor(x, y, width, height, color = 'black', rotation = 20) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.color = color;
+    this.rotation = rotation;
     this.isClicked = false;
     this.isDragging = false;
     this.handles = this.createHandles();
   }
 
-  draw(context) {
-    if (this.isClicked) {
-      this.handles.forEach(handle => handle.draw(context));
-    }
+  get center() {
+    const { x, y, width, height } = this;
+    return [x + width / 2, y + height / 2];
   }
 
-  clone() {
-    throw new Error('Not implemented');
+  get transformation() {
+    return Transformation.fromShape(this);
+  }
+
+  draw(context) {
+    this.transformation.decorate(context, () => {
+      this.drawBody(context);
+      if (this.isClicked) {
+        this.handles.forEach(handle => handle.draw(context));
+      }
+    });
   }
 
   pressMouse(x, y, consumed) {
+    [x, y] = this.transformation.localize(x, y);
     if (consumed) {
       this.isClicked = false;
     } else {
@@ -79,5 +90,17 @@ export class Shape {
       new LowerLeftHandle(this),
       new LowerRightHandle(this)
     ];
+  }
+
+  drawBody(context) {
+    throw new Error('Not implemented');
+  }
+
+  clone() {
+    throw new Error('Not implemented');
+  }
+
+  isTouching(x, y) {
+    throw new Error('Not implemented');
   }
 }
