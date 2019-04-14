@@ -13,7 +13,8 @@ export class Rectangle extends Shape {
       this.y + 10,
       this.width,
       this.height,
-      this.color
+      this.color,
+      this.rotation
     );
   }
 
