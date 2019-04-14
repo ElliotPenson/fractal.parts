@@ -7,11 +7,12 @@ import {
   UpperLeftHandle,
   UpperRightHandle,
   LowerLeftHandle,
-  LowerRightHandle
+  LowerRightHandle,
+  RotationHandle
 } from './Handle';
 
 export class Shape {
-  constructor(x, y, width, height, color = 'black', rotation = 20) {
+  constructor(x, y, width, height, color = 'black', rotation = 0) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -88,7 +89,8 @@ export class Shape {
       new UpperLeftHandle(this),
       new UpperRightHandle(this),
       new LowerLeftHandle(this),
-      new LowerRightHandle(this)
+      new LowerRightHandle(this),
+      new RotationHandle(this)
     ];
   }
 

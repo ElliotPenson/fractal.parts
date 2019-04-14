@@ -5,3 +5,7 @@ export function reverse(array) {
 export function convertToRadians(degrees) {
   return (Math.PI / 180) * degrees;
 }
+
+export function convertToDegrees(radians) {
+  return (180 / Math.PI) * radians;
+}

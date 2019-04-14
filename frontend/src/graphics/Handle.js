@@ -1,3 +1,7 @@
+import * as math from 'mathjs';
+
+import { convertToDegrees } from './utilities';
+
 const size = 6;
 const fillColor = 'white';
 const strokeColor = 'black';
@@ -150,6 +154,26 @@ export class LowerRightHandle extends Handle {
     if (this.isDragging) {
       this.parent.width = this.parent.width + deltaX;
       this.parent.height = this.parent.height + deltaY;
+    }
+  }
+}
+
+export class RotationHandle extends Handle {
+  constructor(parent, offset = 25) {
+    super(parent);
+    this.offset = offset;
+  }
+
+  get center() {
+    const { parent, offset } = this;
+    return { x: parent.x + parent.width * 0.5, y: parent.y - offset };
+  }
+
+  moveMouse(deltaX, deltaY) {
+    if (this.isDragging) {
+      const opposite = deltaX;
+      const adjacent = this.parent.height * 0.5 + this.offset + deltaY;
+      this.parent.rotation += convertToDegrees(math.atan(opposite / adjacent));
     }
   }
 }
