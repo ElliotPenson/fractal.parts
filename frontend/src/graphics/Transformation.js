@@ -1,7 +1,5 @@
 import * as math from 'mathjs';
 
-import { convertToRadians } from './utilities';
-
 export class Transformation {
   constructor(xScale, yScale, xSkew, ySkew, xMove, yMove) {
     this.matrix = math.matrix([
@@ -82,10 +80,9 @@ export class Transformation {
 
   /**
    * Destructively perform a clockwise rotation transformation.
-   * @param {number} degrees - Angle of rotation.
+   * @param {number} radians - Angle of rotation.
    */
-  rotate(degrees) {
-    const radians = convertToRadians(degrees);
+  rotate(radians) {
     const [xScale, yScale] = [math.cos(radians), math.cos(radians)];
     const [xSkew, ySkew] = [math.sin(radians), -math.sin(radians)];
     const rotation = new Transformation(xScale, yScale, xSkew, ySkew, 0, 0);

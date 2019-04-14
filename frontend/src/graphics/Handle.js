@@ -1,7 +1,5 @@
 import * as math from 'mathjs';
 
-import { convertToDegrees } from './utilities';
-
 const size = 6;
 const fillColor = 'white';
 const strokeColor = 'black';
@@ -174,7 +172,7 @@ export class RotationHandle extends Handle {
       const [centerX, centerY] = this.parent.center;
       const opposite = x - centerX;
       const adjacent = centerY - y;
-      this.parent.rotation = convertToDegrees(Math.atan2(opposite, adjacent));
+      this.parent.rotation = Math.atan2(opposite, adjacent);
     }
   }
 }
