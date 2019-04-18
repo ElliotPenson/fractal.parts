@@ -172,7 +172,7 @@ export class RotationHandle extends Handle {
       const [centerX, centerY] = this.parent.center;
       const opposite = x - centerX;
       const adjacent = centerY - y;
-      this.parent.rotation = Math.atan2(opposite, adjacent);
+      this.parent.rotation = math.atan2(opposite, adjacent);
     }
   }
 }
