@@ -1,5 +1,7 @@
 import * as math from 'mathjs';
 
+import { Cursor, rotateCursor } from './Cursor';
+
 const size = 6;
 const fillColor = 'white';
 const strokeColor = 'black';
@@ -48,6 +50,10 @@ export class LeftHandle extends Handle {
     return { x: parent.x, y: parent.y + parent.height * 0.5 };
   }
 
+  get cursor() {
+    return rotateCursor(Cursor.EW_RESIZE, this.parent.rotation);
+  }
+
   moveMouse(deltaX, deltaY) {
     if (this.isDragging) {
       this.parent.x = this.parent.x + deltaX;
@@ -62,6 +68,10 @@ export class RightHandle extends Handle {
     return { x: parent.x + parent.width, y: parent.y + parent.height * 0.5 };
   }
 
+  get cursor() {
+    return rotateCursor(Cursor.EW_RESIZE, this.parent.rotation);
+  }
+
   moveMouse(deltaX, deltaY) {
     if (this.isDragging) {
       this.parent.width = this.parent.width + deltaX;
@@ -73,6 +83,10 @@ export class TopHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x + parent.width * 0.5, y: parent.y };
+  }
+
+  get cursor() {
+    return rotateCursor(Cursor.NS_RESIZE, this.parent.rotation);
   }
 
   moveMouse(deltaX, deltaY) {
@@ -89,6 +103,10 @@ export class BottomHandle extends Handle {
     return { x: parent.x + parent.width * 0.5, y: parent.y + parent.height };
   }
 
+  get cursor() {
+    return rotateCursor(Cursor.NS_RESIZE, this.parent.rotation);
+  }
+
   moveMouse(deltaX, deltaY) {
     if (this.isDragging) {
       this.parent.height = this.parent.height + deltaY;
@@ -100,6 +118,10 @@ export class UpperLeftHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x, y: parent.y };
+  }
+
+  get cursor() {
+    return rotateCursor(Cursor.NWSE_RESIZE, this.parent.rotation);
   }
 
   moveMouse(deltaX, deltaY) {
@@ -118,6 +140,10 @@ export class UpperRightHandle extends Handle {
     return { x: parent.x + parent.width, y: parent.y };
   }
 
+  get cursor() {
+    return rotateCursor(Cursor.NESW_RESIZE, this.parent.rotation);
+  }
+
   moveMouse(deltaX, deltaY) {
     if (this.isDragging) {
       this.parent.y = this.parent.y + deltaY;
@@ -133,6 +159,10 @@ export class LowerLeftHandle extends Handle {
     return { x: parent.x, y: parent.y + parent.height };
   }
 
+  get cursor() {
+    return rotateCursor(Cursor.NESW_RESIZE, this.parent.rotation);
+  }
+
   moveMouse(deltaX, deltaY) {
     if (this.isDragging) {
       this.parent.x = this.parent.x + deltaX;
@@ -146,6 +176,10 @@ export class LowerRightHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x + parent.width, y: parent.y + parent.height };
+  }
+
+  get cursor() {
+    return rotateCursor(Cursor.NWSE_RESIZE, this.parent.rotation);
   }
 
   moveMouse(deltaX, deltaY) {
@@ -165,6 +199,10 @@ export class RotationHandle extends Handle {
   get center() {
     const { parent, offset } = this;
     return { x: parent.x + parent.width * 0.5, y: parent.y - offset };
+  }
+
+  get cursor() {
+    return Cursor.CROSSHAIR;
   }
 
   moveMouse(deltaX, deltaY, x, y) {

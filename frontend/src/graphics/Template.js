@@ -1,3 +1,4 @@
+import { Cursor, useCursor } from './Cursor';
 import { reverse } from './utilities';
 
 export class Template {
@@ -58,5 +59,21 @@ export class Template {
 
   moveMouse(deltaX, deltaY, x, y) {
     this.shapes.forEach(shape => shape.moveMouse(deltaX, deltaY, x, y));
+    this.setCursor(x, y);
+  }
+
+  setCursor(x, y) {
+    const element = this.findAt(x, y);
+    if (element) {
+      useCursor(this.canvas, element.cursor);
+    } else {
+      useCursor(this.canvas, Cursor.AUTO);
+    }
+  }
+
+  findAt(x, y) {
+    return reverse(this.shapes).reduce((toReturn, shape) => {
+      return toReturn || shape.findAt(x, y);
+    }, null);
   }
 }

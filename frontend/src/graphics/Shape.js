@@ -1,3 +1,4 @@
+import { Cursor } from './Cursor';
 import { Transformation } from './Transformation';
 import {
   LeftHandle,
@@ -27,6 +28,10 @@ export class Shape {
   get center() {
     const { x, y, width, height } = this;
     return [x + width / 2, y + height / 2];
+  }
+
+  get cursor() {
+    return Cursor.MOVE;
   }
 
   get transformation() {
@@ -78,6 +83,18 @@ export class Shape {
       this.y += deltaY;
     }
     this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY, x, y));
+  }
+
+  findAt(x, y) {
+    [x, y] = this.transformation.localize(x, y);
+    const handle = this.handles.find(handle => handle.isTouching(x, y));
+    if (handle) {
+      return handle;
+    } else if (this.isTouching(x, y)) {
+      return this;
+    } else {
+      return null;
+    }
   }
 
   createHandles() {
