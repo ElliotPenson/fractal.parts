@@ -2,15 +2,15 @@ import { Shape } from './Shape';
 
 export class Rectangle extends Shape {
   drawBody(context) {
-    const { x, y, width, height } = this;
-    context.fillStyle = this.color;
+    const { x, y, width, height, color } = this;
+    context.fillStyle = color;
     context.fillRect(x, y, width, height);
   }
 
   clone() {
     return new Rectangle(
-      this.x + 10,
-      this.y + 10,
+      this.x,
+      this.y,
       this.width,
       this.height,
       this.color,

@@ -13,8 +13,8 @@ export class Ellipse extends Shape {
 
   clone() {
     return new Ellipse(
-      this.x + 10,
-      this.y + 10,
+      this.x,
+      this.y,
       this.width,
       this.height,
       this.color,

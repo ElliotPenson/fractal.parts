@@ -32,6 +32,7 @@ export class Template {
     const target = this.shapes.find(shape => shape.isClicked);
     if (target) {
       this.clipboard = target.clone();
+      this.clipboard.shift();
     }
   }
 
@@ -39,6 +40,7 @@ export class Template {
     if (this.clipboard) {
       this.add(this.clipboard);
       this.clipboard = this.clipboard.clone();
+      this.clipboard.shift();
     }
   }
 

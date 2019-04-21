@@ -13,8 +13,8 @@ export class Triangle extends Shape {
 
   clone() {
     return new Triangle(
-      this.x + 10,
-      this.y + 10,
+      this.x,
+      this.y,
       this.width,
       this.height,
       this.color,
