@@ -1,16 +1,6 @@
 import { Cursor } from './Cursor';
 import { Transformation } from './Transformation';
-import {
-  LeftHandle,
-  RightHandle,
-  TopHandle,
-  BottomHandle,
-  UpperLeftHandle,
-  UpperRightHandle,
-  LowerLeftHandle,
-  LowerRightHandle,
-  RotationHandle
-} from './Handle';
+import { Handle } from './Handle';
 
 export class Shape {
   constructor(x, y, width, height, color = 'black', rotation = 0) {
@@ -22,7 +12,7 @@ export class Shape {
     this.rotation = rotation;
     this.isFocused = false;
     this.isDragging = false;
-    this.handles = this.createHandles();
+    this.handles = Handle.build(this);
   }
 
   get center() {
@@ -103,20 +93,6 @@ export class Shape {
   shift(deltaX = 10, deltaY = 10) {
     this.x += deltaX;
     this.y += deltaY;
-  }
-
-  createHandles() {
-    return [
-      new LeftHandle(this),
-      new RightHandle(this),
-      new TopHandle(this),
-      new BottomHandle(this),
-      new UpperLeftHandle(this),
-      new UpperRightHandle(this),
-      new LowerLeftHandle(this),
-      new LowerRightHandle(this),
-      new RotationHandle(this)
-    ];
   }
 
   drawBody(context) {

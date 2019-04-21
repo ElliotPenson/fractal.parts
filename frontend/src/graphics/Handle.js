@@ -17,7 +17,7 @@ export class Handle {
     context.fillStyle = fillColor;
     context.fillRect(x - size * 0.5, y - size * 0.5, size, size);
     context.lineWidth = 1;
-    context.fillStyle = strokeColor;
+    context.strokeStyle = strokeColor;
     context.strokeRect(x - size * 0.5 + 0.5, y - size * 0.5 + 0.5, size, size);
   }
 
@@ -42,9 +42,23 @@ export class Handle {
       y >= centerY - size
     );
   }
+
+  static build(shape) {
+    return [
+      new LeftHandle(shape),
+      new RightHandle(shape),
+      new TopHandle(shape),
+      new BottomHandle(shape),
+      new UpperLeftHandle(shape),
+      new UpperRightHandle(shape),
+      new LowerLeftHandle(shape),
+      new LowerRightHandle(shape),
+      new RotationHandle(shape)
+    ];
+  }
 }
 
-export class LeftHandle extends Handle {
+class LeftHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x, y: parent.y + parent.height * 0.5 };
@@ -62,7 +76,7 @@ export class LeftHandle extends Handle {
   }
 }
 
-export class RightHandle extends Handle {
+class RightHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x + parent.width, y: parent.y + parent.height * 0.5 };
@@ -79,7 +93,7 @@ export class RightHandle extends Handle {
   }
 }
 
-export class TopHandle extends Handle {
+class TopHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x + parent.width * 0.5, y: parent.y };
@@ -97,7 +111,7 @@ export class TopHandle extends Handle {
   }
 }
 
-export class BottomHandle extends Handle {
+class BottomHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x + parent.width * 0.5, y: parent.y + parent.height };
@@ -114,7 +128,7 @@ export class BottomHandle extends Handle {
   }
 }
 
-export class UpperLeftHandle extends Handle {
+class UpperLeftHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x, y: parent.y };
@@ -134,7 +148,7 @@ export class UpperLeftHandle extends Handle {
   }
 }
 
-export class UpperRightHandle extends Handle {
+class UpperRightHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x + parent.width, y: parent.y };
@@ -153,7 +167,7 @@ export class UpperRightHandle extends Handle {
   }
 }
 
-export class LowerLeftHandle extends Handle {
+class LowerLeftHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x, y: parent.y + parent.height };
@@ -172,7 +186,7 @@ export class LowerLeftHandle extends Handle {
   }
 }
 
-export class LowerRightHandle extends Handle {
+class LowerRightHandle extends Handle {
   get center() {
     const { parent } = this;
     return { x: parent.x + parent.width, y: parent.y + parent.height };
@@ -190,7 +204,7 @@ export class LowerRightHandle extends Handle {
   }
 }
 
-export class RotationHandle extends Handle {
+class RotationHandle extends Handle {
   constructor(parent, offset = 25) {
     super(parent);
     this.offset = offset;
