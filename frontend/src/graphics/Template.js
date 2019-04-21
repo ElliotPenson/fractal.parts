@@ -14,7 +14,7 @@ export class Template {
   }
 
   delete() {
-    this.shapes = this.shapes.filter(shape => !shape.isClicked);
+    this.shapes = this.shapes.filter(shape => !shape.isFocused);
   }
 
   draw() {
@@ -29,7 +29,7 @@ export class Template {
   }
 
   copy() {
-    const target = this.shapes.find(shape => shape.isClicked);
+    const target = this.shapes.find(shape => shape.isFocused);
     if (target) {
       this.clipboard = target.clone();
       this.clipboard.shift();

@@ -20,7 +20,7 @@ export class Shape {
     this.height = height;
     this.color = color;
     this.rotation = rotation;
-    this.isClicked = false;
+    this.isFocused = false;
     this.isDragging = false;
     this.handles = this.createHandles();
   }
@@ -41,7 +41,7 @@ export class Shape {
   draw(context) {
     this.transformation.decorate(context, () => {
       this.drawBody(context);
-      if (this.isClicked) {
+      if (this.isFocused) {
         this.handles.forEach(handle => handle.draw(context));
       }
     });
@@ -50,7 +50,7 @@ export class Shape {
   pressMouse(x, y, consumed) {
     [x, y] = this.transformation.localize(x, y);
     if (consumed) {
-      this.isClicked = false;
+      this.isFocused = false;
     } else {
       consumed = this.handles.reduce((consumed, shape) => {
         return shape.pressMouse(x, y, consumed);
@@ -58,27 +58,31 @@ export class Shape {
 
       if (consumed) {
         // Click on handle.
-        this.isClicked = true;
+        this.isFocused = true;
       } else if (this.isTouching(x, y)) {
         // Click on shape.
-        this.isClicked = true;
+        this.isFocused = true;
         this.isDragging = true;
         consumed = true;
       } else {
         // Nothing clicked.
-        this.isClicked = false;
+        this.isFocused = false;
       }
     }
     return consumed;
   }
 
   liftMouse() {
+    if (this.isDragging) {
+      this.isFocused = true;
+    }
     this.isDragging = false;
     this.handles.forEach(handle => handle.liftMouse());
   }
 
   moveMouse(deltaX, deltaY, x, y) {
     if (this.isDragging) {
+      this.isFocused = false;
       this.shift(deltaX, deltaY);
     }
     this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY, x, y));
