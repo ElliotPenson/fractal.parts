@@ -61,7 +61,7 @@ export class Handle {
 class LeftHandle extends Handle {
   get center() {
     const { parent } = this;
-    return { x: parent.x, y: parent.y + parent.height * 0.5 };
+    return { x: parent.x, y: parent.center.y };
   }
 
   get cursor() {
@@ -79,7 +79,7 @@ class LeftHandle extends Handle {
 class RightHandle extends Handle {
   get center() {
     const { parent } = this;
-    return { x: parent.x + parent.width, y: parent.y + parent.height * 0.5 };
+    return { x: parent.right, y: parent.center.y };
   }
 
   get cursor() {
@@ -96,7 +96,7 @@ class RightHandle extends Handle {
 class TopHandle extends Handle {
   get center() {
     const { parent } = this;
-    return { x: parent.x + parent.width * 0.5, y: parent.y };
+    return { x: parent.center.x, y: parent.y };
   }
 
   get cursor() {
@@ -114,7 +114,7 @@ class TopHandle extends Handle {
 class BottomHandle extends Handle {
   get center() {
     const { parent } = this;
-    return { x: parent.x + parent.width * 0.5, y: parent.y + parent.height };
+    return { x: parent.center.x, y: parent.bottom };
   }
 
   get cursor() {
@@ -151,7 +151,7 @@ class UpperLeftHandle extends Handle {
 class UpperRightHandle extends Handle {
   get center() {
     const { parent } = this;
-    return { x: parent.x + parent.width, y: parent.y };
+    return { x: parent.right, y: parent.y };
   }
 
   get cursor() {
@@ -170,7 +170,7 @@ class UpperRightHandle extends Handle {
 class LowerLeftHandle extends Handle {
   get center() {
     const { parent } = this;
-    return { x: parent.x, y: parent.y + parent.height };
+    return { x: parent.x, y: parent.bottom };
   }
 
   get cursor() {
@@ -189,7 +189,7 @@ class LowerLeftHandle extends Handle {
 class LowerRightHandle extends Handle {
   get center() {
     const { parent } = this;
-    return { x: parent.x + parent.width, y: parent.y + parent.height };
+    return { x: parent.right, y: parent.bottom };
   }
 
   get cursor() {
@@ -212,7 +212,7 @@ class RotationHandle extends Handle {
 
   get center() {
     const { parent, offset } = this;
-    return { x: parent.x + parent.width * 0.5, y: parent.y - offset };
+    return { x: parent.center.x, y: parent.y - offset };
   }
 
   get cursor() {
@@ -221,7 +221,7 @@ class RotationHandle extends Handle {
 
   moveMouse(deltaX, deltaY, x, y) {
     if (this.isDragging) {
-      const [centerX, centerY] = this.parent.center;
+      const { x: centerX, y: centerY } = this.parent.center;
       const opposite = x - centerX;
       const adjacent = centerY - y;
       this.parent.rotation = math.atan2(opposite, adjacent);

@@ -17,9 +17,16 @@ export class Shape {
     this.guides = [];
   }
 
+  get right() {
+    return this.x + this.width;
+  }
+
+  get bottom() {
+    return this.y + this.height;
+  }
+
   get center() {
-    const { x, y, width, height } = this;
-    return [x + width / 2, y + height / 2];
+    return { x: this.x + this.width / 2, y: this.y + this.height / 2 };
   }
 
   get cursor() {

@@ -125,7 +125,7 @@ export class Transformation {
    * @returns {Transformation}
    */
   static fromShape(shape) {
-    const [x, y] = shape.center;
+    const { x, y } = shape.center;
     const { rotation } = shape;
     const transformation = Transformation.identity();
     transformation.translate(x, y);

@@ -17,19 +17,6 @@ export class Guide {
   }
 }
 
-class yGuide extends Guide {
-  constructor(y, movingShape, stillShape) {
-    super(movingShape, stillShape);
-    this.y = y;
-  }
-
-  draw(context) {
-    const { y, movingShape, stillShape } = this;
-    const x = xRange(movingShape, stillShape);
-    drawLine(Math.min(...x), y, Math.max(...x), y, context);
-  }
-}
-
 class xGuide extends Guide {
   constructor(x, movingShape, stillShape) {
     super(movingShape, stillShape);
@@ -43,35 +30,16 @@ class xGuide extends Guide {
   }
 }
 
-class TopGuide extends yGuide {
-  get displacement() {
-    return this.y - this.movingShape.y;
+class yGuide extends Guide {
+  constructor(y, movingShape, stillShape) {
+    super(movingShape, stillShape);
+    this.y = y;
   }
 
-  apply(shape) {
-    shape.y = this.y;
-  }
-}
-
-class YCenterGuide extends yGuide {
-  get displacement() {
-    const { y, movingShape } = this;
-    return y - (movingShape.y + movingShape.height / 2);
-  }
-
-  apply(shape) {
-    shape.y = this.y - shape.height / 2;
-  }
-}
-
-class BottomGuide extends yGuide {
-  get displacement() {
-    const { y, movingShape } = this;
-    return y - (movingShape.y + movingShape.height);
-  }
-
-  apply(shape) {
-    shape.y = this.y - shape.height;
+  draw(context) {
+    const { y, movingShape, stillShape } = this;
+    const x = xRange(movingShape, stillShape);
+    drawLine(Math.min(...x), y, Math.max(...x), y, context);
   }
 }
 
@@ -87,8 +55,7 @@ class LeftGuide extends xGuide {
 
 class XCenterGuide extends xGuide {
   get displacement() {
-    const { x, movingShape } = this;
-    return x - (movingShape.x + movingShape.width / 2);
+    return this.x - this.movingShape.center.x;
   }
 
   apply(shape) {
@@ -98,12 +65,42 @@ class XCenterGuide extends xGuide {
 
 class RightGuide extends xGuide {
   get displacement() {
-    const { x, movingShape } = this;
-    return x - (movingShape.x + movingShape.width);
+    return this.x - this.movingShape.right;
   }
 
   apply(shape) {
     shape.x = this.x - shape.width;
+  }
+}
+
+class TopGuide extends yGuide {
+  get displacement() {
+    return this.y - this.movingShape.y;
+  }
+
+  apply(shape) {
+    shape.y = this.y;
+  }
+}
+
+class YCenterGuide extends yGuide {
+  get displacement() {
+    return this.y - this.movingShape.center.y;
+  }
+
+  apply(shape) {
+    shape.y = this.y - shape.height / 2;
+  }
+}
+
+class BottomGuide extends yGuide {
+  get displacement() {
+    const { y, movingShape } = this;
+    return y - this.movingShape.bottom;
+  }
+
+  apply(shape) {
+    shape.y = this.y - shape.height;
   }
 }
 
