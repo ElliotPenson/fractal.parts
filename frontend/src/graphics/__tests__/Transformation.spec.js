@@ -1,8 +1,9 @@
 import { Transformation } from '../Transformation';
 
 const context = {
-  setTransform: jest.fn(),
-  resetTransform: jest.fn()
+  transform: jest.fn(),
+  save: jest.fn(),
+  restore: jest.fn()
 };
 
 describe('Transformation', () => {

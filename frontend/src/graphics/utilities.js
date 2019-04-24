@@ -17,3 +17,16 @@ export function convertToRadians(degrees) {
 export function convertToDegrees(radians) {
   return (180 / Math.PI) * radians;
 }
+
+/**
+ * Find the ration of device pixels to CSS pixels. Default to 1 if not found.
+ * @returns {number}
+ */
+export function getPixelRatio(context) {
+  return (
+    window.devicePixelRatio ||
+    window.webkitDevicePixelRatio ||
+    window.mozDevicePixelRatio ||
+    1
+  );
+}

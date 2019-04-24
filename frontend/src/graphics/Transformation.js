@@ -96,9 +96,10 @@ export class Transformation {
    */
   decorate(context, draw) {
     const { xScale, yScale, xSkew, ySkew, xMove, yMove } = this;
-    context.setTransform(xScale, xSkew, ySkew, yScale, xMove, yMove);
+    context.save();
+    context.transform(xScale, xSkew, ySkew, yScale, xMove, yMove);
     draw();
-    context.resetTransform();
+    context.restore();
   }
 
   /**

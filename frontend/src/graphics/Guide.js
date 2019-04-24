@@ -95,8 +95,7 @@ class YCenterGuide extends yGuide {
 
 class BottomGuide extends yGuide {
   get displacement() {
-    const { y, movingShape } = this;
-    return y - this.movingShape.bottom;
+    return this.y - this.movingShape.bottom;
   }
 
   apply(shape) {

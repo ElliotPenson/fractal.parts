@@ -3,11 +3,14 @@ import { Rectangle } from './Rectangle';
 import { Triangle } from './Triangle';
 import { Ellipse } from './Ellipse';
 import { colors } from './colors';
+import { getPixelRatio } from './utilities';
 
 export class Controller {
   constructor(canvas) {
     this.canvas = canvas;
-    this.template = new Template(canvas);
+    this.context = canvas.getContext('2d');
+    this.template = new Template(canvas, this.context);
+    this.correctPixels();
     this.render();
     this.attachListeners();
     this.colors = colors();
@@ -66,6 +69,21 @@ export class Controller {
       reaction(event);
       this.render();
     });
+  }
+
+  /**
+   * Avoid a blurry canvas on HiDPI (retina) displays. Scale up to
+   * devicePixelRatio then scale down with CSS.
+   */
+  correctPixels() {
+    const { canvas, context } = this;
+    const { width, height } = canvas;
+    const pixelRatio = getPixelRatio();
+    canvas.width *= pixelRatio;
+    canvas.height *= pixelRatio;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    context.scale(pixelRatio, pixelRatio);
   }
 }
 

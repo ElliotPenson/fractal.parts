@@ -2,9 +2,9 @@ import { Cursor, useCursor } from './Cursor';
 import { reverse } from './utilities';
 
 export class Template {
-  constructor(canvas) {
+  constructor(canvas, context) {
     this.canvas = canvas;
-    this.context = canvas.getContext('2d');
+    this.context = context;
     this.shapes = [];
     this.clipboard = null;
   }
