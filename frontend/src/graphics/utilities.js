@@ -1,3 +1,11 @@
+export function* filter(predicate, generator) {
+  for (const item of generator) {
+    if (predicate(item)) {
+      yield item;
+    }
+  }
+}
+
 export function reverse(array) {
   return array.slice(0).reverse();
 }

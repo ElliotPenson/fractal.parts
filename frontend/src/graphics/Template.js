@@ -18,8 +18,10 @@ export class Template {
   }
 
   draw() {
+    const { context } = this;
     this.clear();
-    this.shapes.forEach(shape => shape.draw(this.context));
+    this.shapes.forEach(shape => shape.draw(context));
+    this.shapes.forEach(shape => shape.drawGuides(context));
   }
 
   clear() {
@@ -60,7 +62,9 @@ export class Template {
   }
 
   moveMouse(deltaX, deltaY, x, y) {
-    this.shapes.forEach(shape => shape.moveMouse(deltaX, deltaY, x, y));
+    this.shapes.forEach(shape =>
+      shape.moveMouse(deltaX, deltaY, x, y, this.shapes)
+    );
     this.setCursor(x, y);
   }
 

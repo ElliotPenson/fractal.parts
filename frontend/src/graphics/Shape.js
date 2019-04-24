@@ -1,4 +1,5 @@
 import { Cursor } from './Cursor';
+import { inferGuides } from './Guide';
 import { Transformation } from './Transformation';
 import { Handle } from './Handle';
 
@@ -13,6 +14,7 @@ export class Shape {
     this.isFocused = false;
     this.isDragging = false;
     this.handles = Handle.build(this);
+    this.guides = [];
   }
 
   get center() {
@@ -30,11 +32,25 @@ export class Shape {
 
   draw(context) {
     this.transformation.decorate(context, () => {
-      this.drawBody(context);
+      this.withGuides().drawBody(context);
       if (this.isFocused) {
-        this.handles.forEach(handle => handle.draw(context));
+        this.drawHandles(context);
       }
     });
+  }
+
+  drawHandles(context) {
+    this.handles.forEach(handle => handle.draw(context));
+  }
+
+  drawGuides(context) {
+    this.guides.forEach(guide => guide.draw(context));
+  }
+
+  withGuides() {
+    const shape = this.clone();
+    this.guides.forEach(guide => guide.apply(shape));
+    return shape;
   }
 
   pressMouse(x, y, consumed) {
@@ -68,12 +84,19 @@ export class Shape {
     }
     this.isDragging = false;
     this.handles.forEach(handle => handle.liftMouse());
+    this.consumeGuides();
   }
 
-  moveMouse(deltaX, deltaY, x, y) {
+  consumeGuides() {
+    this.guides.forEach(guide => guide.apply(this));
+    this.guides = [];
+  }
+
+  moveMouse(deltaX, deltaY, x, y, shapes) {
     if (this.isDragging) {
       this.isFocused = false;
       this.shift(deltaX, deltaY);
+      this.guides = inferGuides(shapes);
     }
     this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY, x, y));
   }
