@@ -1,3 +1,9 @@
+/**
+ * Lazily remove all items from a collection where predicate returns false.
+ * @param {function} predicate
+ * @param {Iterator|Generator} generator
+ * @returns {Generator} A new generator
+ */
 export function* filter(predicate, generator) {
   for (const item of generator) {
     if (predicate(item)) {
