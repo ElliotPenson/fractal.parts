@@ -92,7 +92,8 @@ function isDeletion(key) {
 }
 
 function findPosition(event, canvas) {
-  const x = event.pageX - canvas.offsetLeft;
-  const y = event.pageY - canvas.offsetTop;
+  const { left, top } = canvas.getBoundingClientRect();
+  const x = event.pageX - left;
+  const y = event.pageY - top;
   return { x, y };
 }

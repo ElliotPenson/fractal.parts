@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Typography, Button } from 'antd';
+import { Button, Tabs, Typography } from 'antd';
 
 import Canvas from './Canvas';
 import { Controller } from '../graphics/Controller';
 
 import './Create.css';
 
+const { Group } = Button;
+const { TabPane } = Tabs;
 const { Title } = Typography;
 
 class Create extends Component {
@@ -22,16 +24,8 @@ class Create extends Component {
     this.controller = new Controller(canvas);
   };
 
-  handleRectangle = () => {
+  handleAdd = () => {
     this.controller.addRectangle();
-  };
-
-  handleTriangle = () => {
-    this.controller.addTriangle();
-  };
-
-  handleEllipse = () => {
-    this.controller.addEllipse();
   };
 
   render() {
@@ -40,18 +34,30 @@ class Create extends Component {
         <Title editable={{ onChange: this.handleTitle }}>
           {this.state.title}
         </Title>
-        <Canvas width="750" height="750" onRef={this.handleCanvas} />
-        <div>
-          <Button size="large" onClick={this.handleRectangle}>
-            New Rectangle
-          </Button>
-          <Button size="large" onClick={this.handleTriangle}>
-            New Triangle
-          </Button>
-          <Button size="large" onClick={this.handleEllipse}>
-            New Ellipse
-          </Button>
-        </div>
+        <Tabs
+          size="large"
+          tabBarExtraContent={
+            <Group>
+              <Button size="large" onClick={this.handleAdd}>
+                Add
+              </Button>
+              <Button size="large" type="primary">
+                Publish
+              </Button>
+            </Group>
+          }
+        >
+          <TabPane tab="Template" key="1">
+            <Canvas
+              width={window.innerWidth}
+              height="1000"
+              onRef={this.handleCanvas}
+            />
+          </TabPane>
+          <TabPane tab="Preview" key="2">
+            todo
+          </TabPane>
+        </Tabs>
       </div>
     );
   }
