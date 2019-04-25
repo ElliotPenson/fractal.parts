@@ -62,10 +62,18 @@ export class Template {
   }
 
   moveMouse(deltaX, deltaY, x, y) {
-    this.shapes.forEach(shape =>
-      shape.moveMouse(deltaX, deltaY, x, y, this.shapes)
+    const { shapes } = this;
+    shapes.forEach(shape => shape.moveMouse(deltaX, deltaY, x, y, shapes));
+    if (!this.isDragging()) {
+      this.setCursor(x, y);
+    }
+  }
+
+  isDragging() {
+    return this.shapes.some(
+      shape =>
+        shape.isDragging || shape.handles.some(handle => handle.isDragging)
     );
-    this.setCursor(x, y);
   }
 
   setCursor(x, y) {
