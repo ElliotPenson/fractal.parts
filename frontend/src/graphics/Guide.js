@@ -105,10 +105,14 @@ class BottomGuide extends yGuide {
 
 export function inferGuides(shapes) {
   const moving = shapes.find(shape => shape.isDragging);
-  const still = shapes.filter(shape => !shape.isDragging);
-  let xGuides = closerThan(threshold, generateXGuides(moving, still));
-  let yGuides = closerThan(threshold, generateYGuides(moving, still));
-  return [...findClosest(xGuides), ...findClosest(yGuides)];
+  if (moving) {
+    const still = shapes.filter(shape => !shape.isDragging);
+    let xGuides = closerThan(threshold, generateXGuides(moving, still));
+    let yGuides = closerThan(threshold, generateYGuides(moving, still));
+    return [...findClosest(xGuides), ...findClosest(yGuides)];
+  } else {
+    return [];
+  }
 }
 
 function* generateXGuides(movingShape, stillShapes) {
@@ -135,7 +139,7 @@ function closerThan(threshold, guides) {
   return filter(guide => Math.abs(guide.displacement) <= threshold, guides);
 }
 
-function findClosest(guides) {
+export function findClosest(guides) {
   return Array.from(guides).reduce((closest, guide) => {
     if (closest.length === 0 || isCloser(guide, closest[0])) {
       return [guide];
@@ -155,10 +159,10 @@ function isCloser(guide1, guide2) {
  * Find key (left, center, right) x-values in collection of Shape objects.
  * @param {[Shape]} shapes
  */
-function xRange(...shapes) {
+export function xRange(...shapes) {
   return shapes.reduce((range, shape) => {
-    const { x, width } = shape.withGuides();
-    return [...range, x, x + width / 2, x + width];
+    const { x, center, right } = shape.withGuides();
+    return [...range, x, center.x, right];
   }, []);
 }
 
@@ -166,10 +170,10 @@ function xRange(...shapes) {
  * Find key (top, center, bottom) y-values in collection of Shape objects.
  * @param {[Shape]} shapes
  */
-function yRange(...shapes) {
+export function yRange(...shapes) {
   return shapes.reduce((range, shape) => {
-    const { y, height } = shape.withGuides();
-    return [...range, y, y + height / 2, y + height];
+    const { y, center, bottom } = shape.withGuides();
+    return [...range, y, center.y, bottom];
   }, []);
 }
 
