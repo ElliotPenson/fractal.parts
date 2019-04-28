@@ -1,89 +1,99 @@
 import { Template } from './Template';
+import { Attractor } from './Attractor';
 import { Rectangle } from './Rectangle';
-import { Triangle } from './Triangle';
-import { Ellipse } from './Ellipse';
 import { colors } from './colors';
-import { getPixelRatio } from './utilities';
 
 export class Controller {
-  constructor(canvas) {
-    this.canvas = canvas;
-    this.context = canvas.getContext('2d');
-    this.template = new Template(canvas, this.context);
-    this.correctPixels();
-    this.render();
-    this.attachListeners();
+  constructor() {
     this.colors = colors();
   }
 
-  render() {
-    this.template.draw();
+  set templateCanvas(canvas) {
+    this.template = new Template(canvas);
   }
 
-  // TODO: Combine these methods when the user chooses a shape.
-  addRectangle() {
+  set attractorCanvas(canvas) {
+    this.attractor = new Attractor(canvas);
+  }
+
+  add() {
     const color = this.colors.next().value;
     const shape = new Rectangle(100, 100, 150, 150, color);
     this.template.add(shape);
-    this.render();
+    this.template.draw();
   }
 
-  addTriangle() {
-    const color = this.colors.next().value;
-    const shape = new Triangle(100, 100, 150, 150, color);
-    this.template.add(shape);
-    this.render();
+  showTemplate() {
+    this.attachListeners();
+    this.template.draw();
   }
 
-  addEllipse() {
-    const color = this.colors.next().value;
-    const shape = new Ellipse(100, 100, 150, 150, color);
-    this.template.add(shape);
-    this.render();
+  showPreview() {
+    this.detachListeners();
+    this.attractor.transformations = this.template.export();
+    this.attractor.draw();
+  }
+
+  listenToMouseDown = event => {
+    const { x, y } = findPosition(event, this.template.canvas);
+    this.template.pressMouse(x, y);
+    this.template.draw();
+  };
+
+  listenToMouseMove = event => {
+    const { x, y } = findPosition(event, this.template.canvas);
+    this.template.moveMouse(event.movementX, event.movementY, x, y);
+    this.template.draw();
+  };
+
+  listenToMouseUp = event => {
+    this.template.liftMouse();
+    this.template.draw();
+  };
+
+  listenToKeyDown = event => {
+    if (isDeletion(event.key)) {
+      this.template.delete();
+    }
+    this.template.draw();
+  };
+
+  listenToCopy = event => {
+    this.template.copy();
+  };
+
+  listenToPaste = event => {
+    this.template.paste();
+    this.template.draw();
+  };
+
+  listenToCut = event => {
+    this.template.cut();
+    this.template.draw();
+  };
+
+  get listeners() {
+    return [
+      ['mousedown', this.listenToMouseDown],
+      ['mousemove', this.listenToMouseMove],
+      ['mouseup', this.listenToMouseUp],
+      ['keydown', this.listenToKeyDown],
+      ['copy', this.listenToCopy],
+      ['paste', this.listenToPaste],
+      ['cut', this.listenToCut]
+    ];
   }
 
   attachListeners() {
-    this.on('mousedown', event => {
-      const { x, y } = findPosition(event, this.canvas);
-      this.template.pressMouse(x, y);
-    });
-    this.on('mousemove', event => {
-      const { x, y } = findPosition(event, this.canvas);
-      this.template.moveMouse(event.movementX, event.movementY, x, y);
-    });
-    this.on('mouseup', () => {
-      this.template.liftMouse();
-    });
-    this.on('keydown', event => {
-      if (isDeletion(event.key)) {
-        this.template.delete();
-      }
-    });
-    this.on('copy', () => this.template.copy());
-    this.on('paste', () => this.template.paste());
-    this.on('cut', () => this.template.cut());
+    for (const [type, listener] of this.listeners) {
+      window.addEventListener(type, listener);
+    }
   }
 
-  on(eventType, reaction) {
-    window.addEventListener(eventType, event => {
-      reaction(event);
-      this.render();
-    });
-  }
-
-  /**
-   * Avoid a blurry canvas on HiDPI (retina) displays. Scale up to
-   * devicePixelRatio then scale down with CSS.
-   */
-  correctPixels() {
-    const { canvas, context } = this;
-    const { width, height } = canvas;
-    const pixelRatio = getPixelRatio();
-    canvas.width *= pixelRatio;
-    canvas.height *= pixelRatio;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    context.scale(pixelRatio, pixelRatio);
+  detachListeners() {
+    for (const [type, listener] of this.listeners) {
+      window.removeEventListener(type, listener);
+    }
   }
 }
 

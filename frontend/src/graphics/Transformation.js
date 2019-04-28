@@ -90,6 +90,23 @@ export class Transformation {
   }
 
   /**
+   * Destructively perform a clockwise rotation at a given origin.
+   * @param {number} radians
+   * @param {number} x
+   * @param {number} y
+   */
+  rotateAt(radians, x, y) {
+    this.translate(x, y);
+    this.rotate(radians);
+    this.translate(-x, -y);
+  }
+
+  scale(x, y) {
+    const translation = new Transformation(x, y, 0, 0, 0, 0);
+    this.multiply(translation);
+  }
+
+  /**
    * Apply this transformation to an HTML canvas before an arbitrary function.
    * @param {CanvasRenderingContext2D} context
    * @param {function} draw
@@ -129,9 +146,28 @@ export class Transformation {
     const { x, y } = shape.center;
     const { rotation } = shape;
     const transformation = Transformation.identity();
-    transformation.translate(x, y);
-    transformation.rotate(rotation);
-    transformation.translate(-x, -y);
+    transformation.rotateAt(rotation, x, y);
+    return transformation;
+  }
+
+  /**
+   * Represent the difference between two shapes as a transformation matrix.
+   * @param {Shape} parent
+   * @param {Shape} child
+   * @returns {Transformation}
+   */
+  static betweenShapes(parent, child) {
+    const transformation = Transformation.identity();
+    transformation.translate(child.x - parent.x, child.y - parent.y);
+    transformation.scale(
+      child.width / parent.width,
+      child.height / parent.height
+    );
+    transformation.rotateAt(
+      child.rotation - parent.rotation,
+      (child.width / parent.width) * (parent.width / 2),
+      (child.height / parent.height) * (parent.height / 2)
+    );
     return transformation;
   }
 }

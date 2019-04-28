@@ -24,11 +24,31 @@ export function convertToDegrees(radians) {
   return (180 / Math.PI) * radians;
 }
 
+export function getContext(canvas) {
+  const context = canvas.getContext('2d');
+  correctPixels(canvas, context);
+  return context;
+}
+
+/**
+ * Avoid a blurry canvas on HiDPI (retina) displays. Scale up to
+ * devicePixelRatio then scale down with CSS.
+ */
+function correctPixels(canvas, context) {
+  const { width, height } = canvas;
+  const pixelRatio = getPixelRatio();
+  canvas.width *= pixelRatio;
+  canvas.height *= pixelRatio;
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
+  context.scale(pixelRatio, pixelRatio);
+}
+
 /**
  * Find the ration of device pixels to CSS pixels. Default to 1 if not found.
  * @returns {number}
  */
-export function getPixelRatio(context) {
+function getPixelRatio(context) {
   return (
     window.devicePixelRatio ||
     window.webkitDevicePixelRatio ||

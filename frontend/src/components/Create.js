@@ -14,18 +14,32 @@ class Create extends Component {
   constructor(props) {
     super(props);
     this.state = { title: 'Enter a title here.' };
+    this.controller = new Controller();
   }
 
   handleTitle = title => {
     this.setState({ title });
   };
 
-  handleCanvas = canvas => {
-    this.controller = new Controller(canvas);
+  handleTemplate = canvas => {
+    this.controller.templateCanvas = canvas;
+    this.controller.showTemplate();
+  };
+
+  handleAttractor = canvas => {
+    this.controller.attractorCanvas = canvas;
   };
 
   handleAdd = () => {
-    this.controller.addRectangle();
+    this.controller.add();
+  };
+
+  onTab = key => {
+    if (key === 'template') {
+      this.controller.showTemplate();
+    } else {
+      this.controller.showPreview();
+    }
   };
 
   render() {
@@ -36,6 +50,7 @@ class Create extends Component {
         </Title>
         <Tabs
           size="large"
+          onChange={this.onTab}
           tabBarExtraContent={
             <Group>
               <Button size="large" onClick={this.handleAdd}>
@@ -47,15 +62,19 @@ class Create extends Component {
             </Group>
           }
         >
-          <TabPane tab="Template" key="1">
+          <TabPane tab="Template" key="template" forceRender>
             <Canvas
               width={window.innerWidth}
               height="1000"
-              onRef={this.handleCanvas}
+              onRef={this.handleTemplate}
             />
           </TabPane>
-          <TabPane tab="Preview" key="2">
-            todo
+          <TabPane tab="Preview" key="preview" forceRender>
+            <Canvas
+              width={window.innerWidth}
+              height="1000"
+              onRef={this.handleAttractor}
+            />
           </TabPane>
         </Tabs>
       </div>

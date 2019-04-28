@@ -1,11 +1,15 @@
 import { Cursor, useCursor } from './Cursor';
-import { reverse } from './utilities';
+import { reverse, getContext } from './utilities';
+import { Rectangle } from './Rectangle';
+import { Transformation } from './Transformation';
 
 export class Template {
   constructor(canvas, context) {
     this.canvas = canvas;
-    this.context = context;
+    this.context = getContext(canvas);
     this.shapes = [];
+    this.base = new Rectangle(10, 10, 500, 500, '#EEEEEE');
+    this.shapes = [this.base];
     this.clipboard = null;
   }
 
@@ -49,6 +53,12 @@ export class Template {
   cut() {
     this.copy();
     this.delete();
+  }
+
+  export() {
+    const { base, shapes } = this;
+    const children = shapes.filter(shape => shape !== base);
+    return children.map(child => Transformation.betweenShapes(base, child));
   }
 
   pressMouse(x, y) {
