@@ -14,6 +14,7 @@ export class Handle {
 
   draw(context) {
     let { x, y } = this.center;
+    [x, y] = [math.round(x), math.round(y)];
     context.fillStyle = fillColor;
     context.fillRect(x - size * 0.5, y - size * 0.5, size, size);
     context.lineWidth = 1;
