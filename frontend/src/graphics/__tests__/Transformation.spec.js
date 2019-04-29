@@ -1,4 +1,5 @@
 import { Transformation } from '../Transformation';
+import { Rectangle } from '../Rectangle';
 
 const context = {
   transform: jest.fn(),
@@ -86,6 +87,30 @@ describe('Transformation', () => {
       expect(transformation.ySkew).toEqual(0);
       expect(transformation.xMove).toEqual(0);
       expect(transformation.yMove).toEqual(0);
+    });
+  });
+
+  describe('betweenShapes', () => {
+    it('returns the identity matrix between identical shapes', () => {
+      const shape = new Rectangle(1, 2, 3, 4, 'red', 23);
+      const transformation = Transformation.betweenShapes(shape, shape.clone());
+      expect(transformation.equals(Transformation.identity())).toBeTruthy();
+    });
+
+    it('moves as a function of shape displacement', () => {
+      const parent = new Rectangle(1, 2, 1, 1);
+      const child = new Rectangle(10, 200, 1, 1);
+      const transformation = Transformation.betweenShapes(parent, child);
+      expect(transformation.xMove).toEqual(child.x - parent.x);
+      expect(transformation.yMove).toEqual(child.y - parent.y);
+    });
+
+    it('scales as a function of shape size', () => {
+      const parent = new Rectangle(1, 1, 1, 1);
+      const child = new Rectangle(1, 1, 10, 100);
+      const transformation = Transformation.betweenShapes(parent, child);
+      expect(transformation.xScale).toEqual(child.width / parent.width);
+      expect(transformation.yScale).toEqual(child.height / parent.height);
     });
   });
 });
