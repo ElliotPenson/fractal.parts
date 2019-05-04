@@ -2,15 +2,13 @@
 #
 # Deploy CloudFormation stack to production.i
 
-bucket="fractal.parts"
-template_file=packaged.yml
-iam_file="todo"
+bucket="api.fractal.parts"
 
 sam package \
-    --output-template-file $template_file \
+    --output-template-file packaged.yml \
     --s3-bucket $bucket
 
 sam deploy \
-    --template-file $template_file \
+    --template-file packaged.yml \
     --stack-name fractal-parts \
-    --capabilities $iam_file
+    --capabilities CAPABILITY_IAM

@@ -9,6 +9,7 @@ Resources:
       CodeUri: functions/
       Handler: list.handle
       Runtime: nodejs8.10
+      AutoPublishAlias: live
       Events:
         GetFractals:
           Type: Api
@@ -21,6 +22,7 @@ Resources:
       CodeUri: functions/
       Handler: create.handle
       Runtime: nodejs8.10
+      AutoPublishAlias: live
       Events:
         Fractal:
           Type: Api
@@ -33,6 +35,7 @@ Resources:
       CodeUri: functions/
       Handler: get.handle
       Runtime: nodejs8.10
+      AutoPublishAlias: live
       Events:
         Fractal:
           Type: Api
