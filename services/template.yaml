@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: fractal.parts
+  
+Resources:
+  GetFractalsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/
+      Handler: list.handle
+      Runtime: nodejs8.10
+      Events:
+        GetFractals:
+          Type: Api
+          Properties:
+            Path: /fractals
+            Method: get
+  PostFractalFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/
+      Handler: create.handle
+      Runtime: nodejs8.10
+      Events:
+        Fractal:
+          Type: Api
+          Properties:
+            Path: /fractals
+            Method: post
+  GetFractalFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/
+      Handler: get.handle
+      Runtime: nodejs8.10
+      Events:
+        Fractal:
+          Type: Api
+          Properties:
+            Path: /fractals/{name}
+            Method: get

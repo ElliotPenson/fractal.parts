@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+# Deploy CloudFormation stack to production.i
+
+bucket="fractal.parts"
+template_file=packaged.yml
+iam_file="todo"
+
+sam package \
+    --output-template-file $template_file \
+    --s3-bucket $bucket
+
+sam deploy \
+    --template-file $template_file \
+    --stack-name fractal-parts \
+    --capabilities $iam_file

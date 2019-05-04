@@ -1,0 +1,22 @@
+# -*- Restclient -*-
+
+#
+# GET fractals
+#
+GET http://127.0.0.1:3000/fractals
+
+#
+# POST fractal
+#
+POST http://127.0.0.1:3000/fractals
+Content-Type: application/json
+
+{
+    "title": "Example",
+    "body": { "transformations": "TODO" }
+}
+
+#
+# GET fractal
+#
+GET http://127.0.0.1:3000/fractals/example
