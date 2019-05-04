@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 #
-# Deploy frontend to S3
+# Deploy static assets to S3
 
 bucket="fractal.parts"
 
-cd frontend
 npm run build
 aws s3 sync build s3://$bucket --profile personal
