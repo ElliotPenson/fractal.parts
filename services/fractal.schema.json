@@ -1,0 +1,29 @@
+{
+  "$id": "https://api.fractal.parts/fractal.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Fractal",
+  "type": "object",
+  "required": [ "title", "body" ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "User-defined fractal name."
+    },
+    "body": {
+      "type": "object",
+      "description": "Unstructured content."
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier formed from the fractal title."
+    },
+    "createdOn": {
+      "type": "datetime",
+      "description": "Timestamp when created."
+    },
+    "views": {
+      "type": "integer",
+      "description": "Number of times the fractal has been clicked."
+    }
+  }
+}
