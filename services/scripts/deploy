@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Deploy CloudFormation stack to production.i
+# Deploy CloudFormation stack to production.
 
 bucket="api.fractal.parts"
 

@@ -1,0 +1,23 @@
+{
+  "name": "fractal.parts",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "scripts/start",
+    "deploy": "scripts/deploy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElliotPenson/fractal.parts.git"
+  },
+  "author": "Elliot Penson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ElliotPenson/fractal.parts/issues"
+  },
+  "homepage": "https://github.com/ElliotPenson/fractal.parts#readme",
+  "devDependencies": {
+    "aws-sdk": "^2.449.0",
+    "yaml": "^1.5.1"
+  }
+}
