@@ -1,15 +1,24 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: fractal.parts
-  
+
+Globals:
+  Function:
+    Runtime: nodejs8.10
+    CodeUri: functions/
+    AutoPublishAlias: live
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref FractalTable
+
 Resources:
   GetFractalsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: functions/
       Handler: list.handle
-      Runtime: nodejs8.10
-      AutoPublishAlias: live
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FractalTable
       Events:
         GetFractals:
           Type: Api
@@ -19,12 +28,12 @@ Resources:
   PostFractalFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: functions/
       Handler: create.handle
-      Runtime: nodejs8.10
-      AutoPublishAlias: live
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FractalTable
       Events:
-        Fractal:
+        PostFractal:
           Type: Api
           Properties:
             Path: /fractals
@@ -32,13 +41,26 @@ Resources:
   GetFractalFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: functions/
       Handler: get.handle
-      Runtime: nodejs8.10
-      AutoPublishAlias: live
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FractalTable
       Events:
-        Fractal:
+        GetFractal:
           Type: Api
           Properties:
-            Path: /fractals/{name}
+            Path: /fractals/{id}
             Method: get
+  FractalTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: FractalTable
+      AttributeDefinitions:
+        -
+          AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "id"
+          KeyType: "HASH"
+      BillingMode: PAY_PER_REQUEST
