@@ -1,9 +1,5 @@
+const { buildResponse, HttpStatus } = require('./utilities');
+
 exports.handle = async (event, context) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'list'
-    })
-  };
-  return response;
+  return buildResponse('todo', HttpStatus.CREATED);
 };
