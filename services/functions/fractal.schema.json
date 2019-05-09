@@ -1,13 +1,12 @@
 {
-  "$id": "https://api.fractal.parts/fractal.schema.json",
-  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Fractal",
   "type": "object",
-  "required": [ "title", "body" ],
+  "required": ["title", "body"],
   "properties": {
     "title": {
       "type": "string",
-      "description": "User-defined fractal name."
+      "description": "User-defined fractal name. Must contain at least one alphanumeric character.",
+      "pattern": "[a-zA-Z0-9]"
     },
     "body": {
       "type": "object",
@@ -18,8 +17,9 @@
       "description": "Unique identifier formed from the fractal title."
     },
     "createdOn": {
-      "type": "datetime",
-      "description": "Timestamp when created."
+      "type": "string",
+      "description": "Timestamp of creation date.",
+      "format": "date-time"
     },
     "views": {
       "type": "integer",

@@ -13,10 +13,41 @@ Content-Type: application/json
 
 {
     "title": "Example",
-    "body": { "transformations": "TODO" }
+    "body": {}
 }
 
 #
 # GET fractal
 #
 GET http://127.0.0.1:3000/fractals/example
+
+#
+# POST with no title
+#
+POST http://127.0.0.1:3000/fractals
+Content-Type: application/json
+
+{
+    "body": {}
+}
+
+#
+# POST with no body
+#
+POST http://127.0.0.1:3000/fractals
+Content-Type: application/json
+
+{
+    "title": "nobody"
+}
+
+#
+# POST title with no alphanumeric characters.
+#
+POST http://127.0.0.1:3000/fractals
+Content-Type: application/json
+
+{
+    "title": "^&!$%&(",
+    "body": {}
+}

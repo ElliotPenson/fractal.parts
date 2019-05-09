@@ -4,9 +4,14 @@ const {
   buildErrorResponse,
   HttpStatus
 } = require('./utilities');
+const { validate } = require('./validation');
 
 exports.handle = async (event, context) => {
   const fractal = build(event);
+  const valid = validate(fractal);
+  if (!valid) {
+    return buildErrorResponse(validate.errors, HttpStatus.BAD_REQUEST);
+  }
   if (await dynamo.exists({ id: fractal.id })) {
     return buildErrorResponse('Title already exists.', HttpStatus.CONFLICT);
   }
@@ -21,9 +26,13 @@ function build(event) {
 }
 
 function makeId(title) {
-  const alphanumeric = removeSymbols(title);
-  const words = alphanumeric.split(' ');
-  return words.join('-').toLowerCase();
+  if (title) {
+    const alphanumeric = removeSymbols(title);
+    const words = alphanumeric.split(' ');
+    return words.join('-').toLowerCase();
+  } else {
+    return null;
+  }
 }
 
 function removeSymbols(text) {
