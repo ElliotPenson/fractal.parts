@@ -7,18 +7,12 @@ Globals:
     Runtime: nodejs8.10
     CodeUri: functions/
     AutoPublishAlias: live
-    Environment:
-      Variables:
-        TABLE_NAME: !Ref FractalTable
 
 Resources:
   GetFractalsFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: list.handle
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref FractalTable
       Events:
         GetFractals:
           Type: Api
@@ -29,9 +23,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: create.handle
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref FractalTable
       Events:
         PostFractal:
           Type: Api
@@ -42,25 +33,9 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: get.handle
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref FractalTable
       Events:
         GetFractal:
           Type: Api
           Properties:
-            Path: /fractals/{id}
+            Path: /fractals/{key}
             Method: get
-  FractalTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: FractalTable
-      AttributeDefinitions:
-        -
-          AttributeName: "id"
-          AttributeType: "S"
-      KeySchema:
-        -
-          AttributeName: "id"
-          KeyType: "HASH"
-      BillingMode: PAY_PER_REQUEST

@@ -6,12 +6,8 @@ const HttpStatus = Object.freeze({
   OK: 200
 });
 
-function buildErrorResponse(message, statusCode) {
-  return buildResponse({ message }, statusCode);
-}
-
 function buildResponse(body, statusCode = HttpStatus.OK) {
   return { statusCode, body: JSON.stringify(body) };
 }
 
-module.exports = { HttpStatus, buildErrorResponse, buildResponse };
+module.exports = { HttpStatus, buildResponse };

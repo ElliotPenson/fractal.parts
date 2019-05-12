@@ -1,18 +1,15 @@
-const dynamo = require('./dynamo-db');
-const {
-  buildResponse,
-  buildErrorResponse,
-  HttpStatus
-} = require('./utilities');
+const { get, increment } = require('./database');
+const { buildResponse, HttpStatus } = require('./utilities');
 
 exports.handle = async (event, context, other) => {
-  const { id } = event.pathParameters;
-  const fractal = await dynamo.get({ id });
+  const { key } = event.pathParameters;
+  await increment(key);
+  const fractal = await get(key);
   if (!fractal) {
-    return buildErrorResponse(
-      `Fractal with ID '${id}' does not exist`,
+    return buildResponse(
+      { message: `Fractal with key '${key}' does not exist` },
       HttpStatus.NOT_FOUND
     );
   }
-  return buildResponse(fractal, HttpStatus.CREATED);
+  return buildResponse(fractal);
 };
