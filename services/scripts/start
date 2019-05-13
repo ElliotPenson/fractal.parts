@@ -4,7 +4,7 @@
 
 docker run -p 3306:3306 \
        -e MYSQL_ROOT_PASSWORD=password \
-       -e MYSQL_DATABASE=database \
+       -e MYSQL_DATABASE=fractaldb \
        -e MYSQL_USER=user \
        -e MYSQL_PASSWORD=password \
        -d mysql:5.6

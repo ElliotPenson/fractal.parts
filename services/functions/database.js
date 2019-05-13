@@ -1,17 +1,15 @@
-const knex = require('knex')({
-  client: 'mysql2',
-  connection: {
-    host: 'host.docker.internal',
-    user: 'user',
-    password: 'password',
-    database: 'database'
-  }
-});
-
-const tableName = 'fractals';
+const {
+  AWS_SAM_LOCAL,
+  DATABASE_URL,
+  DATABASE_NAME,
+  DATABASE_USER,
+  DATABASE_PASSWORD
+} = process.env;
+console.log(getConfig());
+const knex = require('knex')({ client: 'mysql2', connection: getConfig() });
 
 async function get(key) {
-  const fractal = await knex(tableName)
+  const fractal = await knex('fractals')
     .where({ key })
     .first();
   return deserialize(fractal);
@@ -19,19 +17,19 @@ async function get(key) {
 
 async function exists(key) {
   return Boolean(
-    await knex(tableName)
+    await knex('fractals')
       .where({ key })
       .first()
   );
 }
 
 function put(fractal) {
-  return knex(tableName).insert(serialize(fractal));
+  return knex('fractals').insert(serialize(fractal));
 }
 
 async function list(sort, limit, offset) {
   const fractals = knex('*')
-    .from(tableName)
+    .from('fractals')
     .orderBy(sort)
     .limit(limit)
     .offset(offset);
@@ -39,14 +37,14 @@ async function list(sort, limit, offset) {
 }
 
 async function count() {
-  const row = await knex(tableName)
+  const row = await knex('fractals')
     .count({ count: 'id' })
     .first();
   return row.count;
 }
 
 function increment(key, column = 'views') {
-  return knex(tableName)
+  return knex('fractals')
     .where({ key })
     .increment(column, 1);
 }
@@ -57,6 +55,15 @@ function serialize(fractal) {
 
 function deserialize(fractal) {
   return { ...fractal, body: JSON.parse(fractal.body) };
+}
+
+function getConfig() {
+  return {
+    database: DATABASE_NAME,
+    host: AWS_SAM_LOCAL ? 'host.docker.internal' : DATABASE_URL,
+    user: DATABASE_USER || 'user',
+    password: DATABASE_PASSWORD || 'password'
+  };
 }
 
 module.exports = { get, exists, put, list, count, increment };
