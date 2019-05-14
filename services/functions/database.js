@@ -5,7 +5,7 @@ const {
   DATABASE_USER,
   DATABASE_PASSWORD
 } = process.env;
-console.log(getConfig());
+
 const knex = require('knex')({ client: 'mysql2', connection: getConfig() });
 
 async function get(key) {

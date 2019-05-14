@@ -1,14 +1,14 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: fractal.parts
 
 Parameters:
-  DatabaseName:
+  DomainName:
     Type: String
-    Default: "fractaldb"
-  DatabasePort:
-    Type: Number
-    Default: 3306
+    Default: "api.fractal.parts"
+  HostedZoneName:
+    Type: String
+    Default: "fractal.parts."
   VpcId:
     Type: String
     Default: "vpc-07326fd09eb064e9c"
@@ -18,14 +18,20 @@ Parameters:
   PrivateSubnets:
     Type: String
     Default: "subnet-0f945c3a3868bf8e9,subnet-0732369e5e0ce1c63"
+  DatabaseName:
+    Type: String
+    Default: "fractaldb"
+  DatabasePort:
+    Type: Number
+    Default: 3306
 
 Globals:
   Function:
     Runtime: nodejs8.10
-    AutoPublishAlias: live
+    AutoPublishAlias: live  # enable gradual deployment
     VpcConfig:
       SecurityGroupIds:
-        - !Ref LambdaSecurityGroup
+        - !Ref LambdaSG
       SubnetIds: !Split [",", !Ref PublicSubnets]
     Timeout: 90
     MemorySize: 1024
@@ -34,18 +40,14 @@ Globals:
         DATABASE_NAME: !Ref DatabaseName
         DATABASE_PORT: !Ref DatabasePort
         DATABASE_URL: !GetAtt Database.Endpoint.Address
-        DATABASE_USER: !Join
-        - ''
-        - - '{{resolve:secretsmanager:'
-          - !Ref DatabaseSecret
-          - ':SecretString:username}}'
-        DATABASE_PASSWORD: !Join
-        - ''
-        - - '{{resolve:secretsmanager:'
-          - !Ref DatabaseSecret
-          - ':SecretString:password}}'
+        DATABASE_USER: !Sub "{{resolve:secretsmanager:${DatabaseSecret}:SecretString:username}}"
+        DATABASE_PASSWORD: !Sub "{{resolve:secretsmanager:${DatabaseSecret}:SecretString:password}}"
 
 Resources:
+
+  ################################################################################
+  # Lambda Functions
+
   GetFractalsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -85,7 +87,41 @@ Resources:
           Properties:
             Path: /fractals/{key}
             Method: get
-  LambdaSecurityGroup:
+
+  ################################################################################
+  # Domain Name
+
+  ApiGatewayDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      CertificateArn: !Ref Certificate
+      DomainName: !Ref DomainName
+  ApiGatewayMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref ApiGatewayDomain
+      RestApiId: !Ref ServerlessRestApi
+      Stage: Prod
+  DNSRecord:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Ref HostedZoneName
+      RecordSets:
+      - Name: !Ref DomainName
+        Type: A
+        AliasTarget:
+          DNSName: !GetAtt ApiGatewayDomain.DistributionDomainName
+          HostedZoneId: Z2FDTNDATAQYW2  # universal CloudFront ID
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      ValidationMethod: DNS
+
+  ################################################################################
+  # Security Groups
+
+  LambdaSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: "Public lambda rules"
@@ -108,15 +144,15 @@ Resources:
           ToPort: 443
           CidrIp: 0.0.0.0/0
       VpcId: !Ref VpcId
-  LambdaSecurityGroupEgress:
+  LambdaSGEgress:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
-      GroupId: !Ref LambdaSecurityGroup
+      GroupId: !Ref LambdaSG
       IpProtocol: tcp
       FromPort: !Ref DatabasePort
       ToPort: !Ref DatabasePort
-      DestinationSecurityGroupId: !Ref DatabaseSecurityGroup
-  DatabaseSecurityGroup:
+      DestinationSecurityGroupId: !Ref DatabaseSG
+  DatabaseSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: "Private database rules"
@@ -130,36 +166,32 @@ Resources:
           ToPort: 443
           CidrIp: 0.0.0.0/0
       VpcId: !Ref VpcId
-  DatabaseSecurityGroupIngress:
+  DatabaseSGIngress:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
-      GroupId: !Ref DatabaseSecurityGroup
+      GroupId: !Ref DatabaseSG
       IpProtocol: tcp
       FromPort: !Ref DatabasePort
       ToPort: !Ref DatabasePort
-      SourceSecurityGroupId: !Ref LambdaSecurityGroup
+      SourceSecurityGroupId: !Ref LambdaSG
+
+  ################################################################################
+  # Database
+
   Database:
     Type: AWS::RDS::DBCluster
     Properties:
-      MasterUsername: !Join
-        - ''
-        - - '{{resolve:secretsmanager:'
-          - !Ref DatabaseSecret
-          - ':SecretString:username}}'
-      MasterUserPassword: !Join
-        - ''
-        - - '{{resolve:secretsmanager:'
-          - !Ref DatabaseSecret
-          - ':SecretString:password}}'
+      MasterUsername: !Sub "{{resolve:secretsmanager:${DatabaseSecret}:SecretString:username}}"
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${DatabaseSecret}:SecretString:password}}"
       DatabaseName: !Ref DatabaseName
       Engine: aurora
       EngineMode: serverless
       ScalingConfiguration:
         AutoPause: false
-        MaxCapacity: 32
         MinCapacity: 2
+        MaxCapacity: 32
       VpcSecurityGroupIds:
-        - !Ref DatabaseSecurityGroup
+        - !Ref DatabaseSG
       DBSubnetGroupName: !Ref DatabaseSubnetGroup
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
@@ -169,10 +201,10 @@ Resources:
   DatabaseSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Description: 'Secret for the fractal database user'
+      Description: "Secret for the fractal database user"
       GenerateSecretString:
         SecretStringTemplate: '{"username": "root"}'
-        GenerateStringKey: 'password'
+        GenerateStringKey: "password"
         PasswordLength: 16
         ExcludeCharacters: '"@/\'
   DatabaseSecretAttachment:
