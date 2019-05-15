@@ -10,4 +10,11 @@ function buildResponse(body, statusCode = HttpStatus.OK) {
   return { statusCode, body: JSON.stringify(body) };
 }
 
-module.exports = { HttpStatus, buildResponse };
+function buildConflictResponse(key) {
+  return buildResponse(
+    { message: `A fractal with key '${key}' already exists.` },
+    HttpStatus.CONFLICT
+  );
+}
+
+module.exports = { HttpStatus, buildResponse, buildConflictResponse };
