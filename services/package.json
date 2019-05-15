@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "scripts": {
     "start": "scripts/start",
-    "seed": "scripts/seed.js",
     "deploy": "scripts/deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
