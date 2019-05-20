@@ -136,4 +136,9 @@ export class Shape {
   isTouching(x, y) {
     throw new Error('Not implemented');
   }
+
+  toJSON() {
+    const { x, y, width, height, color, rotation } = this;
+    return { x, y, width, height, color, rotation };
+  }
 }

@@ -3,6 +3,7 @@ import { Button, Tabs, Typography } from 'antd';
 
 import Canvas from './Canvas';
 import { Controller } from '../graphics/Controller';
+import { create } from '../api';
 
 import './Create.css';
 
@@ -13,7 +14,10 @@ const { Title } = Typography;
 class Create extends Component {
   constructor(props) {
     super(props);
-    this.state = { title: 'Enter a title here.' };
+    this.state = {
+      title: 'Enter a title here.',
+      publishing: false
+    };
     this.controller = new Controller();
   }
 
@@ -42,6 +46,17 @@ class Create extends Component {
     }
   };
 
+  publish = async () => {
+    this.setState({ publishing: true });
+    try {
+      const response = await create(this.state.title, this.controller.template);
+      this.props.history.push(`/${response.data.key}`);
+    } catch (error) {
+      console.error(`Failed to publish (${error.response.status})`);
+    }
+    this.setState({ publishing: false });
+  };
+
   render() {
     return (
       <div className="Create">
@@ -56,7 +71,12 @@ class Create extends Component {
               <Button size="large" onClick={this.handleAdd}>
                 Add
               </Button>
-              <Button size="large" type="primary">
+              <Button
+                size="large"
+                type="primary"
+                onClick={this.publish}
+                loading={this.state.publishing}
+              >
                 Publish
               </Button>
             </Group>
