@@ -42,6 +42,10 @@ Globals:
         DATABASE_URL: !GetAtt Database.Endpoint.Address
         DATABASE_USER: !Sub "{{resolve:secretsmanager:${DatabaseSecret}:SecretString:username}}"
         DATABASE_PASSWORD: !Sub "{{resolve:secretsmanager:${DatabaseSecret}:SecretString:password}}"
+  Api:
+    Cors:
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
 
 Resources:
 

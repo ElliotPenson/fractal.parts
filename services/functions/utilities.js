@@ -7,7 +7,11 @@ const HttpStatus = Object.freeze({
 });
 
 function buildResponse(body, statusCode = HttpStatus.OK) {
-  return { statusCode, body: JSON.stringify(body) };
+  return {
+    statusCode,
+    body: JSON.stringify(body),
+    headers: { 'Access-Control-Allow-Origin': '*' }
+  };
 }
 
 function buildConflictResponse(key) {
