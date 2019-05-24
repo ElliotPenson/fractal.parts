@@ -2,17 +2,23 @@ import { Cursor, useCursor } from './Cursor';
 import { reverse, getContext } from './utilities';
 import { Rectangle } from './Rectangle';
 import { Transformation } from './Transformation';
+import { colors } from './colors';
 
 export class Template {
-  constructor(canvas, context) {
+  constructor(canvas) {
     this.canvas = canvas;
     this.context = getContext(canvas);
     this.base = new Rectangle(10, 10, 500, 500, '#EEEEEE');
     this.shapes = [this.base];
     this.clipboard = null;
+    this.colors = colors();
   }
 
   add(shape) {
+    if (!shape) {
+      const color = this.colors.next().value;
+      shape = new Rectangle(100, 100, 150, 150, color);
+    }
     this.shapes.push(shape);
   }
 
@@ -99,4 +105,77 @@ export class Template {
       return toReturn || shape.findAt(x, y);
     }, null);
   }
+
+  makeInteractive() {
+    for (const [type, listener] of this.listeners) {
+      window.addEventListener(type, listener);
+    }
+  }
+
+  removeInteractivity() {
+    for (const [type, listener] of this.listeners) {
+      window.removeEventListener(type, listener);
+    }
+  }
+
+  get listeners() {
+    return [
+      ['mousedown', this.mouseDownListener],
+      ['mousemove', this.mouseMoveListener],
+      ['mouseup', this.mouseUpListener],
+      ['keydown', this.keyDownListener],
+      ['copy', this.copyListener],
+      ['paste', this.pasteListener],
+      ['cut', this.cutListener]
+    ];
+  }
+
+  mouseDownListener = event => {
+    const { x, y } = findPosition(event, this.canvas);
+    this.pressMouse(x, y);
+    this.draw();
+  };
+
+  mouseMoveListener = event => {
+    const { x, y } = findPosition(event, this.canvas);
+    this.moveMouse(event.movementX, event.movementY, x, y);
+    this.draw();
+  };
+
+  mouseUpListener = () => {
+    this.liftMouse();
+    this.draw();
+  };
+
+  keyDownListener = event => {
+    if (isDeletion(event.key)) {
+      this.delete();
+    }
+    this.draw();
+  };
+
+  copyListener = () => {
+    this.copy();
+  };
+
+  pasteListener = () => {
+    this.paste();
+    this.draw();
+  };
+
+  cutListener = () => {
+    this.cut();
+    this.draw();
+  };
+}
+
+function isDeletion(key) {
+  return ['backspace', 'clear', 'delete', 'del'].includes(key.toLowerCase());
+}
+
+function findPosition(event, canvas) {
+  const { left, top } = canvas.getBoundingClientRect();
+  const x = event.pageX - left;
+  const y = event.pageY - top;
+  return { x, y };
 }

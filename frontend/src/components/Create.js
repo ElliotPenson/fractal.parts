@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Button, Tabs, Typography } from 'antd';
 
 import Canvas from './Canvas';
-import { Controller } from '../graphics/Controller';
+import { Template } from '../graphics/Template';
+import { RecursiveAttractor } from '../graphics/RecursiveAttractor';
 import { create } from '../api';
 
 import './Create.css';
@@ -18,7 +19,6 @@ class Create extends Component {
       title: 'Enter a title here.',
       publishing: false
     };
-    this.controller = new Controller();
   }
 
   handleTitle = title => {
@@ -26,30 +26,34 @@ class Create extends Component {
   };
 
   handleTemplate = canvas => {
-    this.controller.templateCanvas = canvas;
-    this.controller.showTemplate();
+    this.template = new Template(canvas);
+    this.template.makeInteractive();
+    this.template.draw();
   };
 
   handleAttractor = canvas => {
-    this.controller.attractorCanvas = canvas;
+    this.attractor = new RecursiveAttractor(canvas);
   };
 
   handleAdd = () => {
-    this.controller.add();
+    this.template.add();
+    this.template.draw();
   };
 
   onTab = key => {
+    const { attractor, template } = this;
     if (key === 'template') {
-      this.controller.showTemplate();
+      template.makeInteractive();
     } else {
-      this.controller.showPreview();
+      template.removeInteractivity();
+      attractor.draw(template);
     }
   };
 
   publish = async () => {
     this.setState({ publishing: true });
     try {
-      const response = await create(this.state.title, this.controller.template);
+      const response = await create(this.state.title, this.template);
       this.props.history.push(`/${response.data.key}`);
     } catch (error) {
       console.error(`Failed to publish (${error.response.status})`);
