@@ -20,4 +20,17 @@ describe('Shape', () => {
       expect(shape.center.y).toEqual(y + height / 2);
     });
   });
+
+  describe('clone', () => {
+    it('duplicates properties', () => {
+      const shape = new Shape(0, 1, 2, 3, 'color', 4);
+      const copy = shape.clone();
+      expect(shape.x).toEqual(shape.x);
+      expect(shape.y).toEqual(shape.y);
+      expect(shape.width).toEqual(shape.width);
+      expect(shape.height).toEqual(shape.height);
+      expect(shape.color).toEqual(shape.color);
+      expect(shape.rotation).toEqual(shape.rotation);
+    });
+  });
 });

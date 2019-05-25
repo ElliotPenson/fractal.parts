@@ -1,5 +1,5 @@
 import { Template } from '../Template.js';
-import { Rectangle } from '../Rectangle.js';
+import { Shape } from '../Shape.js';
 
 const context = {
   fillRect: jest.fn(),
@@ -15,7 +15,7 @@ describe('Template', () => {
     it('increases the number of shapes', () => {
       const template = new Template(canvas);
       const before = template.shapes.length;
-      template.add(new Rectangle());
+      template.add(new Shape());
       const after = template.shapes.length;
       expect(after).toBeGreaterThan(before);
     });
@@ -24,7 +24,7 @@ describe('Template', () => {
   describe('delete', () => {
     it('removes the focused shape', () => {
       const template = new Template(canvas);
-      template.add(new Rectangle(0, 0, 100, 100));
+      template.add(new Shape(0, 0, 100, 100));
       const before = template.shapes.length;
       template.pressMouse(50, 50);
       template.delete();
@@ -34,7 +34,7 @@ describe('Template', () => {
 
     it('does nothing if no shape is focused', () => {
       const template = new Template(canvas);
-      template.add(new Rectangle(0, 0, 100, 100));
+      template.add(new Shape(0, 0, 100, 100));
       const before = template.shapes.length;
       template.delete();
       const after = template.shapes.length;
@@ -63,9 +63,9 @@ describe('Template', () => {
     it('adds another shape to the template', () => {
       const template = new Template(canvas);
       const shapes = [
-        new Rectangle(0, 0, 10, 10),
-        new Rectangle(20, 20, 100, 100),
-        new Rectangle(200, 100, 2, 3)
+        new Shape(0, 0, 10, 10),
+        new Shape(20, 20, 100, 100),
+        new Shape(200, 100, 2, 3)
       ];
       shapes.forEach(shape => template.add(shape));
       const before = template.shapes.length;

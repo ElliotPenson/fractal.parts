@@ -46,6 +46,12 @@ export class Shape {
     });
   }
 
+  drawBody(context) {
+    const { x, y, width, height, color } = this;
+    context.fillStyle = color;
+    context.fillRect(x, y, width, height);
+  }
+
   drawHandles(context) {
     this.handles.forEach(handle => handle.draw(context));
   }
@@ -125,20 +131,26 @@ export class Shape {
     this.y += deltaY;
   }
 
-  drawBody(context) {
-    throw new Error('Not implemented');
-  }
-
   clone() {
-    throw new Error('Not implemented');
+    const { x, y, width, height, color, rotation } = this;
+    return new Shape(x, y, width, height, color, rotation);
   }
 
   isTouching(x, y) {
-    throw new Error('Not implemented');
+    return (
+      x >= this.x &&
+      x <= this.x + this.width &&
+      y >= this.y &&
+      y <= this.y + this.height
+    );
   }
 
   toJSON() {
     const { x, y, width, height, color, rotation } = this;
     return { x, y, width, height, color, rotation };
+  }
+
+  static fromJSON({ x, y, width, height, color, rotation }) {
+    return new Shape(x, y, width, height, color, rotation);
   }
 }
