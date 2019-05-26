@@ -8,7 +8,7 @@
 | ------ | --------------- | ------------------------- | ------------ | -------------------|
 | GET    | /fractals       | `sort`, `limit`, `offset` | *None*       | `{ total, items }` |
 | POST   | /fractals       | *None*                    | `Fractal`    | `Fractal`          |
-| GET    | /fractal/<name> | *None*                    | *None*       | `Fractal`          |
+| GET    | /fractals/{key} | *None*                    | *None*       | `Fractal`          |
 
 See `fractal.schema.json` for the definition of `Fractal`.
 
