@@ -6,6 +6,8 @@ const {
   DATABASE_PASSWORD
 } = process.env;
 
+const Direction = Object.freeze({ ASC: 'asc', DESC: 'desc' });
+
 const knex = require('knex')({ client: 'mysql2', connection: getConfig() });
 
 async function get(key) {
@@ -28,9 +30,10 @@ function put(fractal) {
 }
 
 async function list(sort, limit, offset) {
+  const [column, direction] = parseSort(sort);
   const fractals = knex('*')
     .from('fractals')
-    .orderBy(sort)
+    .orderBy(column, direction)
     .limit(Number(limit))
     .offset(Number(offset));
   return fractals.map(deserialize);
@@ -57,6 +60,26 @@ function deserialize(fractal) {
   return { ...fractal, body: JSON.parse(fractal.body) };
 }
 
+function parseSort(sort) {
+  return [findColumn(sort), findDirection(sort)];
+}
+
+function findColumn(sort) {
+  if (sort.startsWith('+') || sort.startsWith('-')) {
+    return sort.slice(1);
+  } else {
+    return sort;
+  }
+}
+
+function findDirection(sort) {
+  if (sort.startsWith('-')) {
+    return Direction.DESC;
+  } else {
+    return Direction.ASC;
+  }
+}
+
 function getConfig() {
   return {
     database: DATABASE_NAME,
@@ -66,4 +89,4 @@ function getConfig() {
   };
 }
 
-module.exports = { get, exists, put, list, count, increment };
+module.exports = { get, exists, put, list, count, increment, parseSort };

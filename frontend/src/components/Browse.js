@@ -9,7 +9,7 @@ const pageSize = 6;
 class Browse extends Component {
   constructor(props) {
     super(props);
-    this.state = { page: 1, sort: 'views', total: 0, fractals: [] };
+    this.state = { page: 1, sort: '-views', total: 0, fractals: [] };
   }
 
   async componentDidMount() {
@@ -39,7 +39,7 @@ class Browse extends Component {
           value={this.state.sort}
           onChange={sort => this.setState({ sort })}
         >
-          <Select.Option value="views">Most Views</Select.Option>
+          <Select.Option value="-views">Most Views</Select.Option>
           <Select.Option value="newest">Newest</Select.Option>
           <Select.Option value="oldest">Oldest</Select.Option>
         </Select>
