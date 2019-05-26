@@ -5,4 +5,4 @@
 bucket="fractal.parts"
 
 npm run build
-aws s3 sync build s3://$bucket --profile personal
+aws s3 sync build s3://$bucket
