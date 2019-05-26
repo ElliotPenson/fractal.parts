@@ -1,5 +1,7 @@
 # fractal.parts
 
+[![Build](https://travis-ci.com/ElliotPenson/fractal.parts.svg?branch=master)](https://travis-ci.com/ElliotPenson/fractal.parts)
+
 ## Frontend
 
 This application was bootstrapped with `create-react-app`. After installing
