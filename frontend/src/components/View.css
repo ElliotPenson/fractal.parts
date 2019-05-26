@@ -1,0 +1,12 @@
+.View {
+  padding: 100px;
+}
+
+.View h1 {
+  font-size: calc(40px + 2vmin);
+  margin-bottom: 10px;
+}
+
+.View p {
+  font-size: calc(20px + 1vmin);
+}

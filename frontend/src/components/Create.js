@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Button, Tabs, Typography } from 'antd';
 
 import Canvas from './Canvas';
+import Attractor from './Attractor';
 import { Template } from '../graphics/Template';
-import { RecursiveAttractor } from '../graphics/RecursiveAttractor';
 import { create } from '../api';
 
 import './Create.css';
@@ -17,7 +17,8 @@ class Create extends Component {
     super(props);
     this.state = {
       title: 'Enter a title here.',
-      publishing: false
+      publishing: false,
+      fractal: null
     };
   }
 
@@ -26,13 +27,11 @@ class Create extends Component {
   };
 
   handleTemplate = canvas => {
-    this.template = new Template(canvas);
-    this.template.makeInteractive();
-    this.template.draw();
-  };
-
-  handleAttractor = canvas => {
-    this.attractor = new RecursiveAttractor(canvas);
+    if (canvas) {
+      this.template = new Template(canvas);
+      this.template.makeInteractive();
+      this.template.draw();
+    }
   };
 
   handleAdd = () => {
@@ -41,13 +40,14 @@ class Create extends Component {
   };
 
   onTab = key => {
-    const { attractor, template } = this;
+    const { template } = this;
     if (key === 'template') {
       template.makeInteractive();
     } else {
       template.removeInteractivity();
-      attractor.draw(template);
     }
+    const { parent, children } = template;
+    this.setState({ fractal: { parent, children } });
   };
 
   publish = async () => {
@@ -56,6 +56,7 @@ class Create extends Component {
       const response = await create(this.state.title, this.template);
       this.props.history.push(`/${response.data.key}`);
     } catch (error) {
+      console.log(error);
       console.error(`Failed to publish (${error.response.status})`);
     }
     this.setState({ publishing: false });
@@ -94,10 +95,10 @@ class Create extends Component {
             />
           </TabPane>
           <TabPane tab="Preview" key="preview" forceRender>
-            <Canvas
+            <Attractor
               width={window.innerWidth}
               height="1000"
-              onRef={this.handleAttractor}
+              fractal={this.state.fractal}
             />
           </TabPane>
         </Tabs>

@@ -24,7 +24,7 @@ function drawRecursively(
   context,
   shape,
   transformations,
-  iterations,
+  iterations = 6,
   count = 0
 ) {
   if (count === iterations) {

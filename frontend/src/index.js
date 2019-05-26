@@ -6,7 +6,7 @@ import './index.css';
 import App from './components/App';
 import Browse from './components/Browse';
 import Create from './components/Create';
-import NotFound from './components/NotFound';
+import View from './components/View';
 
 const routing = (
   <Router>
@@ -14,7 +14,7 @@ const routing = (
       <Route exact path="/" component={App} />
       <Route path="/browse" component={Browse} />
       <Route path="/create" component={Create} />
-      <Route component={NotFound} />
+      <Route component={View} />
     </Switch>
   </Router>
 );

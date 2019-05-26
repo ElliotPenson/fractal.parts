@@ -12,11 +12,11 @@
 
 .App h1 {
   font-size: calc(40px + 3vmin);
-  margin-bottom: 0.3em;
+  margin-bottom: 0;
 }
 
 .App p {
-  font-size: 2vmin;
+  font-size: calc(10px + 1vmin);
 }
 
 .App button {
