@@ -43,6 +43,11 @@ Globals:
         DATABASE_USER: !Sub "{{resolve:secretsmanager:${DatabaseSecret}:SecretString:username}}"
         DATABASE_PASSWORD: !Sub "{{resolve:secretsmanager:${DatabaseSecret}:SecretString:password}}"
   Api:
+    MethodSettings:
+      - HttpMethod: "*"
+        ResourcePath: "/*"
+        MetricsEnabled: true
+        LoggingLevel: "INFO"
     Cors:
       AllowHeaders: "'*'"
       AllowOrigin: "'*'"
