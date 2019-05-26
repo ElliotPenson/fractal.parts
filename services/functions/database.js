@@ -31,8 +31,8 @@ async function list(sort, limit, offset) {
   const fractals = knex('*')
     .from('fractals')
     .orderBy(sort)
-    .limit(limit)
-    .offset(offset);
+    .limit(Number(limit))
+    .offset(Number(offset));
   return fractals.map(deserialize);
 }
 
