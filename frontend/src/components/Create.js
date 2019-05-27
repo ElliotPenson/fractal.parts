@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Tabs, Typography } from 'antd';
 
 import Canvas from './Canvas';
+import PublishButton from './PublishButton';
 import Attractor from './Attractor';
 import { Template } from '../graphics/Template';
 import { create } from '../api';
@@ -17,7 +18,7 @@ class Create extends Component {
     super(props);
     this.state = {
       title: 'Enter a title here.',
-      publishing: false,
+      isPublishing: false,
       fractal: null
     };
   }
@@ -50,18 +51,18 @@ class Create extends Component {
   };
 
   publish = async () => {
-    this.setState({ publishing: true });
+    this.setState({ isPublishing: true });
     try {
       const response = await create(this.state.title, this.template);
       this.props.history.push(`/${response.data.key}`);
     } catch (error) {
-      console.log(error);
       console.error(`Failed to publish (${error.response.status})`);
+      this.setState({ isPublishing: false });
     }
-    this.setState({ publishing: false });
   };
 
   render() {
+    const { isPublishing } = this.state;
     return (
       <div className="Create">
         <Title editable={{ onChange: this.handleTitle }}>
@@ -75,14 +76,10 @@ class Create extends Component {
               <Button size="large" onClick={this.handleAdd}>
                 Add
               </Button>
-              <Button
-                size="large"
-                type="primary"
-                onClick={this.publish}
-                loading={this.state.publishing}
-              >
-                Publish
-              </Button>
+              <PublishButton
+                isPublishing={isPublishing}
+                onPublish={this.publish}
+              />
             </Group>
           }
         >
