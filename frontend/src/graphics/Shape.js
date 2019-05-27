@@ -98,6 +98,22 @@ export class Shape {
     this.isDragging = false;
     this.handles.forEach(handle => handle.liftMouse());
     this.consumeGuides();
+    this.correctNegatives();
+  }
+
+  /**
+   * Flip the sign of negative width/height values to ensure that shape size is
+   * always positive. Adjust x/y so the shape doesn't move.
+   */
+  correctNegatives() {
+    if (this.width < 0) {
+      this.x += this.width;
+      this.width = -this.width;
+    }
+    if (this.height < 0) {
+      this.y += this.height;
+      this.height = -this.height;
+    }
   }
 
   consumeGuides() {
