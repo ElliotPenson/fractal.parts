@@ -13,11 +13,11 @@ class Browse extends Component {
   }
 
   async componentDidMount() {
-    const { page, sort } = this.state;
-    await this.fetch(page, sort);
+    await this.fetch();
   }
 
-  async fetch(page, sort) {
+  async fetch() {
+    const { page, sort } = this.state;
     try {
       const { data } = await list(sort, pageSize * (page - 1), pageSize);
       this.setState({ total: data.total, fractals: data.items });
@@ -27,21 +27,22 @@ class Browse extends Component {
   }
 
   handlePage = page => {
-    this.fetch(page, this.state.sort);
-    this.setState({ page });
+    this.setState({ page }, () => this.fetch());
+  };
+
+  handleSort = sort => {
+    this.setState({ sort }, () => this.fetch());
   };
 
   render() {
     const { fractals, total } = this.state;
     return (
       <div className="Browse">
-        <Select
-          value={this.state.sort}
-          onChange={sort => this.setState({ sort })}
-        >
+        <Select value={this.state.sort} onChange={this.handleSort}>
           <Select.Option value="-views">Most Views</Select.Option>
-          <Select.Option value="newest">Newest</Select.Option>
-          <Select.Option value="oldest">Oldest</Select.Option>
+          <Select.Option value="views">Least Views</Select.Option>
+          <Select.Option value="-created_at">Newest</Select.Option>
+          <Select.Option value="created_at">Oldest</Select.Option>
         </Select>
         <Row>
           {fractals.map(fractal => {
