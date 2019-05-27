@@ -46,8 +46,7 @@ class Create extends Component {
     } else {
       template.removeInteractivity();
     }
-    const { parent, children } = template;
-    this.setState({ fractal: { parent, children } });
+    this.setState({ fractal: template });
   };
 
   publish = async () => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Icon } from 'antd';
+import { Typography } from 'antd';
 
 import NotFound from './NotFound';
 import Attractor from './Attractor';

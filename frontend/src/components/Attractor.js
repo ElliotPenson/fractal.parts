@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import Canvas from './Canvas';
 import { draw } from '../graphics/attractor';
 
-function Attractor({ width, height, fractal }) {
-  if (fractal) {
+class Attractor extends Component {
+  constructor() {
+    super();
+    this.state = { canvas: null };
+  }
+
+  render() {
+    const { fractal, width, height } = this.props;
+    const { canvas } = this.state;
+    if (!fractal) {
+      return null;
+    }
+    if (canvas) {
+      draw(canvas, fractal);
+    }
     return (
-      <div className="Attractor">
-        <Canvas
-          width={width}
-          height={height}
-          onRef={canvas => canvas && draw(canvas, fractal)}
-        />
-      </div>
+      <Canvas
+        width={width}
+        height={height}
+        onRef={canvas => this.setState({ canvas })}
+      />
     );
-  } else {
-    return <div />;
   }
 }
 
