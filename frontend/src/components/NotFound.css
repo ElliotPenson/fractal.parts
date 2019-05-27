@@ -1,0 +1,15 @@
+.NotFound {
+  text-align: center;
+  padding-top: 10vh;
+}
+
+.NotFound h1 {
+  font-size: calc(30px + 3vmin);
+  font-weight: 400;
+}
+
+.NotFound .anticon {
+  color: rgba(0, 0, 0, 0.85);
+  padding: 1vh;
+  font-size: calc(30px + 5vmin);
+}
