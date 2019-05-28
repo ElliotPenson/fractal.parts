@@ -3,6 +3,7 @@ import { Button, Tabs, Typography } from 'antd';
 
 import Canvas from './Canvas';
 import PublishButton from './PublishButton';
+import SettingsDrawer from './SettingsDrawer';
 import Attractor from './Attractor';
 import { Template } from '../graphics/Template';
 import { create } from '../api';
@@ -19,6 +20,7 @@ class Create extends Component {
     this.state = {
       title: 'Enter a title here.',
       isPublishing: false,
+      settingsVisible: false,
       fractal: null
     };
   }
@@ -62,7 +64,7 @@ class Create extends Component {
   };
 
   render() {
-    const { isPublishing } = this.state;
+    const { isPublishing, drawerVisible } = this.state;
     return (
       <div className="Create">
         <Title editable={{ onChange: this.handleTitle }}>
@@ -75,6 +77,12 @@ class Create extends Component {
             <Group>
               <Button size="large" onClick={this.handleAdd}>
                 Add
+              </Button>
+              <Button
+                size="large"
+                onClick={() => this.setState({ drawerVisible: true })}
+              >
+                Settings
               </Button>
               <PublishButton
                 isPublishing={isPublishing}
@@ -98,6 +106,10 @@ class Create extends Component {
             />
           </TabPane>
         </Tabs>
+        <SettingsDrawer
+          visible={drawerVisible}
+          onClose={() => this.setState({ drawerVisible: false })}
+        />
       </div>
     );
   }
