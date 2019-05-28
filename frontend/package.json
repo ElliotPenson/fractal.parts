@@ -12,7 +12,8 @@
     "react-app-rewired": "^2.1.1",
     "react-dom": "^16.8.4",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "riek": "^1.1.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

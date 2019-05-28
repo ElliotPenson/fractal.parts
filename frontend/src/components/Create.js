@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Tabs, Typography } from 'antd';
+import { Button, Tabs } from 'antd';
 
 import Canvas from './Canvas';
+import EditableTitle from './EditableTitle';
 import PublishButton from './PublishButton';
 import SettingsDrawer from './SettingsDrawer';
 import Attractor from './Attractor';
@@ -12,7 +13,6 @@ import './Create.css';
 
 const { Group } = Button;
 const { TabPane } = Tabs;
-const { Title } = Typography;
 
 class Create extends Component {
   constructor(props) {
@@ -64,12 +64,10 @@ class Create extends Component {
   };
 
   render() {
-    const { isPublishing, drawerVisible } = this.state;
+    const { title, isPublishing, drawerVisible } = this.state;
     return (
       <div className="Create">
-        <Title editable={{ onChange: this.handleTitle }}>
-          {this.state.title}
-        </Title>
+        <EditableTitle value={title} onChange={this.handleTitle} />
         <Tabs
           size="large"
           onChange={this.onTab}
