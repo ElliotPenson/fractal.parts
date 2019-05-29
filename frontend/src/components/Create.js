@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Tabs } from 'antd';
+import { Button, message, Tabs } from 'antd';
 
 import Canvas from './Canvas';
 import EditableTitle from './EditableTitle';
 import PublishButton from './PublishButton';
 import SettingsDrawer from './SettingsDrawer';
+import RedTooltip from './RedTooltip';
 import Attractor from './Attractor';
 import { Template } from '../graphics/Template';
 import { create } from '../api';
@@ -14,11 +15,18 @@ import './Create.css';
 const { Group } = Button;
 const { TabPane } = Tabs;
 
+const defaultTitle = 'Enter a title here.';
+const conflictCode = 409;
+
 class Create extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Enter a title here.',
+      title: defaultTitle,
+      errors: {
+        title: { isValid: true, message: '' },
+        template: { isValid: true, message: '' }
+      },
       isPublishing: false,
       settingsVisible: false,
       fractal: null
@@ -27,6 +35,7 @@ class Create extends Component {
 
   handleTitle = title => {
     this.setState({ title });
+    this.clearError('title');
   };
 
   handleTemplate = canvas => {
@@ -40,9 +49,56 @@ class Create extends Component {
   handleAdd = () => {
     this.template.add();
     this.template.draw();
+    this.clearError('template');
   };
 
-  onTab = key => {
+  validate() {
+    return (
+      this.validateField(
+        'title',
+        title => title === defaultTitle,
+        'Click to enter a title.'
+      ) &&
+      this.validateField(
+        'title',
+        title => !/[a-zA-Z]/.test(title),
+        'The title must contain at least one letter.'
+      ) &&
+      this.validateField(
+        'template',
+        () => this.template.children.length === 0,
+        'Be sure to add a shape.'
+      )
+    );
+  }
+
+  validateField(field, predicate, message) {
+    if (predicate(this.state[field])) {
+      this.addError(field, message);
+      return false;
+    }
+    return true;
+  }
+
+  clearError(field) {
+    this.setError(field);
+  }
+
+  addError(field, message) {
+    this.setError(field, message);
+  }
+
+  setError(field, message) {
+    this.setState(({ errors }) => {
+      const isValid = !Boolean(message);
+      if (!message) {
+        message = errors[field].message;
+      }
+      return { errors: { ...errors, [field]: { isValid, message } } };
+    });
+  }
+
+  handleTab = key => {
     const { template } = this;
     if (key === 'template') {
       template.makeInteractive();
@@ -53,29 +109,47 @@ class Create extends Component {
   };
 
   publish = async () => {
-    this.setState({ isPublishing: true });
-    try {
-      const response = await create(this.state.title, this.template);
-      this.props.history.push(`/${response.data.key}`);
-    } catch (error) {
-      console.error(`Failed to publish (${error.response.status})`);
-      this.setState({ isPublishing: false });
+    if (this.validate()) {
+      this.setState({ isPublishing: true });
+      try {
+        const { data } = await create(this.state.title, this.template);
+        this.props.history.push(`/${data.key}`);
+      } catch (error) {
+        const { status } = error.response;
+        if (status === conflictCode) {
+          this.addError('title', 'A fractal with this title already exists.');
+        } else {
+          message.error(`Unable to publish fractal (${status})`);
+        }
+        this.setState({ isPublishing: false });
+      }
     }
   };
 
   render() {
-    const { title, isPublishing, drawerVisible } = this.state;
+    const { title, errors, isPublishing, drawerVisible } = this.state;
     return (
       <div className="Create">
-        <EditableTitle value={title} onChange={this.handleTitle} />
+        <EditableTitle
+          value={title}
+          onChange={this.handleTitle}
+          hasError={!errors.title.isValid}
+          errorMessage={errors.title.message}
+        />
+
         <Tabs
           size="large"
-          onChange={this.onTab}
+          onChange={this.handleTab}
           tabBarExtraContent={
             <Group>
-              <Button size="large" onClick={this.handleAdd}>
-                Add
-              </Button>
+              <RedTooltip
+                visible={!errors.template.isValid}
+                message={errors.template.message}
+              >
+                <Button size="large" onClick={this.handleAdd}>
+                  Add
+                </Button>
+              </RedTooltip>
               <Button
                 size="large"
                 onClick={() => this.setState({ drawerVisible: true })}
@@ -104,6 +178,7 @@ class Create extends Component {
             />
           </TabPane>
         </Tabs>
+
         <SettingsDrawer
           visible={drawerVisible}
           onClose={() => this.setState({ drawerVisible: false })}

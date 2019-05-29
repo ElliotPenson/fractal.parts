@@ -1,0 +1,11 @@
+.RedTooltip {
+  max-width: none;
+}
+
+.RedTooltip .ant-tooltip-arrow {
+  border-bottom-color: #ff4136;
+}
+
+.RedTooltip .ant-tooltip-inner {
+  background-color: #ff4136;
+}

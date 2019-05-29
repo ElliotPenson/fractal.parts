@@ -1,8 +1,12 @@
 .EditableTitle {
+  color: rgba(0, 0, 0, 0.85);
   font-size: calc(20px + 2.5vmin);
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.85);
   margin-bottom: 0.3em;
+}
+
+.EditableTitle-error {
+  color: #ff4136;
 }
 
 .EditableTitle input {
