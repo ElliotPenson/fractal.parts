@@ -29,10 +29,6 @@ Globals:
   Function:
     Runtime: nodejs8.10
     AutoPublishAlias: live  # enable gradual deployment
-    VpcConfig:
-      SecurityGroupIds:
-        - !Ref LambdaSG
-      SubnetIds: !Split [",", !Ref PublicSubnets]
     Timeout: 90
     MemorySize: 1024
     Environment:
@@ -64,6 +60,10 @@ Resources:
       CodeUri: functions/
       Policies:
       - AWSLambdaVPCAccessExecutionRole
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSG
+        SubnetIds: !Split [",", !Ref PublicSubnets]
       Events:
         GetFractals:
           Type: Api
@@ -77,6 +77,10 @@ Resources:
       CodeUri: functions/
       Policies:
       - AWSLambdaVPCAccessExecutionRole
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSG
+        SubnetIds: !Split [",", !Ref PublicSubnets]
       Events:
         PostFractal:
           Type: Api
@@ -90,12 +94,37 @@ Resources:
       CodeUri: functions/
       Policies:
       - AWSLambdaVPCAccessExecutionRole
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaSG
+        SubnetIds: !Split [",", !Ref PublicSubnets]
       Events:
         GetFractal:
           Type: Api
           Properties:
             Path: /fractals/{key}
             Method: get
+  WarmingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: warm.handle
+      CodeUri: functions/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambdaRole
+      Events:
+        EveryFiveMinutes:
+          Type: Schedule
+          Properties:
+            Schedule: rate(5 minutes)
+      Environment:
+        Variables:
+          DOMAIN_NAME: !Ref DomainName
+          LAMBDAS: !Join
+            - ","
+            - - !Ref GetFractalsFunction
+              - !Ref PostFractalFunction
+              - !Ref GetFractalFunction
 
   ################################################################################
   # Domain Name

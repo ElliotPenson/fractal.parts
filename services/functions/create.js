@@ -1,4 +1,5 @@
 const { put, exists } = require('./database');
+const { isWarming } = require('./warm');
 const {
   buildResponse,
   buildConflictResponse,
@@ -7,6 +8,9 @@ const {
 const { validate } = require('./validation');
 
 async function handle(event, context) {
+  if (isWarming(event)) {
+    return buildResponse();
+  }
   const { title, body } = JSON.parse(event.body);
   const valid = validate({ title, body });
   if (!valid) {

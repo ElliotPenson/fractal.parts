@@ -1,7 +1,11 @@
 const { exists, get, increment } = require('./database');
+const { isWarming } = require('./warm');
 const { buildResponse, HttpStatus } = require('./utilities');
 
 exports.handle = async (event, context, other) => {
+  if (isWarming(event)) {
+    return buildResponse();
+  }
   const { key } = event.pathParameters;
   if (!(await exists(key))) {
     return buildResponse(
