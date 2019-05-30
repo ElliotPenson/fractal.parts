@@ -1,0 +1,24 @@
+.Browse {
+  margin: 0 auto;
+  padding: 2em;
+  font-size: 1.8em;
+  max-width: 1100px;
+}
+
+.Browse {
+  font-size: 1.8em;
+}
+
+.Browse-title {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 2em;
+}
+
+.Browse svg {
+  font-size: 1.5em;
+}
+
+.Browse h2 {
+  font-size: 1em;
+}

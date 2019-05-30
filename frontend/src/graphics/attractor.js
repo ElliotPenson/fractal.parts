@@ -3,7 +3,7 @@ import { pickRandom } from 'mathjs';
 import { Transformation } from './Transformation';
 import { getContext } from './utilities';
 
-const color = 'black';
+const color = 'rgba(0, 0, 0, 0.85)';
 
 export function draw(canvas, fractal, random = false) {
   const context = getContext(canvas);
