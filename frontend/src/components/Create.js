@@ -3,7 +3,6 @@ import { Button, message, Tabs } from 'antd';
 
 import Canvas from './Canvas';
 import EditableTitle from './EditableTitle';
-import PublishButton from './PublishButton';
 import SettingsDrawer from './SettingsDrawer';
 import RedTooltip from './RedTooltip';
 import Attractor from './Attractor';
@@ -156,10 +155,14 @@ class Create extends Component {
               >
                 Settings
               </Button>
-              <PublishButton
-                isPublishing={isPublishing}
-                onPublish={this.publish}
-              />
+              <Button
+                size="large"
+                type="primary"
+                loading={isPublishing}
+                onClick={this.publish}
+              >
+                Publish
+              </Button>
             </Group>
           }
         >
