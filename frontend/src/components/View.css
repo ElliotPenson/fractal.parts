@@ -3,10 +3,10 @@
 }
 
 .View h1 {
-  font-size: calc(40px + 2vmin);
+  font-size: calc(20px + 2.5vmin);
   margin-bottom: 10px;
 }
 
 .View p {
-  font-size: calc(20px + 1vmin);
+  font-size: calc(10px + 1vmin);
 }

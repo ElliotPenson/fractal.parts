@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TimeAgo from 'react-timeago';
-import { Typography } from 'antd';
+import { notification, Typography } from 'antd';
 
 import NotFound from './NotFound';
 import Attractor from './Attractor';
@@ -17,15 +17,34 @@ class View extends Component {
   }
 
   async componentDidMount() {
-    const { pathname } = this.props.location;
-    const key = pathname.slice(1);
     try {
-      const { data, status } = await get(key);
+      const { data, status } = await get(this.parseKey());
       this.setState({ fractal: data, status });
+      if (this.justPublished()) {
+        this.displaySuccess();
+      }
     } catch (error) {
-      const { status } = error.response;
-      this.setState({ status });
+      this.setState({ status: error.response.status });
     }
+  }
+
+  parseKey() {
+    const { pathname } = this.props.location;
+    return pathname.slice(1);
+  }
+
+  justPublished() {
+    const { state } = this.props.location;
+    return state && state.justPublished;
+  }
+
+  displaySuccess() {
+    const key = this.parseKey();
+    notification.success({
+      message: 'Successfully published!',
+      description: `Your fractal is permanently available at fractal.parts/${key}.`,
+      duration: null // don't close automatically.
+    });
   }
 
   render() {

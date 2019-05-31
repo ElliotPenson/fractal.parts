@@ -112,7 +112,7 @@ class Create extends Component {
       this.setState({ isPublishing: true });
       try {
         const { data } = await create(this.state.title, this.template);
-        this.props.history.push(`/${data.key}`);
+        this.redirect(data.key);
       } catch (error) {
         const { status } = error.response;
         if (status === conflictCode) {
@@ -123,6 +123,13 @@ class Create extends Component {
         this.setState({ isPublishing: false });
       }
     }
+  };
+
+  redirect = key => {
+    this.props.history.push({
+      pathname: `/${key}`,
+      state: { justPublished: true }
+    });
   };
 
   render() {
