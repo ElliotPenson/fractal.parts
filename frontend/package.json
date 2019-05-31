@@ -14,6 +14,7 @@
     "react-infinite-scroller": "^1.2.4",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
+    "react-timeago": "^4.4.0",
     "riek": "^1.1.0"
   },
   "scripts": {

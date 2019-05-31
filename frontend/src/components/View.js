@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TimeAgo from 'react-timeago';
 import { Typography } from 'antd';
 
 import NotFound from './NotFound';
@@ -34,14 +35,18 @@ class View extends Component {
     } else if (!fractal) {
       return null;
     } else {
+      const { title, created_at, views, body } = fractal;
       return (
         <div className="View">
-          <Title>{fractal.title}</Title>
-          <p>with {fractal.views} views</p>
+          <Title>{title}</Title>
+          <p>
+            Created <TimeAgo date={created_at} live={false} />. Viewed {views}{' '}
+            time{views === 1 ? '' : 's'}.
+          </p>
           <Attractor
             width={window.innerWidth}
             height={window.innerHeight}
-            fractal={fractal.body}
+            fractal={body}
           />
         </div>
       );
