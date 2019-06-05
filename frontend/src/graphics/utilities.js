@@ -1,4 +1,23 @@
 /**
+ * Enumerated keyboard keys. The values in this object correspond with DOM event
+ * attributes.
+ */
+export const Key = Object.freeze({
+  BACKSPACE: 'backspace',
+  CLEAR: 'clear',
+  DELETE: 'delete',
+  DEL: 'del',
+  CONTROL: 'ctrlKey',
+  ALT: 'altKey',
+  SHIFT: 'shiftKey',
+  META: 'metaKey'
+});
+
+export function isDeletion(key) {
+  return [Key.BACKSPACE, Key.CLEAR, Key.DELETE, Key.DEL].includes(key);
+}
+
+/**
  * Lazily remove all items from a collection where predicate returns false.
  * @param {function} predicate
  * @param {Iterator|Generator} generator

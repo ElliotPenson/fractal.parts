@@ -121,13 +121,21 @@ export class Shape {
     this.guides = [];
   }
 
-  moveMouse(deltaX, deltaY, x, y, shapes) {
+  moveMouse(deltaX, deltaY, x, y, shapes, keypress) {
     if (this.isDragging) {
       this.isFocused = false;
       this.shift(deltaX, deltaY);
-      this.guides = inferGuides(shapes);
+      this.setGuides(shapes, keypress);
     }
     this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY, x, y));
+  }
+
+  setGuides(shapes, keypress = false) {
+    if (keypress) {
+      this.guides = [];
+    } else {
+      this.guides = inferGuides(shapes);
+    }
   }
 
   findAt(x, y) {

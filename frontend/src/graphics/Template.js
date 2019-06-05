@@ -1,5 +1,5 @@
 import { Cursor, useCursor } from './Cursor';
-import { reverse, getContext } from './utilities';
+import { Key, isDeletion, reverse, getContext } from './utilities';
 import { Shape } from './Shape';
 import { colors } from './colors';
 
@@ -73,9 +73,11 @@ export class Template {
     this.shapes.forEach(shape => shape.liftMouse());
   }
 
-  moveMouse(deltaX, deltaY, x, y) {
+  moveMouse(deltaX, deltaY, x, y, keypress) {
     const { shapes } = this;
-    shapes.forEach(shape => shape.moveMouse(deltaX, deltaY, x, y, shapes));
+    shapes.forEach(shape =>
+      shape.moveMouse(deltaX, deltaY, x, y, shapes, keypress)
+    );
     if (!this.isDragging()) {
       this.setCursor(x, y);
     }
@@ -135,7 +137,7 @@ export class Template {
 
   mouseMoveListener = event => {
     const { x, y } = findPosition(event, this.canvas);
-    this.moveMouse(event.movementX, event.movementY, x, y);
+    this.moveMouse(event.movementX, event.movementY, x, y, getKeypress(event));
     this.draw();
   };
 
@@ -145,7 +147,7 @@ export class Template {
   };
 
   keyDownListener = event => {
-    if (isDeletion(event.key)) {
+    if (isDeletion(event.key.toLowerCase())) {
       this.delete();
     }
     this.draw();
@@ -166,8 +168,8 @@ export class Template {
   };
 }
 
-function isDeletion(key) {
-  return ['backspace', 'clear', 'delete', 'del'].includes(key.toLowerCase());
+function getKeypress(event) {
+  return Object.keys(Key).find(key => event[Key[key]]);
 }
 
 function findPosition(event, canvas) {
