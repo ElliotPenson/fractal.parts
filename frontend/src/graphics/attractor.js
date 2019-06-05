@@ -8,10 +8,12 @@ const color = 'rgba(0, 0, 0, 0.85)';
 export function draw(canvas, fractal, random = false) {
   const context = getContext(canvas);
   const transformations = buildTransformations(fractal);
-  if (random) {
-    drawRandomly(context, fractal.parent, transformations);
-  } else {
-    drawRecursively(context, fractal.parent, transformations);
+  if (transformations.length > 0) {
+    if (random) {
+      drawRandomly(context, fractal.parent, transformations);
+    } else {
+      drawRecursively(context, fractal.parent, transformations);
+    }
   }
 }
 

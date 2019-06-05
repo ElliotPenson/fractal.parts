@@ -157,17 +157,24 @@ export class Transformation {
    * @returns {Transformation}
    */
   static betweenShapes(parent, child) {
+    [parent, child] = moveToOrigin(parent, child);
     const transformation = Transformation.identity();
+    const xScale = child.width / parent.width;
+    const yScale = child.height / parent.height;
     transformation.translate(child.x - parent.x, child.y - parent.y);
-    transformation.scale(
-      child.width / parent.width,
-      child.height / parent.height
-    );
     transformation.rotateAt(
       child.rotation - parent.rotation,
-      (child.width / parent.width) * (parent.width / 2),
-      (child.height / parent.height) * (parent.height / 2)
+      xScale * (parent.width / 2),
+      yScale * (parent.height / 2)
     );
+    transformation.scale(xScale, yScale);
     return transformation;
   }
+}
+
+function moveToOrigin(parent, child) {
+  const { x, y } = parent;
+  parent = { ...parent, x: 0, y: 0 };
+  child = { ...child, x: child.x - x, y: child.y - y };
+  return [parent, child];
 }
