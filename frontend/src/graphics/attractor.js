@@ -1,12 +1,11 @@
 import { pickRandom } from 'mathjs';
 
 import { Transformation } from './Transformation';
-import { getContext } from './utilities';
 
 const color = 'rgba(0, 0, 0, 0.85)';
 
-export function draw(canvas, fractal, random = false) {
-  const context = getContext(canvas);
+export function draw(context, fractal, random = false) {
+  clear(context);
   const transformations = buildTransformations(fractal);
   if (transformations.length > 0) {
     if (random) {
@@ -26,7 +25,7 @@ function drawRecursively(
   context,
   shape,
   transformations,
-  iterations = 1,
+  iterations = 7,
   count = 0
 ) {
   if (count === iterations) {
@@ -65,4 +64,9 @@ function drawShape(context, shape) {
 function plotPoint(context, x, y) {
   context.fillStyle = 'black';
   context.fillRect(x, y, 1, 1);
+}
+
+function clear(context) {
+  context.fillStyle = 'white';
+  context.fillRect(0, 0, 1000, 1000);
 }

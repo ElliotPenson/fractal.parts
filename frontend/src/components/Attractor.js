@@ -2,29 +2,29 @@ import React, { Component } from 'react';
 
 import Canvas from './Canvas';
 import { draw } from '../graphics/attractor';
+import { getContext } from '../graphics/utilities';
 
 class Attractor extends Component {
   constructor() {
     super();
-    this.state = { canvas: null };
+    this.state = { context: null };
   }
+
+  handleCanvas = canvas => {
+    const context = getContext(canvas);
+    this.setState({ context });
+  };
 
   render() {
     const { fractal, width, height } = this.props;
-    const { canvas } = this.state;
+    const { context } = this.state;
     if (!fractal) {
       return null;
     }
-    if (canvas) {
-      draw(canvas, fractal);
+    if (context) {
+      draw(context, fractal);
     }
-    return (
-      <Canvas
-        width={width}
-        height={height}
-        onRef={canvas => this.setState({ canvas })}
-      />
-    );
+    return <Canvas width={width} height={height} onRef={this.handleCanvas} />;
   }
 }
 
