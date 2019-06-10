@@ -54,7 +54,7 @@ class View extends Component {
     } else if (!fractal) {
       return null;
     } else {
-      const { title, created_at, views, body } = fractal;
+      const { title, created_at, views } = fractal;
       return (
         <div className="View">
           <Title>{title}</Title>
@@ -65,7 +65,7 @@ class View extends Component {
           <Attractor
             width={window.innerWidth}
             height={window.innerHeight}
-            fractal={body}
+            fractal={fractal}
           />
         </div>
       );

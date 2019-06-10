@@ -9,9 +9,9 @@ export const API_URL = 'https://api.fractal.parts/fractals/';
  * @param {Template} template
  * @returns {Promise}
  */
-export function create(title, template) {
-  const { parent, children } = template;
-  return axios.post(API_URL, { title, body: { parent, children } });
+export function create(fractal) {
+  const { title, body } = fractal;
+  return axios.post(API_URL, { title, body });
 }
 
 /**

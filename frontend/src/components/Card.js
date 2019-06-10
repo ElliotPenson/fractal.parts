@@ -6,11 +6,11 @@ import Attractor from './Attractor';
 import './Card.css';
 
 function Card({ fractal }) {
-  const { key, title, body } = fractal;
+  const { key, title } = fractal;
   return (
     <div className="Card">
       <Link to={`/${key}`}>
-        <Attractor width={200} height={200} fractal={body} />
+        <Attractor width={200} height={200} fractal={fractal} />
         <h2>{title}</h2>
       </Link>
     </div>

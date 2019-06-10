@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, message, Tabs } from 'antd';
+import produce from 'immer';
 
 import Canvas from './Canvas';
 import EditableTitle from './EditableTitle';
@@ -8,6 +9,7 @@ import RedTooltip from './RedTooltip';
 import Attractor from './Attractor';
 import { Template } from '../graphics/Template';
 import { create } from '../api';
+import { RenderMethod } from '../graphics/attractor';
 
 import './Create.css';
 
@@ -21,19 +23,27 @@ class Create extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: defaultTitle,
       errors: {
         title: { isValid: true, message: '' },
         template: { isValid: true, message: '' }
       },
       isPublishing: false,
       settingsVisible: false,
-      fractal: null
+      fractal: {
+        title: defaultTitle,
+        body: {
+          settings: { renderMethod: RenderMethod.PROGRESSIVE, iterations: 6 }
+        }
+      }
     };
   }
 
   handleTitle = title => {
-    this.setState({ title });
+    this.setState(
+      produce(draft => {
+        draft.fractal.title = title;
+      })
+    );
     this.clearError('title');
   };
 
@@ -49,6 +59,68 @@ class Create extends Component {
     this.template.add();
     this.template.draw();
     this.clearError('template');
+  };
+
+  handleSettings = settings => {
+    this.setState(
+      produce(draft => {
+        draft.fractal.body.settings = {
+          ...draft.fractal.body.settings,
+          ...settings
+        };
+      })
+    );
+  };
+
+  handleTab = key => {
+    if (key === 'template') {
+      this.template.makeInteractive();
+    } else {
+      this.template.removeInteractivity();
+      this.syncFractal();
+    }
+  };
+
+  syncFractal = () => {
+    this.setState(
+      produce(draft => {
+        draft.fractal = this.makeFractal();
+      })
+    );
+  };
+
+  makeFractal = () => {
+    const {
+      title,
+      body: { settings }
+    } = this.state.fractal;
+    const { parent, children } = this.template;
+    return { title, body: { settings, parent, children } };
+  };
+
+  publish = async () => {
+    if (this.validate()) {
+      this.setState({ isPublishing: true });
+      try {
+        const { data } = await create(this.makeFractal());
+        this.redirect(data.key);
+      } catch (error) {
+        const { status } = error.response;
+        if (status === conflictCode) {
+          this.addError('title', 'A fractal with this title already exists.');
+        } else {
+          message.error(`Unable to publish fractal (${status})`);
+        }
+        this.setState({ isPublishing: false });
+      }
+    }
+  };
+
+  redirect = key => {
+    this.props.history.push({
+      pathname: `/${key}`,
+      state: { justPublished: true }
+    });
   };
 
   validate() {
@@ -97,52 +169,16 @@ class Create extends Component {
     });
   }
 
-  handleTab = key => {
-    const { template } = this;
-    if (key === 'template') {
-      template.makeInteractive();
-    } else {
-      template.removeInteractivity();
-    }
-    this.setState({ fractal: template });
-  };
-
-  publish = async () => {
-    if (this.validate()) {
-      this.setState({ isPublishing: true });
-      try {
-        const { data } = await create(this.state.title, this.template);
-        this.redirect(data.key);
-      } catch (error) {
-        const { status } = error.response;
-        if (status === conflictCode) {
-          this.addError('title', 'A fractal with this title already exists.');
-        } else {
-          message.error(`Unable to publish fractal (${status})`);
-        }
-        this.setState({ isPublishing: false });
-      }
-    }
-  };
-
-  redirect = key => {
-    this.props.history.push({
-      pathname: `/${key}`,
-      state: { justPublished: true }
-    });
-  };
-
   render() {
-    const { title, errors, isPublishing, drawerVisible } = this.state;
+    const { errors, isPublishing, drawerVisible, fractal } = this.state;
     return (
       <div className="Create">
         <EditableTitle
-          value={title}
+          value={fractal.title}
           onChange={this.handleTitle}
           hasError={!errors.title.isValid}
           errorMessage={errors.title.message}
         />
-
         <Tabs
           size="large"
           onChange={this.handleTab}
@@ -184,14 +220,15 @@ class Create extends Component {
             <Attractor
               width={window.innerWidth}
               height="1000"
-              fractal={this.state.fractal}
+              fractal={fractal}
             />
           </TabPane>
         </Tabs>
-
         <SettingsDrawer
+          settings={fractal.body.settings}
           visible={drawerVisible}
           onClose={() => this.setState({ drawerVisible: false })}
+          onChange={this.handleSettings}
         />
       </div>
     );

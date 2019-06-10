@@ -1,0 +1,12 @@
+.SettingsDrawer-label {
+  text-align: right;
+  padding: 5px 10px;
+}
+
+.SettingsDrawer-label::after {
+  content: ':';
+}
+
+.SettingsDrawer-row {
+  padding-bottom: 5px;
+}

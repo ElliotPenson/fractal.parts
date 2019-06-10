@@ -11,14 +11,16 @@ class Attractor extends Component {
   }
 
   handleCanvas = canvas => {
-    const context = getContext(canvas);
-    this.setState({ context });
+    if (canvas) {
+      const context = getContext(canvas);
+      this.setState({ context });
+    }
   };
 
   render() {
     const { fractal, width, height } = this.props;
     const { context } = this.state;
-    if (!fractal) {
+    if (!fractal || !fractal.body || !fractal.body.parent) {
       return null;
     }
     if (context) {

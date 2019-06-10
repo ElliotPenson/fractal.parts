@@ -4,20 +4,37 @@ import { Transformation } from './Transformation';
 
 const color = 'rgba(0, 0, 0, 0.85)';
 
-export function draw(context, fractal, random = false) {
+export const RenderMethod = Object.freeze({
+  RANDOM: 'random',
+  PROGRESSIVE: 'progressive'
+});
+
+export const ITERATION_RANGE = {
+  [RenderMethod.RANDOM]: [1000, 50000],
+  [RenderMethod.PROGRESSIVE]: [1, 10]
+};
+
+export function draw(context, fractal) {
   clear(context);
+  let { iterations, renderMethod } = fractal.body.settings;
   const transformations = buildTransformations(fractal);
   if (transformations.length > 0) {
-    if (random) {
-      drawRandomly(context, fractal.parent, transformations);
+    iterations = fitToRange(iterations, renderMethod);
+    if (renderMethod === RenderMethod.RANDOM) {
+      drawRandomly(context, fractal.body.parent, transformations, iterations);
     } else {
-      drawRecursively(context, fractal.parent, transformations);
+      drawRecursively(
+        context,
+        fractal.body.parent,
+        transformations,
+        iterations
+      );
     }
   }
 }
 
 function buildTransformations(fractal) {
-  const { parent, children } = fractal;
+  const { parent, children } = fractal.body;
   return children.map(child => Transformation.betweenShapes(parent, child));
 }
 
@@ -69,4 +86,15 @@ function plotPoint(context, x, y) {
 function clear(context) {
   context.fillStyle = 'white';
   context.fillRect(0, 0, 1000, 1000);
+}
+
+function fitToRange(iterations, renderMethod) {
+  const [min, max] = ITERATION_RANGE[renderMethod];
+  if (iterations < min) {
+    return min;
+  } else if (iterations > max) {
+    return max;
+  } else {
+    return iterations;
+  }
 }
