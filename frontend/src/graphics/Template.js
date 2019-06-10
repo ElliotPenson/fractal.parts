@@ -130,7 +130,10 @@ export class Template {
   }
 
   mouseDownListener = event => {
+    console.log(event);
+    console.log(this.canvas.getBoundingClientRect());
     const { x, y } = findPosition(event, this.canvas);
+    console.log({ x, y });
     this.pressMouse(x, y);
     this.draw();
   };
@@ -174,7 +177,7 @@ function getKeypress(event) {
 
 function findPosition(event, canvas) {
   const { left, top } = canvas.getBoundingClientRect();
-  const x = event.pageX - left;
-  const y = event.pageY - top;
+  const x = event.clientX - left;
+  const y = event.clientY - top;
   return { x, y };
 }
