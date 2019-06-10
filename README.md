@@ -8,3 +8,6 @@ with a React frontend. See the
 or the
 [frontend README](https://github.com/ElliotPenson/fractal.parts/tree/master/frontend)
 for more information.
+
+Thanks to [Jason Lynch](https://github.com/jason-lynch) and Owen Littlejohns for
+their early comments and testing.
