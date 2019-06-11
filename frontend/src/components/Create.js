@@ -144,7 +144,7 @@ class Create extends Component {
   }
 
   validateField(field, predicate, message) {
-    if (predicate(this.state[field])) {
+    if (predicate(this.state.fractal[field])) {
       this.addError(field, message);
       return false;
     }
