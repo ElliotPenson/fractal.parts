@@ -4,7 +4,7 @@ import { Transformation } from './Transformation';
 import { Handle } from './Handle';
 
 export class Shape {
-  constructor(x, y, width, height, color = 'black', rotation = 0) {
+  constructor(x, y, width, height, color, rotation = 0, outline = false) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -13,6 +13,7 @@ export class Shape {
     this.rotation = rotation;
     this.isFocused = false;
     this.isDragging = false;
+    this.outline = outline;
     this.handles = Handle.build(this);
     this.guides = [];
   }
@@ -47,9 +48,23 @@ export class Shape {
   }
 
   drawBody(context) {
-    const { x, y, width, height, color } = this;
-    context.fillStyle = color;
-    context.fillRect(x, y, width, height);
+    context.save();
+    if (this.outline) {
+      this.drawOutline(context);
+    }
+    this.drawRectangle(context);
+    context.restore();
+  }
+
+  drawRectangle(context) {
+    context.fillStyle = this.color;
+    context.fillRect(this.x, this.y, this.width, this.height);
+  }
+
+  drawOutline(context) {
+    context.lineWidth = 2;
+    context.strokeStyle = '#D9D9D9';
+    context.strokeRect(this.x, this.y, this.width, this.height);
   }
 
   drawHandles(context) {
@@ -156,8 +171,8 @@ export class Shape {
   }
 
   clone() {
-    const { x, y, width, height, color, rotation } = this;
-    return new Shape(x, y, width, height, color, rotation);
+    const { x, y, width, height, color, rotation, outline } = this;
+    return new Shape(x, y, width, height, color, rotation, outline);
   }
 
   isTouching(x, y) {
@@ -176,5 +191,11 @@ export class Shape {
 
   static fromJSON({ x, y, width, height, color, rotation }) {
     return new Shape(x, y, width, height, color, rotation);
+  }
+}
+
+export class Base extends Shape {
+  constructor(x, y, width, height) {
+    super(x, y, width, height, 'white', 0, true);
   }
 }

@@ -1,13 +1,15 @@
 import { Cursor, useCursor } from './Cursor';
 import { Key, isDeletion, reverse, getContext } from './utilities';
-import { Shape } from './Shape';
+import { Shape, Base } from './Shape';
 import { colors } from './colors';
+
+const backgroundColor = '#F8F8F8';
 
 export class Template {
   constructor(canvas) {
     this.canvas = canvas;
     this.context = getContext(canvas);
-    this.parent = new Shape(10, 10, 500, 500, '#EEEEEE');
+    this.parent = new Base(100, 100, 500, 500);
     this.shapes = [this.parent];
     this.clipboard = null;
     this.colors = colors();
@@ -20,7 +22,7 @@ export class Template {
   add(shape) {
     if (!shape) {
       const color = this.colors.next().value;
-      shape = new Shape(100, 100, 150, 150, color);
+      shape = new Shape(100, 100, 150, 150, color, 0, false);
     }
     this.shapes.push(shape);
   }
@@ -40,7 +42,7 @@ export class Template {
 
   clear() {
     const { context, canvas } = this;
-    context.fillStyle = 'white';
+    context.fillStyle = backgroundColor;
     context.fillRect(0, 0, canvas.width, canvas.height);
   }
 
@@ -132,10 +134,7 @@ export class Template {
   }
 
   mouseDownListener = event => {
-    console.log(event);
-    console.log(this.canvas.getBoundingClientRect());
     const { x, y } = findPosition(event, this.canvas);
-    console.log({ x, y });
     this.pressMouse(x, y);
     this.draw();
   };

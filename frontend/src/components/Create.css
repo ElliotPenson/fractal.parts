@@ -1,3 +1,7 @@
 .Create {
   padding: 3em 4em;
 }
+
+.Create .ant-tabs-bar {
+  margin: 0;
+}
