@@ -26,7 +26,9 @@ export class Template {
   }
 
   delete() {
-    this.shapes = this.shapes.filter(shape => !shape.isFocused);
+    this.shapes = this.shapes.filter(
+      shape => shape === this.parent || !shape.isFocused
+    );
   }
 
   draw() {
