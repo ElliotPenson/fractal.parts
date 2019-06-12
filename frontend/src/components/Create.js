@@ -7,6 +7,7 @@ import EditableTitle from './EditableTitle';
 import SettingsDrawer from './SettingsDrawer';
 import RedTooltip from './RedTooltip';
 import Attractor from './Attractor';
+import { ask } from './notifications';
 import { Template } from '../graphics/Template';
 import { create } from '../api';
 import { RenderMethod } from '../graphics/attractor';
@@ -36,6 +37,14 @@ class Create extends Component {
         }
       }
     };
+  }
+
+  componentDidMount() {
+    ask(
+      'Welcome to fractal.parts!',
+      'This page lets you create a fractal. Would you like a tour?',
+      () => this.setState({ tour: true })
+    );
   }
 
   handleTitle = title => {

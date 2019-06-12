@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import TimeAgo from 'react-timeago';
-import { notification, Typography } from 'antd';
+import { Typography } from 'antd';
 
 import NotFound from './NotFound';
 import Attractor from './Attractor';
+import { success } from './notifications';
 import { get } from '../api';
 
 import './View.css';
@@ -40,11 +41,10 @@ class View extends Component {
 
   displaySuccess() {
     const key = this.parseKey();
-    notification.success({
-      message: 'Successfully published!',
-      description: `Your fractal is permanently available at fractal.parts/${key}.`,
-      duration: null // don't close automatically.
-    });
+    success(
+      'Successfully published!',
+      `Your fractal is permanently available at fractal.parts/${key}.`
+    );
   }
 
   render() {
