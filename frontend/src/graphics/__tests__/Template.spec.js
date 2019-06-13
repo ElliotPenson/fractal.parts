@@ -3,6 +3,7 @@ import { Shape } from '../Shape.js';
 
 const context = {
   fillRect: jest.fn(),
+  strokeRect: jest.fn(),
   scale: jest.fn(),
   save: jest.fn(),
   transform: jest.fn(),
