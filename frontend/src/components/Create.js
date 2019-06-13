@@ -7,7 +7,7 @@ import EditableTitle from './EditableTitle';
 import SettingsDrawer from './SettingsDrawer';
 import RedTooltip from './RedTooltip';
 import Attractor from './Attractor';
-import { ask } from './notifications';
+import { welcome } from './notifications';
 import { Template } from '../graphics/Template';
 import { create } from '../api';
 import { RenderMethod } from '../graphics/attractor';
@@ -30,6 +30,7 @@ class Create extends Component {
       },
       isPublishing: false,
       settingsVisible: false,
+      tourVisible: false,
       fractal: {
         title: defaultTitle,
         body: {
@@ -40,10 +41,10 @@ class Create extends Component {
   }
 
   componentDidMount() {
-    ask(
+    welcome(
       'Welcome to fractal.parts!',
       'This page lets you create a fractal. Would you like a tour?',
-      () => this.setState({ tour: true })
+      () => this.setState({ tourVisible: true })
     );
   }
 
@@ -179,7 +180,7 @@ class Create extends Component {
   }
 
   render() {
-    const { errors, isPublishing, drawerVisible, fractal } = this.state;
+    const { errors, isPublishing, settingsVisible, fractal } = this.state;
     return (
       <div className="Create">
         <EditableTitle
@@ -203,7 +204,7 @@ class Create extends Component {
               </RedTooltip>
               <Button
                 size="large"
-                onClick={() => this.setState({ drawerVisible: true })}
+                onClick={() => this.setState({ settingsVisible: true })}
               >
                 Settings
               </Button>
@@ -235,8 +236,8 @@ class Create extends Component {
         </Tabs>
         <SettingsDrawer
           settings={fractal.body.settings}
-          visible={drawerVisible}
-          onClose={() => this.setState({ drawerVisible: false })}
+          visible={settingsVisible}
+          onClose={() => this.setState({ settingsVisible: false })}
           onChange={this.handleSettings}
         />
       </div>

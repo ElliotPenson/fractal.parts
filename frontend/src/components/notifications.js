@@ -1,14 +1,44 @@
 import React from 'react';
-import { Button, message, Modal, notification, Tabs } from 'antd';
+import { notification } from 'antd';
 
+import { preventWelcome } from '../cookies';
 import YesNo from './YesNo';
 
-export function ask(message, description, onYes) {
-  const key = makeKey();
-  const btn = <YesNo onYes={onYes} onNo={() => notification.close(key)} />;
-  notification.open({ key, message, description, duration: null, btn });
+const duration = null; // don't close
+
+/**
+ * Display a message to new users. Save a cookie to prevent additional welcomes.
+ */
+export function welcome(message, description, onYes) {
+  if (!preventWelcome.get()) {
+    ask(message, description, onYes, () => preventWelcome.on());
+  }
 }
 
+/**
+ * Show a dialog box that asks the user a yes/no question.
+ */
+export function ask(message, description, onYes, onClose) {
+  const key = makeKey();
+  const close = () => {
+    notification.close(key);
+    onClose();
+  };
+  const btn = (
+    <YesNo
+      onYes={() => {
+        close();
+        onYes();
+      }}
+      onNo={close}
+    />
+  );
+  notification.open({ key, message, description, duration, btn, onClose });
+}
+
+/**
+ * Display a green notification.
+ */
 export function success(message, description) {
   notification.success({ message, description, duration: null });
 }
