@@ -8,8 +8,8 @@ class Canvas extends Component {
   }
 
   render() {
-    const { width, height, onRef } = this.props;
-    return <canvas {...{ width, height }} ref={onRef} />;
+    const { width, height, onRef, className } = this.props;
+    return <canvas {...{ width, height }} ref={onRef} className={className} />;
   }
 }
 

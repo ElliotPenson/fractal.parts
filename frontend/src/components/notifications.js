@@ -33,7 +33,7 @@ export function ask(message, description, onYes, onClose) {
       onNo={close}
     />
   );
-  notification.open({ key, message, description, duration, btn, onClose });
+  notification.open({ key, message, description, duration, btn });
 }
 
 /**

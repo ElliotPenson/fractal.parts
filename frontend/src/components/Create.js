@@ -7,6 +7,7 @@ import EditableTitle from './EditableTitle';
 import SettingsDrawer from './SettingsDrawer';
 import RedTooltip from './RedTooltip';
 import Attractor from './Attractor';
+import Tour from './Tour';
 import { welcome } from './notifications';
 import { Template } from '../graphics/Template';
 import { create } from '../api';
@@ -198,7 +199,11 @@ class Create extends Component {
                 visible={!errors.template.isValid}
                 message={errors.template.message}
               >
-                <Button size="large" onClick={this.handleAdd}>
+                <Button
+                  className="Create-add"
+                  size="large"
+                  onClick={this.handleAdd}
+                >
                   Add
                 </Button>
               </RedTooltip>
@@ -209,6 +214,7 @@ class Create extends Component {
                 Settings
               </Button>
               <Button
+                className="Create-publish"
                 size="large"
                 type="primary"
                 loading={isPublishing}
@@ -221,12 +227,17 @@ class Create extends Component {
         >
           <TabPane tab="Template" key="template" forceRender>
             <Canvas
+              className="Create-template"
               width={window.innerWidth}
               height="1000"
               onRef={this.handleTemplate}
             />
           </TabPane>
-          <TabPane tab="Preview" key="preview" forceRender>
+          <TabPane
+            tab={<span className="Create-preview">Preview</span>}
+            key="preview"
+            forceRender
+          >
             <Attractor
               width={window.innerWidth}
               height="1000"
@@ -240,6 +251,7 @@ class Create extends Component {
           onClose={() => this.setState({ settingsVisible: false })}
           onChange={this.handleSettings}
         />
+        <Tour run={this.state.tourVisible} />
       </div>
     );
   }

@@ -49,7 +49,6 @@ class Browse extends Component {
         <InfiniteScroll loadMore={this.fetch} hasMore={hasMore} loader={loader}>
           <Row>
             {fractals.map(fractal => {
-              console.log(fractal.key);
               return (
                 <Col key={fractal.key} sm={24} md={12} lg={8}>
                   <Card fractal={fractal} />

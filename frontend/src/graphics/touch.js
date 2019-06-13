@@ -54,7 +54,6 @@ function findPosition(touchEvent) {
 function findMovement(touchEvent) {
   if (lastPosition) {
     const currentPosition = findPosition(touchEvent);
-    console.log(currentPosition.clientX - lastPosition.clientX);
     return {
       movementX: currentPosition.clientX - lastPosition.clientX,
       movementY: currentPosition.clientY - lastPosition.clientY
