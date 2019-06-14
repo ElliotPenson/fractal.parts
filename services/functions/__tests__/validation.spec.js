@@ -2,12 +2,12 @@ const { validate } = require('../validation');
 
 describe('validate', () => {
   it('returns true when a title and body are given', () => {
-    const fractal = { title: 'example', body: {} };
+    const fractal = { title: 'example', body: '' };
     expect(validate(fractal)).toBeTruthy();
   });
 
   it('requires a title', () => {
-    const fractal = { body: {} };
+    const fractal = { body: '' };
     expect(validate(fractal)).toBeFalsy();
   });
 
@@ -19,8 +19,20 @@ describe('validate', () => {
   it('requires a title with at least one alphanumeric character', () => {
     const titles = ['', '    ', '!', '%^&$(%'];
     for (const title of titles) {
-      const fractal = { title, body: {} };
+      const fractal = { title, body: '' };
       expect(validate(fractal)).toBeFalsy();
     }
+  });
+
+  it('restricts the length of the title', () => {
+    const longTitle = 'text'.repeat(100000);
+    const fractal = { title: longTitle, body: '' };
+    expect(validate(fractal)).toBeFalsy();
+  });
+
+  it('restricts the length of the title', () => {
+    const longBody = 'text'.repeat(1000000);
+    const fractal = { title: 'title', body: longBody };
+    expect(validate(fractal)).toBeFalsy();
   });
 });

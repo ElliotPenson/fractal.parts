@@ -10,7 +10,7 @@ export const API_URL = 'https://api.fractal.parts/fractals/';
  * @returns {Promise}
  */
 export function create(fractal) {
-  const { title, body } = fractal;
+  const { title, body } = serialize(fractal);
   return axios.post(API_URL, { title, body });
 }
 
@@ -21,7 +21,7 @@ export function create(fractal) {
  */
 export function get(key) {
   const endpoint = url.resolve(API_URL, key);
-  return axios.get(endpoint);
+  return deserialize(axios.get(endpoint));
 }
 
 /**
@@ -29,5 +29,14 @@ export function get(key) {
  * @returns {Promise}
  */
 export function list(sort, offset, limit = 6) {
-  return axios.get(API_URL, { params: { sort, offset, limit } });
+  const response = axios.get(API_URL, { params: { sort, offset, limit } });
+  return { ...response, items: response.items.map(deserialize) };
+}
+
+function serialize(fractal) {
+  return { ...fractal, body: JSON.stringify(fractal.body) };
+}
+
+function deserialize(fractal) {
+  return { ...fractal, body: JSON.parse(fractal.body) };
 }

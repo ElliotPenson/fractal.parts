@@ -11,10 +11,9 @@ const Direction = Object.freeze({ ASC: 'asc', DESC: 'desc' });
 const knex = require('knex')({ client: 'mysql2', connection: getConfig() });
 
 async function get(key) {
-  const fractal = await knex('fractals')
+  return await knex('fractals')
     .where({ key })
     .first();
-  return deserialize(fractal);
 }
 
 async function exists(key) {
@@ -26,17 +25,16 @@ async function exists(key) {
 }
 
 function put(fractal) {
-  return knex('fractals').insert(serialize(fractal));
+  return knex('fractals').insert(fractal);
 }
 
 async function list(sort, limit, offset) {
   const [column, direction] = parseSort(sort);
-  const fractals = knex('*')
+  return knex('*')
     .from('fractals')
     .orderBy(column, direction)
     .limit(Number(limit))
     .offset(Number(offset));
-  return fractals.map(deserialize);
 }
 
 async function count() {
@@ -50,14 +48,6 @@ function increment(key, column = 'views') {
   return knex('fractals')
     .where({ key })
     .increment(column, 1);
-}
-
-function serialize(fractal) {
-  return { ...fractal, body: JSON.stringify(fractal.body) };
-}
-
-function deserialize(fractal) {
-  return { ...fractal, body: JSON.parse(fractal.body) };
 }
 
 function parseSort(sort) {

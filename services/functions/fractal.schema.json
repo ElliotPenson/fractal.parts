@@ -6,11 +6,13 @@
     "title": {
       "type": "string",
       "description": "User-defined fractal name. Must contain at least one alphanumeric character.",
-      "pattern": "[a-zA-Z0-9]"
+      "pattern": "[a-zA-Z0-9]",
+      "maxLength": 1000
     },
     "body": {
-      "type": "object",
-      "description": "Unstructured content."
+      "type": "string",
+      "description": "Unstructured content.",
+      "maxLength": 50000
     },
     "id": {
       "type": "string",
