@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Joyride from 'react-joyride';
-import { Button } from 'antd';
 
 import TourTooltip from './TourTooltip';
 
@@ -20,7 +19,7 @@ class Tour extends Component {
         target: '.Create-template',
         content:
           'The white rectangle on the canvas acts as the base shape. Click the base to resize.',
-        placement: 'top',
+        placement: 'top-start',
         placementBeacon: 'top'
       },
       {
