@@ -1,6 +1,6 @@
-# Services
+# Backend
 
-![Services Diagram](./services-diagram.png)
+![Backend Diagram](./backend-diagram.png)
 
 ## API
 
