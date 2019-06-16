@@ -87,7 +87,7 @@ class RightHandle extends Handle {
     return rotateCursor(Cursor.EW_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(deltaX, deltaY, x, y) {
     if (this.isDragging) {
       this.parent.width = this.parent.width + deltaX;
     }

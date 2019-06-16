@@ -142,6 +142,7 @@ export class Shape {
       this.shift(deltaX, deltaY);
       this.setGuides(shapes, keypress);
     }
+    [deltaX, deltaY] = this.transformation.localizeDelta(deltaX, deltaY, x, y);
     this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY, x, y));
   }
 

@@ -129,6 +129,21 @@ export class Transformation {
   }
 
   /**
+   * Undo this transformation's linear combination on a change in position.
+   * @param {number} deltaX
+   * @param {number} deltaY
+   * @param {number} finalX
+   * @param {number} finalY
+   */
+  localizeDelta(deltaX, deltaY, endX, endY) {
+    let [startX, startY] = [endX - deltaX, endY - deltaY];
+    // Delta x/y cannot be applied directly to the transformation.
+    [startX, startY] = this.localize(startX, startY);
+    [endX, endY] = this.localize(endX, endY);
+    return [endX - startX, endY - startY];
+  }
+
+  /**
    * Build the identity transformation (e.g. the transformation 'I' such that
    * Ix = x for all x).
    * @returns {Transformation}
