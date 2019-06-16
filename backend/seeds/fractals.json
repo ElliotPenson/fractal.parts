@@ -1,7 +1,134 @@
 [
   {
     "title": "Sierpinski",
-    "body": "TODO",
-    "view": 100
+    "body": {
+      "parent": {
+        "color": "white",
+        "height": 500,
+        "rotation": 0,
+        "width": 500,
+        "x": 100,
+        "y": 100
+      },
+      "children": [
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 250,
+          "rotation": 0,
+          "width": 250,
+          "x": 225,
+          "y": 100
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 250,
+          "rotation": 0,
+          "width": 250,
+          "x": 100,
+          "y": 350
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 250,
+          "rotation": 0,
+          "width": 250,
+          "x": 350,
+          "y": 350
+        }
+      ],
+      "settings": {
+        "renderMethod": "progressive",
+        "iterations": 8
+      }
+    },
+    "views": 300
+  },
+  {
+    "title": "Floral",
+    "body": {
+      "parent": {
+        "color": "white",
+        "height": 500,
+        "rotation": 0,
+        "width": 500,
+        "x": 100,
+        "y": 100
+      },
+      "children": [
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 250,
+          "rotation": 0,
+          "width": 250,
+          "x": 100,
+          "y": 100
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 392,
+          "rotation": -0.7831041111130865,
+          "width": 398,
+          "x": 265,
+          "y": 268
+        }
+      ],
+      "settings": {
+        "iterations": 40003,
+        "renderMethod": "random"
+      }
+    },
+    "views": 200
+  },
+  {
+    "title": "Koch Curve",
+    "body": {
+      "parent": {
+        "color": "white",
+        "height": 253,
+        "rotation": 0,
+        "width": 867,
+        "x": 7,
+        "y": 8
+      },
+      "children": [
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 84,
+          "rotation": 0,
+          "width": 289,
+          "x": 7,
+          "y": 177
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 84,
+          "rotation": 0,
+          "width": 289,
+          "x": 585,
+          "y": 177
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 84,
+          "rotation": -1.0445999363925744,
+          "width": 289,
+          "x": 187.5,
+          "y": 74
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "height": 84,
+          "rotation": 1.0466166980119833,
+          "width": 289,
+          "x": 404.5,
+          "y": 73
+        }
+      ],
+      "settings": {
+        "iterations": 6,
+        "renderMethod": "progressive"
+      }
+    },
+    "views": 100
   }
 ]
