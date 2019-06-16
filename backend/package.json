@@ -4,7 +4,8 @@
   "scripts": {
     "start": "scripts/start",
     "deploy": "scripts/deploy",
-    "test": "jest functions"
+    "test": "jest functions",
+    "seed": "knex seed:run"
   },
   "repository": {
     "type": "git",
