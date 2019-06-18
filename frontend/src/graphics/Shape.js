@@ -1,7 +1,9 @@
+import { cos, sin } from 'mathjs';
+
 import { Cursor } from './Cursor';
 import { inferGuides } from './Guide';
-import { Transformation } from './Transformation';
 import { Handle } from './Handle';
+import { isInside } from './geometry';
 
 export class Shape {
   constructor(x, y, width, height, color, rotation = 0, outline = false) {
@@ -18,53 +20,100 @@ export class Shape {
     this.guides = [];
   }
 
+  get top() {
+    const { height, rotation } = this;
+    const hypotenuse = 0.5 * height;
+    return {
+      x: this.x + sin(rotation) * hypotenuse,
+      y: this.y - cos(rotation) * hypotenuse
+    };
+  }
+
+  get left() {
+    const { width, rotation } = this;
+    const hypotenuse = 0.5 * width;
+    return {
+      x: this.x - cos(rotation) * hypotenuse,
+      y: this.y - sin(rotation) * hypotenuse
+    };
+  }
+
   get right() {
-    return this.x + this.width;
+    const { width, rotation } = this;
+    const hypotenuse = 0.5 * width;
+    return {
+      x: this.x + cos(rotation) * hypotenuse,
+      y: this.y + sin(rotation) * hypotenuse
+    };
   }
 
   get bottom() {
-    return this.y + this.height;
+    const { height, rotation } = this;
+    const hypotenuse = 0.5 * height;
+    return {
+      x: this.x - sin(rotation) * hypotenuse,
+      y: this.y + cos(rotation) * hypotenuse
+    };
   }
 
-  get center() {
-    return { x: this.x + this.width / 2, y: this.y + this.height / 2 };
+  get topLeft() {
+    const { left, height, rotation } = this;
+    const hypotenuse = 0.5 * height;
+    return {
+      x: left.x + sin(rotation) * hypotenuse,
+      y: left.y - cos(rotation) * hypotenuse
+    };
+  }
+
+  get topRight() {
+    const { top, width, rotation } = this;
+    const hypotenuse = 0.5 * width;
+    return {
+      x: top.x + cos(rotation) * hypotenuse,
+      y: top.y + sin(rotation) * hypotenuse
+    };
+  }
+
+  get bottomRight() {
+    const { right, height, rotation } = this;
+    const hypotenuse = 0.5 * height;
+    return {
+      x: right.x - sin(rotation) * hypotenuse,
+      y: right.y + cos(rotation) * hypotenuse
+    };
+  }
+
+  get bottomLeft() {
+    const { bottom, width, rotation } = this;
+    const hypotenuse = 0.5 * width;
+    return {
+      x: bottom.x - cos(rotation) * hypotenuse,
+      y: bottom.y - sin(rotation) * hypotenuse
+    };
   }
 
   get cursor() {
     return Cursor.MOVE;
   }
 
-  get transformation() {
-    return Transformation.fromShape(this);
-  }
-
   draw(context) {
-    this.transformation.decorate(context, () => {
-      this.withGuides().drawBody(context);
-      if (this.isFocused) {
-        this.drawHandles(context);
-      }
-    });
+    this.withGuides().drawBody(context);
+    if (this.isFocused) {
+      this.drawHandles(context);
+    }
   }
 
   drawBody(context) {
     context.save();
-    if (this.outline) {
-      this.drawOutline(context);
-    }
-    this.drawRectangle(context);
-    context.restore();
-  }
-
-  drawRectangle(context) {
+    const path = pathRectangle(this);
     context.fillStyle = this.color;
-    context.fillRect(this.x, this.y, this.width, this.height);
-  }
-
-  drawOutline(context) {
-    context.lineWidth = 2;
-    context.strokeStyle = '#D9D9D9';
-    context.strokeRect(this.x, this.y, this.width, this.height);
+    context.fill(path);
+    if (this.outline) {
+      context.lineWidth = 2;
+      context.strokeStyle = '#D9D9D9';
+      context.stroke(path);
+    }
+    context.restore();
   }
 
   drawHandles(context) {
@@ -82,7 +131,6 @@ export class Shape {
   }
 
   pressMouse(x, y, consumed) {
-    [x, y] = this.transformation.localize(x, y);
     if (consumed) {
       this.isFocused = false;
     } else {
@@ -142,7 +190,6 @@ export class Shape {
       this.shift(deltaX, deltaY);
       this.setGuides(shapes, keypress);
     }
-    [deltaX, deltaY] = this.transformation.localizeDelta(deltaX, deltaY, x, y);
     this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY, x, y));
   }
 
@@ -155,7 +202,6 @@ export class Shape {
   }
 
   findAt(x, y) {
-    [x, y] = this.transformation.localize(x, y);
     const handle = this.handles.find(handle => handle.isTouching(x, y));
     if (handle) {
       return handle;
@@ -177,12 +223,7 @@ export class Shape {
   }
 
   isTouching(x, y) {
-    return (
-      x >= this.x &&
-      x <= this.x + this.width &&
-      y >= this.y &&
-      y <= this.y + this.height
-    );
+    return isInside({ x, y }, this);
   }
 
   toJSON() {
@@ -199,4 +240,14 @@ export class Base extends Shape {
   constructor(x, y, width, height) {
     super(x, y, width, height, 'white', 0, true);
   }
+}
+
+function pathRectangle({ topLeft, topRight, bottomLeft, bottomRight }) {
+  const path = new Path2D();
+  path.moveTo(topLeft.x, topLeft.y);
+  path.lineTo(topRight.x, topRight.y);
+  path.lineTo(bottomRight.x, bottomRight.y);
+  path.lineTo(bottomLeft.x, bottomLeft.y);
+  path.lineTo(topLeft.x, topLeft.y);
+  return path;
 }

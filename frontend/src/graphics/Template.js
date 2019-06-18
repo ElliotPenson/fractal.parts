@@ -9,7 +9,7 @@ export class Template {
   constructor(canvas) {
     this.canvas = canvas;
     this.context = getContext(canvas);
-    this.parent = new Base(100, 100, 500, 500);
+    this.parent = new Base(500, 500, 500, 500);
     this.shapes = [this.parent];
     this.clipboard = null;
     this.colors = colors();
