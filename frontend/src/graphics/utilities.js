@@ -35,14 +35,6 @@ export function reverse(array) {
   return array.slice(0).reverse();
 }
 
-export function convertToRadians(degrees) {
-  return (Math.PI / 180) * degrees;
-}
-
-export function convertToDegrees(radians) {
-  return (180 / Math.PI) * radians;
-}
-
 export function getContext(canvas) {
   const context = canvas.getContext('2d');
   correctPixels(canvas, context);

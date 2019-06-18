@@ -154,7 +154,7 @@ export class Transformation {
 
   /**
    * Build a Transformation using shape properties.
-   * @param {Shape} shape
+   * @param {Rectangle} shape
    * @returns {Transformation}
    */
   static fromShape(shape) {
@@ -167,8 +167,8 @@ export class Transformation {
 
   /**
    * Represent the difference between two shapes as a transformation matrix.
-   * @param {Shape} parent
-   * @param {Shape} child
+   * @param {Rectangle} parent
+   * @param {Rectangle} child
    * @returns {Transformation}
    */
   static betweenShapes(parent, child) {

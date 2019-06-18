@@ -1,95 +1,17 @@
-import { cos, sin } from 'mathjs';
-
 import { Cursor } from './Cursor';
 import { inferGuides } from './Guide';
 import { Handle } from './Handle';
-import { isInside } from './geometry';
+import { Rectangle } from './geometry';
 
-export class Shape {
+export class Resizable extends Rectangle {
   constructor(x, y, width, height, color, rotation = 0, outline = false) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    super(x, y, width, height, rotation);
     this.color = color;
-    this.rotation = rotation;
     this.isFocused = false;
     this.isDragging = false;
     this.outline = outline;
     this.handles = Handle.build(this);
     this.guides = [];
-  }
-
-  get top() {
-    const { height, rotation } = this;
-    const hypotenuse = 0.5 * height;
-    return {
-      x: this.x + sin(rotation) * hypotenuse,
-      y: this.y - cos(rotation) * hypotenuse
-    };
-  }
-
-  get left() {
-    const { width, rotation } = this;
-    const hypotenuse = 0.5 * width;
-    return {
-      x: this.x - cos(rotation) * hypotenuse,
-      y: this.y - sin(rotation) * hypotenuse
-    };
-  }
-
-  get right() {
-    const { width, rotation } = this;
-    const hypotenuse = 0.5 * width;
-    return {
-      x: this.x + cos(rotation) * hypotenuse,
-      y: this.y + sin(rotation) * hypotenuse
-    };
-  }
-
-  get bottom() {
-    const { height, rotation } = this;
-    const hypotenuse = 0.5 * height;
-    return {
-      x: this.x - sin(rotation) * hypotenuse,
-      y: this.y + cos(rotation) * hypotenuse
-    };
-  }
-
-  get topLeft() {
-    const { left, height, rotation } = this;
-    const hypotenuse = 0.5 * height;
-    return {
-      x: left.x + sin(rotation) * hypotenuse,
-      y: left.y - cos(rotation) * hypotenuse
-    };
-  }
-
-  get topRight() {
-    const { top, width, rotation } = this;
-    const hypotenuse = 0.5 * width;
-    return {
-      x: top.x + cos(rotation) * hypotenuse,
-      y: top.y + sin(rotation) * hypotenuse
-    };
-  }
-
-  get bottomRight() {
-    const { right, height, rotation } = this;
-    const hypotenuse = 0.5 * height;
-    return {
-      x: right.x - sin(rotation) * hypotenuse,
-      y: right.y + cos(rotation) * hypotenuse
-    };
-  }
-
-  get bottomLeft() {
-    const { bottom, width, rotation } = this;
-    const hypotenuse = 0.5 * width;
-    return {
-      x: bottom.x - cos(rotation) * hypotenuse,
-      y: bottom.y - sin(rotation) * hypotenuse
-    };
   }
 
   get cursor() {
@@ -105,13 +27,12 @@ export class Shape {
 
   drawBody(context) {
     context.save();
-    const path = pathRectangle(this);
     context.fillStyle = this.color;
-    context.fill(path);
+    context.fill(this.path);
     if (this.outline) {
       context.lineWidth = 2;
       context.strokeStyle = '#D9D9D9';
-      context.stroke(path);
+      context.stroke(this.path);
     }
     context.restore();
   }
@@ -219,11 +140,7 @@ export class Shape {
 
   clone() {
     const { x, y, width, height, color, rotation, outline } = this;
-    return new Shape(x, y, width, height, color, rotation, outline);
-  }
-
-  isTouching(x, y) {
-    return isInside({ x, y }, this);
+    return new Resizable(x, y, width, height, color, rotation, outline);
   }
 
   toJSON() {
@@ -232,22 +149,12 @@ export class Shape {
   }
 
   static fromJSON({ x, y, width, height, color, rotation }) {
-    return new Shape(x, y, width, height, color, rotation);
+    return new Resizable(x, y, width, height, color, rotation);
   }
 }
 
-export class Base extends Shape {
+export class Base extends Resizable {
   constructor(x, y, width, height) {
     super(x, y, width, height, 'white', 0, true);
   }
-}
-
-function pathRectangle({ topLeft, topRight, bottomLeft, bottomRight }) {
-  const path = new Path2D();
-  path.moveTo(topLeft.x, topLeft.y);
-  path.lineTo(topRight.x, topRight.y);
-  path.lineTo(bottomRight.x, bottomRight.y);
-  path.lineTo(bottomLeft.x, bottomLeft.y);
-  path.lineTo(topLeft.x, topLeft.y);
-  return path;
 }

@@ -156,8 +156,8 @@ function isCloser(guide1, guide2) {
 }
 
 /**
- * Find key (left, center, right) x-values in collection of Shape objects.
- * @param {[Shape]} shapes
+ * Find key (left, center, right) x-values in collection of Rectangle objects.
+ * @param {[Rectangle]} shapes
  */
 export function xRange(...shapes) {
   return shapes.reduce((range, shape) => {
@@ -168,7 +168,7 @@ export function xRange(...shapes) {
 
 /**
  * Find key (top, center, bottom) y-values in collection of Shape objects.
- * @param {[Shape]} shapes
+ * @param {[Rectangle]} shapes
  */
 export function yRange(...shapes) {
   return shapes.reduce((range, shape) => {

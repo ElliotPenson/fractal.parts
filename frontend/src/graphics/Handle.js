@@ -1,4 +1,4 @@
-import * as math from 'mathjs';
+import { atan2, round } from 'mathjs';
 
 import { Cursor, rotateCursor } from './Cursor';
 
@@ -14,7 +14,7 @@ export class Handle {
 
   draw(context) {
     let { x, y } = this.center;
-    [x, y] = [math.round(x), math.round(y)];
+    [x, y] = [round(x), round(y)];
     context.fillStyle = fillColor;
     context.fillRect(x - size * 0.5, y - size * 0.5, size, size);
     context.lineWidth = 1;
@@ -217,7 +217,7 @@ class RotationHandle extends Handle {
       const { x: centerX, y: centerY } = this.parent;
       const opposite = x - centerX;
       const adjacent = centerY - y;
-      this.parent.rotation = math.atan2(opposite, adjacent);
+      this.parent.rotation = atan2(opposite, adjacent);
     }
   }
 }

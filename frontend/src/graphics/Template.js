@@ -1,6 +1,6 @@
 import { Cursor, useCursor } from './Cursor';
 import { Key, isDeletion, reverse, getContext } from './utilities';
-import { Shape, Base } from './Shape';
+import { Resizable, Base } from './Resizable';
 import { colors } from './colors';
 
 const backgroundColor = '#F8F8F8';
@@ -22,7 +22,7 @@ export class Template {
   add(shape) {
     if (!shape) {
       const color = this.colors.next().value;
-      shape = new Shape(100, 100, 150, 150, color, 0, false);
+      shape = new Resizable(100, 100, 150, 150, color, 0, false);
     }
     this.shapes.push(shape);
   }
