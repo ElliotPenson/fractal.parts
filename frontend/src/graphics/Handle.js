@@ -1,5 +1,6 @@
-import { atan2, round } from 'mathjs';
+import { atan2, cos, round, sin } from 'mathjs';
 
+import { Rectangle } from './geometry';
 import { Cursor, rotateCursor } from './Cursor';
 
 const size = 6;
@@ -13,13 +14,12 @@ export class Handle {
   }
 
   draw(context) {
-    let { x, y } = this.center;
-    [x, y] = [round(x), round(y)];
+    const { path } = this.shape;
     context.fillStyle = fillColor;
-    context.fillRect(x - size * 0.5, y - size * 0.5, size, size);
+    context.fill(path);
     context.lineWidth = 1;
     context.strokeStyle = strokeColor;
-    context.strokeRect(x - size * 0.5 + 0.5, y - size * 0.5 + 0.5, size, size);
+    context.stroke(path);
   }
 
   pressMouse(x, y, consumed) {
@@ -35,13 +35,7 @@ export class Handle {
   }
 
   isTouching(x, y) {
-    let { x: centerX, y: centerY } = this.center;
-    return (
-      x <= centerX + size &&
-      x >= centerX - size &&
-      y <= centerY + size &&
-      y >= centerY - size
-    );
+    return this.shape.isTouching(x, y);
   }
 
   static build(shape) {
@@ -60,8 +54,9 @@ export class Handle {
 }
 
 class LeftHandle extends Handle {
-  get center() {
-    return this.parent.left;
+  get shape() {
+    const { left, rotation } = this.parent;
+    return new Rectangle(left.x, left.y, size, size, rotation);
   }
 
   get cursor() {
@@ -77,8 +72,9 @@ class LeftHandle extends Handle {
 }
 
 class RightHandle extends Handle {
-  get center() {
-    return this.parent.right;
+  get shape() {
+    const { right, rotation } = this.parent;
+    return new Rectangle(right.x, right.y, size, size, rotation);
   }
 
   get cursor() {
@@ -93,8 +89,9 @@ class RightHandle extends Handle {
 }
 
 class TopHandle extends Handle {
-  get center() {
-    return this.parent.top;
+  get shape() {
+    const { top, rotation } = this.parent;
+    return new Rectangle(top.x, top.y, size, size, rotation);
   }
 
   get cursor() {
@@ -110,8 +107,9 @@ class TopHandle extends Handle {
 }
 
 class BottomHandle extends Handle {
-  get center() {
-    return this.parent.bottom;
+  get shape() {
+    const { bottom, rotation } = this.parent;
+    return new Rectangle(bottom.x, bottom.y, size, size, rotation);
   }
 
   get cursor() {
@@ -126,8 +124,9 @@ class BottomHandle extends Handle {
 }
 
 class TopLeftHandle extends Handle {
-  get center() {
-    return this.parent.topLeft;
+  get shape() {
+    const { topLeft, rotation } = this.parent;
+    return new Rectangle(topLeft.x, topLeft.y, size, size, rotation);
   }
 
   get cursor() {
@@ -145,8 +144,9 @@ class TopLeftHandle extends Handle {
 }
 
 class TopRightHandle extends Handle {
-  get center() {
-    return this.parent.topRight;
+  get shape() {
+    const { topRight, rotation } = this.parent;
+    return new Rectangle(topRight.x, topRight.y, size, size, rotation);
   }
 
   get cursor() {
@@ -163,8 +163,9 @@ class TopRightHandle extends Handle {
 }
 
 class BottomLeftHandle extends Handle {
-  get center() {
-    return this.parent.bottomLeft;
+  get shape() {
+    const { bottomLeft, rotation } = this.parent;
+    return new Rectangle(bottomLeft.x, bottomLeft.y, size, size, rotation);
   }
 
   get cursor() {
@@ -181,8 +182,9 @@ class BottomLeftHandle extends Handle {
 }
 
 class BottomRightHandle extends Handle {
-  get center() {
-    return this.parent.bottomRight;
+  get shape() {
+    const { bottomRight, rotation } = this.parent;
+    return new Rectangle(bottomRight.x, bottomRight.y, size, size, rotation);
   }
 
   get cursor() {
@@ -203,9 +205,19 @@ class RotationHandle extends Handle {
     this.offset = offset;
   }
 
+  get shape() {
+    const { top, rotation } = this.parent;
+    const x = top.x + sin(rotation) * this.offset;
+    const y = top.y - cos(rotation) * this.offset;
+    return new Rectangle(x, y, size, size, rotation);
+  }
+
   get center() {
     const { parent, offset } = this;
-    return { x: parent.top.x, y: parent.top.y - offset };
+    return {
+      x: parent.top.x + sin(parent.rotation) * offset,
+      y: parent.top.y - cos(parent.rotation) * offset
+    };
   }
 
   get cursor() {
