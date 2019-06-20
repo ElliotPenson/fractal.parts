@@ -1,6 +1,10 @@
+import { abs } from 'mathjs';
+
 import {
   Rectangle,
   isInside,
+  distance,
+  distanceToLine,
   convertToRadians,
   convertToDegrees
 } from '../geometry';
@@ -227,6 +231,51 @@ describe('isInside', () => {
   it('finds points outside a rotated shape', () => {
     expect(isInside({ x: 4, y: 2 }, rotatedRectangle)).toBe(false);
     expect(isInside({ x: 4, y: 7 }, rotatedRectangle)).toBe(false);
+  });
+});
+
+describe('distance', () => {
+  it('returns zero when given the same point', () => {
+    const point = { x: 1, y: 2 };
+    expect(distance(point, point)).toBe(0);
+  });
+
+  it('finds differences on the x-axis', () => {
+    const y = 10;
+    const [x1, x2] = [1, 5];
+    expect(distance({ x: x1, y }, { x: x2, y })).toBe(abs(x1 - x2));
+  });
+
+  it('finds differences on the y-axis', () => {
+    const [y1, y2] = [100, 4];
+    const x = 1;
+    expect(distance({ x, y: y1 }, { x, y: y2 })).toBe(abs(y1 - y2));
+  });
+});
+
+describe('distanceToLine', () => {
+  it('returns zero when given a point on the line', () => {
+    const line = [{ x: 0, y: 0 }, { x: 10, y: 10 }];
+    const point = { x: 5, y: 5 };
+    expect(distanceToLine(point, ...line)).toBe(0);
+  });
+
+  it('calculates x-axis distance', () => {
+    const line = [{ x: 0, y: 0 }, { x: 0, y: 10 }];
+    const point = { x: 5, y: 5 };
+    expect(distanceToLine(point, ...line)).toBe(point.x);
+  });
+
+  it('calculates y-axis distance', () => {
+    const line = [{ x: 0, y: 0 }, { x: 10, y: 0 }];
+    const point = { x: 5, y: 5 };
+    expect(distanceToLine(point, ...line)).toBe(point.y);
+  });
+
+  it('handles diagonal lines', () => {
+    const line = [{ x: 0, y: 0 }, { x: 10, y: 10 }];
+    const point = { x: 5, y: 0 };
+    expect(distanceToLine(point, ...line)).toBeCloseTo(3.536);
   });
 });
 

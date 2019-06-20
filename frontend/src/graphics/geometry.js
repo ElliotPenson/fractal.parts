@@ -1,4 +1,4 @@
-import { abs, cos, distance, sin, sum } from 'mathjs';
+import { abs, cos, sin, sqrt, square, sum } from 'mathjs';
 
 export class Rectangle {
   /**
@@ -8,7 +8,7 @@ export class Rectangle {
    * @param {number} width - Distance in pixels.
    * @param {number} height - Distance in pixels.
    */
-  constructor(x, y, width, height, rotation) {
+  constructor(x, y, width, height, rotation = 0) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -20,6 +20,20 @@ export class Rectangle {
     return isInside({ x, y }, this);
   }
 
+  get center() {
+    const { x, y } = this;
+    return { x, y };
+  }
+
+  set top(point) {
+    const { bottom, bottomRight, height, rotation } = this;
+    const newHeight = distanceToLine(point, bottom, bottomRight);
+    const displacement = newHeight - height;
+    this.height = newHeight;
+    this.x += sin(rotation) * (displacement / 2);
+    this.y -= cos(rotation) * (displacement / 2);
+  }
+
   get top() {
     const { height, rotation } = this;
     const hypotenuse = 0.5 * height;
@@ -27,6 +41,15 @@ export class Rectangle {
       x: this.x + sin(rotation) * hypotenuse,
       y: this.y - cos(rotation) * hypotenuse
     };
+  }
+
+  set left(point) {
+    const { right, topRight, width, rotation } = this;
+    const newWidth = distanceToLine(point, right, topRight);
+    const displacement = newWidth - width;
+    this.width = newWidth;
+    this.x -= cos(rotation) * (displacement / 2);
+    this.y -= sin(rotation) * (displacement / 2);
   }
 
   get left() {
@@ -38,6 +61,15 @@ export class Rectangle {
     };
   }
 
+  set right(point) {
+    const { left, topLeft, width, rotation } = this;
+    const newWidth = distanceToLine(point, left, topLeft);
+    const displacement = newWidth - width;
+    this.width = newWidth;
+    this.x += cos(rotation) * (displacement / 2);
+    this.y += sin(rotation) * (displacement / 2);
+  }
+
   get right() {
     const { width, rotation } = this;
     const hypotenuse = 0.5 * width;
@@ -45,6 +77,15 @@ export class Rectangle {
       x: this.x + cos(rotation) * hypotenuse,
       y: this.y + sin(rotation) * hypotenuse
     };
+  }
+
+  set bottom(point) {
+    const { top, topRight, height, rotation } = this;
+    const newHeight = distanceToLine(point, top, topRight);
+    const displacement = newHeight - height;
+    this.height = newHeight;
+    this.x -= sin(rotation) * (displacement / 2);
+    this.y += cos(rotation) * (displacement / 2);
   }
 
   get bottom() {
@@ -56,6 +97,11 @@ export class Rectangle {
     };
   }
 
+  set topLeft(point) {
+    this.top = point;
+    this.left = point;
+  }
+
   get topLeft() {
     const { left, height, rotation } = this;
     const hypotenuse = 0.5 * height;
@@ -63,6 +109,11 @@ export class Rectangle {
       x: left.x + sin(rotation) * hypotenuse,
       y: left.y - cos(rotation) * hypotenuse
     };
+  }
+
+  set topRight(point) {
+    this.top = point;
+    this.right = point;
   }
 
   get topRight() {
@@ -74,6 +125,11 @@ export class Rectangle {
     };
   }
 
+  set bottomRight(point) {
+    this.bottom = point;
+    this.right = point;
+  }
+
   get bottomRight() {
     const { right, height, rotation } = this;
     const hypotenuse = 0.5 * height;
@@ -81,6 +137,11 @@ export class Rectangle {
       x: right.x - sin(rotation) * hypotenuse,
       y: right.y + cos(rotation) * hypotenuse
     };
+  }
+
+  set bottomLeft(point) {
+    this.bottom = point;
+    this.left = point;
   }
 
   get bottomLeft() {
@@ -127,11 +188,8 @@ export function isInside(point, corners) {
  * Calculate rectangle with euclidean distance and width * height.
  */
 function findRectangleArea({ topLeft, topRight, bottomRight }) {
-  const width = distance([topLeft.x, topLeft.y], [topRight.x, topRight.y]);
-  const height = distance(
-    [topRight.x, topRight.y],
-    [bottomRight.x, bottomRight.y]
-  );
+  const width = distance(topLeft, topRight);
+  const height = distance(topRight, bottomRight);
   return width * height;
 }
 
@@ -147,6 +205,31 @@ function findTriangleArea(cornerA, cornerB, cornerC) {
     cornerC.x * cornerB.y -
     cornerA.x * cornerC.y;
   return 0.5 * abs(determinant);
+}
+
+/**
+ * Find the euclidean distance between two points.
+ * @param {{ x: number, y: number }} pointA
+ * @param {{ x: number, y: number }} pointB
+ */
+export function distance(pointA, pointB) {
+  return sqrt(square(pointB.x - pointA.x) + square(pointB.y - pointA.y));
+}
+
+/**
+ * Find the shortest distance from a point to any point on a line.
+ * @param {{ x: number, y: number }} lineA
+ * @param {{ x: number, y: number }} lineB
+ * @param {{ x: number, y: number }} point
+ */
+export function distanceToLine(point, lineA, lineB) {
+  const numerator =
+    (lineB.y - lineA.y) * point.x -
+    (lineB.x - lineA.x) * point.y +
+    lineB.x * lineA.y -
+    lineB.y * lineA.x;
+  const denominator = distance(lineA, lineB);
+  return abs(numerator) / denominator;
 }
 
 export function convertToRadians(degrees) {

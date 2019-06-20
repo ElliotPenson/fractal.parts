@@ -111,7 +111,7 @@ export class Resizable extends Rectangle {
       this.shift(deltaX, deltaY);
       this.setGuides(shapes, keypress);
     }
-    this.handles.forEach(handle => handle.moveMouse(deltaX, deltaY, x, y));
+    this.handles.forEach(handle => handle.moveMouse(x, y));
   }
 
   setGuides(shapes, keypress = false) {

@@ -1,6 +1,6 @@
-import { atan2, cos, round, sin } from 'mathjs';
+import { atan2, cos, sin } from 'mathjs';
 
-import { Rectangle } from './geometry';
+import { Rectangle, distanceToLine } from './geometry';
 import { Cursor, rotateCursor } from './Cursor';
 
 const size = 6;
@@ -63,10 +63,9 @@ class LeftHandle extends Handle {
     return rotateCursor(Cursor.EW_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(x, y) {
     if (this.isDragging) {
-      this.parent.x = this.parent.x + deltaX;
-      this.parent.width = this.parent.width - deltaX;
+      this.parent.left = { x, y };
     }
   }
 }
@@ -81,9 +80,9 @@ class RightHandle extends Handle {
     return rotateCursor(Cursor.EW_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY, x, y) {
+  moveMouse(x, y) {
     if (this.isDragging) {
-      this.parent.width = this.parent.width + deltaX;
+      this.parent.right = { x, y };
     }
   }
 }
@@ -98,10 +97,9 @@ class TopHandle extends Handle {
     return rotateCursor(Cursor.NS_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(x, y) {
     if (this.isDragging) {
-      this.parent.y = this.parent.y + deltaY;
-      this.parent.height = this.parent.height - deltaY;
+      this.parent.top = { x, y };
     }
   }
 }
@@ -116,9 +114,9 @@ class BottomHandle extends Handle {
     return rotateCursor(Cursor.NS_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(x, y) {
     if (this.isDragging) {
-      this.parent.height = this.parent.height + deltaY;
+      this.parent.bottom = { x, y };
     }
   }
 }
@@ -133,12 +131,9 @@ class TopLeftHandle extends Handle {
     return rotateCursor(Cursor.NWSE_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(x, y) {
     if (this.isDragging) {
-      this.parent.x = this.parent.x + deltaX;
-      this.parent.y = this.parent.y + deltaY;
-      this.parent.width = this.parent.width - deltaX;
-      this.parent.height = this.parent.height - deltaY;
+      this.parent.topLeft = { x, y };
     }
   }
 }
@@ -153,11 +148,9 @@ class TopRightHandle extends Handle {
     return rotateCursor(Cursor.NESW_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(x, y) {
     if (this.isDragging) {
-      this.parent.y = this.parent.y + deltaY;
-      this.parent.height = this.parent.height - deltaY;
-      this.parent.width = this.parent.width + deltaX;
+      this.parent.topRight = { x, y };
     }
   }
 }
@@ -172,11 +165,9 @@ class BottomLeftHandle extends Handle {
     return rotateCursor(Cursor.NESW_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(x, y) {
     if (this.isDragging) {
-      this.parent.x = this.parent.x + deltaX;
-      this.parent.width = this.parent.width - deltaX;
-      this.parent.height = this.parent.height + deltaY;
+      this.parent.bottomLeft = { x, y };
     }
   }
 }
@@ -191,10 +182,9 @@ class BottomRightHandle extends Handle {
     return rotateCursor(Cursor.NWSE_RESIZE, this.parent.rotation);
   }
 
-  moveMouse(deltaX, deltaY) {
+  moveMouse(x, y) {
     if (this.isDragging) {
-      this.parent.width = this.parent.width + deltaX;
-      this.parent.height = this.parent.height + deltaY;
+      this.parent.bottomRight = { x, y };
     }
   }
 }
@@ -224,7 +214,7 @@ class RotationHandle extends Handle {
     return Cursor.CROSSHAIR;
   }
 
-  moveMouse(deltaX, deltaY, x, y) {
+  moveMouse(x, y) {
     if (this.isDragging) {
       const { x: centerX, y: centerY } = this.parent;
       const opposite = x - centerX;
