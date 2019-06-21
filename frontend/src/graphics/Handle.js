@@ -1,6 +1,6 @@
 import { atan2, cos, sin } from 'mathjs';
 
-import { Rectangle, distanceToLine } from './geometry';
+import { Rectangle } from './geometry';
 import { Cursor, rotateCursor } from './Cursor';
 
 const size = 6;

@@ -23,6 +23,7 @@ export class Resizable extends Rectangle {
     if (this.isFocused) {
       this.drawHandles(context);
     }
+    this.drawGuides(context);
   }
 
   drawBody(context) {
@@ -131,11 +132,6 @@ export class Resizable extends Rectangle {
     } else {
       return null;
     }
-  }
-
-  shift(deltaX = 10, deltaY = 10) {
-    this.x += deltaX;
-    this.y += deltaY;
   }
 
   clone() {

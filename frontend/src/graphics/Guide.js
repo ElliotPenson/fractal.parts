@@ -45,11 +45,11 @@ class yGuide extends Guide {
 
 class LeftGuide extends xGuide {
   get displacement() {
-    return this.x - this.movingShape.x;
+    return this.x - this.movingShape.leftmost;
   }
 
   apply(shape) {
-    shape.x = this.x;
+    shape.x += this.x - shape.leftmost;
   }
 }
 
@@ -59,27 +59,27 @@ class XCenterGuide extends xGuide {
   }
 
   apply(shape) {
-    shape.x = this.x - shape.width / 2;
+    shape.x += this.x - shape.center.x;
   }
 }
 
 class RightGuide extends xGuide {
   get displacement() {
-    return this.x - this.movingShape.right;
+    return this.x - this.movingShape.rightmost;
   }
 
   apply(shape) {
-    shape.x = this.x - shape.width;
+    shape.x += this.x - shape.rightmost;
   }
 }
 
 class TopGuide extends yGuide {
   get displacement() {
-    return this.y - this.movingShape.y;
+    return this.y - this.movingShape.topmost;
   }
 
   apply(shape) {
-    shape.y = this.y;
+    shape.y += this.y - shape.topmost;
   }
 }
 
@@ -89,17 +89,17 @@ class YCenterGuide extends yGuide {
   }
 
   apply(shape) {
-    shape.y = this.y - shape.height / 2;
+    shape.y += this.y - shape.center.y;
   }
 }
 
 class BottomGuide extends yGuide {
   get displacement() {
-    return this.y - this.movingShape.bottom;
+    return this.y - this.movingShape.bottommost;
   }
 
   apply(shape) {
-    shape.y = this.y - shape.height;
+    shape.y += this.y - shape.bottommost;
   }
 }
 
@@ -161,8 +161,8 @@ function isCloser(guide1, guide2) {
  */
 export function xRange(...shapes) {
   return shapes.reduce((range, shape) => {
-    const { x, center, right } = shape.withGuides();
-    return [...range, x, center.x, right];
+    const { leftmost, x, rightmost } = shape.withGuides();
+    return [...range, leftmost, x, rightmost];
   }, []);
 }
 
@@ -172,8 +172,8 @@ export function xRange(...shapes) {
  */
 export function yRange(...shapes) {
   return shapes.reduce((range, shape) => {
-    const { y, center, bottom } = shape.withGuides();
-    return [...range, y, center.y, bottom];
+    const { topmost, y, bottommost } = shape.withGuides();
+    return [...range, topmost, y, bottommost];
   }, []);
 }
 

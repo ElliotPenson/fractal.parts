@@ -37,7 +37,6 @@ export class Template {
     const { context } = this;
     this.clear();
     this.shapes.forEach(shape => shape.draw(context));
-    this.shapes.forEach(shape => shape.drawGuides(context));
   }
 
   clear() {

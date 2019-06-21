@@ -1,4 +1,4 @@
-import { abs, cos, sin, sqrt, square, sum } from 'mathjs';
+import { abs, cos, max, min, sin, sqrt, square, sum } from 'mathjs';
 
 export class Rectangle {
   /**
@@ -153,6 +153,22 @@ export class Rectangle {
     };
   }
 
+  get leftmost() {
+    return min(this.topLeft.x, this.bottomLeft.x);
+  }
+
+  get rightmost() {
+    return max(this.topRight.x, this.bottomRight.x);
+  }
+
+  get topmost() {
+    return min(this.topLeft.y, this.topRight.y);
+  }
+
+  get bottommost() {
+    return max(this.bottomLeft.y, this.bottomRight.y);
+  }
+
   get path() {
     const { topLeft, topRight, bottomLeft, bottomRight } = this;
     const path = new Path2D();
@@ -162,6 +178,11 @@ export class Rectangle {
     path.lineTo(bottomLeft.x, bottomLeft.y);
     path.lineTo(topLeft.x, topLeft.y);
     return path;
+  }
+
+  shift(deltaX = 10, deltaY = 10) {
+    this.x += deltaX;
+    this.y += deltaY;
   }
 
   clone() {
