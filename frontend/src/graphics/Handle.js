@@ -35,7 +35,7 @@ export class Handle {
   }
 
   isTouching(x, y) {
-    return this.shape.isTouching(x, y);
+    return this.shape.withResize(10).isTouching(x, y);
   }
 
   static build(shape) {

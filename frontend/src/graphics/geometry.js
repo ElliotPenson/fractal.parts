@@ -180,6 +180,13 @@ export class Rectangle {
     return path;
   }
 
+  withResize(difference) {
+    const clone = this.clone();
+    clone.width += difference;
+    clone.height += difference;
+    return clone;
+  }
+
   shift(deltaX = 10, deltaY = 10) {
     this.x += deltaX;
     this.y += deltaY;
