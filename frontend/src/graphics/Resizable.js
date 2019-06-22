@@ -27,14 +27,12 @@ export class Resizable extends Rectangle {
   }
 
   drawBody(context) {
+    const { color, outline, path } = this;
     context.save();
-    context.fillStyle = this.color;
-    context.fill(this.path);
-    if (this.outline) {
-      context.lineWidth = 2;
-      context.strokeStyle = '#D9D9D9';
-      context.stroke(this.path);
-    }
+    context.fillStyle = color;
+    path.fill(context);
+    context.strokeStyle = outline ? '#D9D9D9' : color;
+    path.stroke(context);
     context.restore();
   }
 

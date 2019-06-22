@@ -1,5 +1,7 @@
 import { abs, cos, max, min, sin, sqrt, square, sum } from 'mathjs';
 
+import { Path } from './Path';
+
 export class Rectangle {
   /**
    * Create a new rectangle.
@@ -170,8 +172,8 @@ export class Rectangle {
   }
 
   get path() {
-    const { topLeft, topRight, bottomLeft, bottomRight } = this;
-    const path = new Path2D();
+    const { topLeft, topRight, bottomLeft, bottomRight, rotation } = this;
+    const path = new Path(rotation === 0);
     path.moveTo(topLeft.x, topLeft.y);
     path.lineTo(topRight.x, topRight.y);
     path.lineTo(bottomRight.x, bottomRight.y);

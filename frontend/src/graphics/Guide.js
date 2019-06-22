@@ -1,4 +1,5 @@
 import { filter } from './utilities';
+import { Path } from './Path';
 
 const threshold = 10;
 
@@ -179,9 +180,8 @@ export function yRange(...shapes) {
 
 function drawLine(x1, y1, x2, y2, context) {
   context.strokeStyle = 'black';
-  context.lineWidth = 1;
-  context.beginPath();
-  context.moveTo(x1 + 0.5, y1 + 0.5);
-  context.lineTo(x2 + 0.5, y2 + 0.5);
-  context.stroke();
+  const path = new Path();
+  path.moveTo(x1, y1);
+  path.lineTo(x2, y2);
+  path.stroke(context);
 }

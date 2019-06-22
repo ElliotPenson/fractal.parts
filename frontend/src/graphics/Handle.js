@@ -16,10 +16,9 @@ export class Handle {
   draw(context) {
     const { path } = this.shape;
     context.fillStyle = fillColor;
-    context.fill(path);
-    context.lineWidth = 1;
+    path.fill(context);
     context.strokeStyle = strokeColor;
-    context.stroke(path);
+    path.stroke(context);
   }
 
   pressMouse(x, y, consumed) {
