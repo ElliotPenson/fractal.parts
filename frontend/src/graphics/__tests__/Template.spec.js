@@ -48,15 +48,14 @@ describe('Template', () => {
     it("calls each shape's draw function", () => {
       const template = new Template(canvas);
       const shapes = [
-        { draw: jest.fn(), drawGuides: jest.fn() },
-        { draw: jest.fn(), drawGuides: jest.fn() },
-        { draw: jest.fn(), drawGuides: jest.fn() }
+        { draw: jest.fn() },
+        { draw: jest.fn() },
+        { draw: jest.fn() }
       ];
       shapes.forEach(shape => template.add(shape));
       template.draw();
       for (const shape of shapes) {
         expect(shape.draw).toHaveBeenCalled();
-        expect(shape.drawGuides).toHaveBeenCalled();
       }
     });
   });
