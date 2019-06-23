@@ -1,8 +1,8 @@
-import * as math from 'mathjs';
+import { cos, deepEqual, matrix, multiply, sin, transpose } from 'mathjs';
 
 export class Transformation {
   constructor(xScale, yScale, xSkew, ySkew, xMove, yMove) {
-    this.matrix = math.matrix([
+    this.matrix = matrix([
       [xScale, ySkew, xMove],
       [xSkew, yScale, yMove],
       [0, 0, 1]
@@ -33,77 +33,46 @@ export class Transformation {
     return this.matrix.get([1, 2]);
   }
 
-  equals(transformation) {
-    return math.deepEqual(this.matrix, transformation.matrix);
-  }
-
-  clone() {
-    const { xScale, yScale, xSkew, ySkew, xMove, yMove } = this;
-    return new Transformation(xScale, yScale, xSkew, ySkew, xMove, yMove);
+  /**
+   * Build the identity transformation (i.e. the transformation 'I' such that Ix
+   * = x for all x).
+   * @returns {Transformation}
+   */
+  static identity() {
+    return new Transformation(1, 1, 0, 0, 0, 0);
   }
 
   /**
-   * Destructively perform the matrix multiplication AB = C.
+   * Build a transformation from a 3x3 matrix.
+   * @param {math.Matrix} matrix
+   * @returns {Transformation}
+   */
+  static fromMatrix(matrix) {
+    const transformation = new Transformation();
+    transformation.matrix = matrix;
+    return transformation;
+  }
+
+  /**
+   * Non-destructively perform the matrix multiplication AB = C.
    * @param {Transformation} transformation
+   * @returns {Transformation}
    */
   multiply(transformation) {
-    this.matrix = math.multiply(this.matrix, transformation.matrix);
+    const matrix = multiply(this.matrix, transformation.matrix);
+    return Transformation.fromMatrix(matrix);
   }
 
   /**
    * Compute the linear combination Ax = b.
    * @param {number} x
    * @param {number} y
-   * @param {boolean} inverse - If true, A^{-1}x is calculated. This parameter
-   *   lets one reverse a linear combination.
-   * @returns {Array}
+   * @returns {number[]} [x, y]
    */
-  solve(x, y, inverse = false) {
-    const vector = math.transpose([x, y, 1]);
-    let { matrix } = this;
-    if (inverse) {
-      matrix = math.inv(matrix);
-    }
-    const prime = math.multiply(matrix, vector);
+  solve(x, y) {
+    const vector = transpose([x, y, 1]);
+    const prime = multiply(this.matrix, vector);
     return prime.toArray().slice(0, -1);
-  }
-
-  /**
-   * Destructively perform a movement transformation.
-   * @param {number} dx
-   * @param {number} dy
-   */
-  translate(dx, dy) {
-    const translation = new Transformation(1, 1, 0, 0, dx, dy);
-    this.multiply(translation);
-  }
-
-  /**
-   * Destructively perform a clockwise rotation transformation.
-   * @param {number} radians - Angle of rotation.
-   */
-  rotate(radians) {
-    const [xScale, yScale] = [math.cos(radians), math.cos(radians)];
-    const [xSkew, ySkew] = [math.sin(radians), -math.sin(radians)];
-    const rotation = new Transformation(xScale, yScale, xSkew, ySkew, 0, 0);
-    this.multiply(rotation);
-  }
-
-  /**
-   * Destructively perform a clockwise rotation at a given origin.
-   * @param {number} radians
-   * @param {number} x
-   * @param {number} y
-   */
-  rotateAt(radians, x, y) {
-    this.translate(x, y);
-    this.rotate(radians);
-    this.translate(-x, -y);
-  }
-
-  scale(x, y) {
-    const translation = new Transformation(x, y, 0, 0, 0, 0);
-    this.multiply(translation);
   }
 
   /**
@@ -119,77 +88,95 @@ export class Transformation {
     context.restore();
   }
 
-  /**
-   * Undo this transformation's linear combination (e.g. Ax = b -> x = A^{-1}b)
-   * @param {number} x
-   * @param {number} y
-   */
-  localize(x, y) {
-    return this.solve(x, y, true);
+  equals(transformation) {
+    return deepEqual(this.matrix, transformation.matrix);
   }
 
-  /**
-   * Undo this transformation's linear combination on a change in position.
-   * @param {number} deltaX
-   * @param {number} deltaY
-   * @param {number} finalX
-   * @param {number} finalY
-   */
-  localizeDelta(deltaX, deltaY, endX, endY) {
-    let [startX, startY] = [endX - deltaX, endY - deltaY];
-    // Delta x/y cannot be applied directly to the transformation.
-    [startX, startY] = this.localize(startX, startY);
-    [endX, endY] = this.localize(endX, endY);
-    return [endX - startX, endY - startY];
-  }
-
-  /**
-   * Build the identity transformation (e.g. the transformation 'I' such that
-   * Ix = x for all x).
-   * @returns {Transformation}
-   */
-  static identity() {
-    return new Transformation(1, 1, 0, 0, 0, 0);
-  }
-
-  /**
-   * Build a Transformation using shape properties.
-   * @param {Rectangle} shape
-   * @returns {Transformation}
-   */
-  static fromShape(shape) {
-    const { x, y } = shape.center;
-    const { rotation } = shape;
-    const transformation = Transformation.identity();
-    transformation.rotateAt(rotation, x, y);
-    return transformation;
-  }
-
-  /**
-   * Represent the difference between two shapes as a transformation matrix.
-   * @param {Rectangle} parent
-   * @param {Rectangle} child
-   * @returns {Transformation}
-   */
-  static betweenShapes(parent, child) {
-    [parent, child] = moveToOrigin(parent, child);
-    const transformation = Transformation.identity();
-    const xScale = child.width / parent.width;
-    const yScale = child.height / parent.height;
-    transformation.translate(child.x - parent.x, child.y - parent.y);
-    transformation.rotateAt(
-      child.rotation - parent.rotation,
-      xScale * (parent.width / 2),
-      yScale * (parent.height / 2)
-    );
-    transformation.scale(xScale, yScale);
-    return transformation;
+  clone() {
+    const { xScale, yScale, xSkew, ySkew, xMove, yMove } = this;
+    return new Transformation(xScale, yScale, xSkew, ySkew, xMove, yMove);
   }
 }
 
-function moveToOrigin(parent, child) {
-  const { x, y } = parent;
-  parent = { ...parent, x: 0, y: 0 };
-  child = { ...child, x: child.x - x, y: child.y - y };
-  return [parent, child];
+/**
+ * Combine a series of transformation matrices with multiplication.
+ * @param {Transformation[]} transformations
+ * @returns {Transformation}
+ */
+export function compose(...transformations) {
+  return transformations.reduce((composition, transformation) => {
+    return composition.multiply(transformation);
+  }, Transformation.identity());
+}
+
+/**
+ * Create a transformation matrix that moves points.
+ * @param {number} dx
+ * @param {number} dy
+ * @returns {Transformation}
+ */
+export function translate(dx, dy) {
+  return new Transformation(1, 1, 0, 0, dx, dy);
+}
+
+/**
+ * Create a transformation matrix that scales by the given delta values.
+ * @param {number} x
+ * @param {number} y
+ */
+export function scale(x, y) {
+  return new Transformation(x, y, 0, 0, 0, 0);
+}
+
+/**
+ * Create a transformation matrix that rotates clockwise.
+ * @param {number} radians - Angle of rotation.
+ * @returns {Transformation}
+ */
+export function rotate(radians) {
+  const [xScale, yScale] = [cos(radians), cos(radians)];
+  const [xSkew, ySkew] = [sin(radians), -sin(radians)];
+  return new Transformation(xScale, yScale, xSkew, ySkew, 0, 0);
+}
+
+/**
+ * Create a transformation matrix that rotates clockwise at a given origin.
+ * @param {number} radians
+ * @param {number} x
+ * @param {number} y
+ * @returns {Transformation}
+ */
+export function rotateAt(radians, x, y) {
+  return compose(
+    translate(x, y),
+    rotate(radians),
+    translate(-x, -y)
+  );
+}
+
+/**
+ * Represent the difference between two shapes as a transformation matrix.
+ * @param {Rectangle} parent
+ * @param {Rectangle} child
+ * @returns {Transformation}
+ */
+export function findTransformation(parent, child) {
+  return compose(
+    findMovement(parent, child),
+    findRotation(parent, child),
+    findScale(parent, child)
+  );
+}
+
+export function findMovement(parent, child) {
+  return translate(child.x - parent.x, child.y - parent.y);
+}
+
+export function findRotation(parent, child) {
+  const rotation = child.rotation - parent.rotation;
+  return rotateAt(rotation, child.width / 2, child.height / 2);
+}
+
+export function findScale(parent, child) {
+  return scale(child.width / parent.width, child.height / parent.height);
 }

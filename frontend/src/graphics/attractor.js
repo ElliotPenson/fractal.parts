@@ -1,6 +1,7 @@
 import { pickRandom } from 'mathjs';
 
-import { Transformation } from './Transformation';
+import { findTransformation } from './Transformation';
+import { Rectangle } from './geometry';
 
 const color = 'rgba(0, 0, 0, 0.85)';
 
@@ -35,7 +36,7 @@ export function draw(context, fractal) {
 
 function buildTransformations(fractal) {
   const { parent, children } = fractal.body;
-  return children.map(child => Transformation.betweenShapes(parent, child));
+  return children.map(child => findTransformation(parent, child));
 }
 
 function drawRecursively(
