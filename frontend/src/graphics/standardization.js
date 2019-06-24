@@ -1,6 +1,7 @@
 import produce from 'immer';
 import { min } from 'mathjs';
 
+import { getCanvasSize } from './utilities';
 import { ITERATION_RANGE } from './attractor';
 
 /**
@@ -26,7 +27,7 @@ export function moveToOrigin(fractal) {
 
 export function resizeToCanvas(fractal, canvas) {
   return produce(fractal, draft => {
-    const { width, height } = canvas;
+    const { width, height } = getCanvasSize(canvas);
     const factor = min(
       width / draft.parent.width,
       height / draft.parent.height

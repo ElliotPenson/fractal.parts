@@ -56,10 +56,25 @@ function correctPixels(canvas, context) {
 }
 
 /**
+ * Find the 'actual' pixel width/height of a canvas. This function reverses any
+ * scaling done for retina displays.
+ * @param {HTMLCanvasElement} canvas
+ * @returns {{ width: number, height: number }}
+ */
+export function getCanvasSize(canvas) {
+  const { width, height } = canvas;
+  const pixelRatio = getPixelRatio();
+  return {
+    width: width / pixelRatio,
+    height: height / pixelRatio
+  };
+}
+
+/**
  * Find the ration of device pixels to CSS pixels. Default to 1 if not found.
  * @returns {number}
  */
-function getPixelRatio(context) {
+function getPixelRatio() {
   return (
     window.devicePixelRatio ||
     window.webkitDevicePixelRatio ||
