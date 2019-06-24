@@ -21,7 +21,7 @@ export class Template {
 
   add(shape) {
     if (!shape) {
-      const color = this.colors.next().value;
+      const { value: color } = this.colors.next();
       shape = new Resizable(100, 100, 150, 150, color, 0, false);
     }
     this.shapes.push(shape);

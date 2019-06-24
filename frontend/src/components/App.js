@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Row, Col, Typography } from 'antd';
+import { Button, Row, Col } from 'antd';
+
+import Sierpinski from './Sierpinski';
 
 import './App.css';
-
-const { Title } = Typography;
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Title>fractal.parts</Title>
+        <div className="App-fractal">
+          <Sierpinski />
+        </div>
         <p>Design and view beautiful fractals.</p>
         <Row>
           <Col span={12}>
