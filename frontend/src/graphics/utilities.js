@@ -82,3 +82,15 @@ function getPixelRatio() {
     1
   );
 }
+
+export function fitToRange(number, [min, max]) {
+  if (number == null) {
+    return min;
+  } else if (number < min) {
+    return min;
+  } else if (number > max) {
+    return max;
+  } else {
+    return number;
+  }
+}

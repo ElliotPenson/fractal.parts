@@ -3,8 +3,7 @@ import {
   resizeToCanvas,
   constrainIterations,
   scale,
-  shift,
-  fitToRange
+  shift
 } from '../standardization';
 import { RenderMethod } from '../attractor';
 
@@ -131,30 +130,5 @@ describe('shift', () => {
     const newShape = shift(shape, dx, dy);
     expect(newShape.x).toEqual(shape.x + dx);
     expect(newShape.y).toEqual(shape.y + dy);
-  });
-});
-
-describe('fitToRange', () => {
-  it('gives the min value when number is null or undefined', () => {
-    expect(fitToRange(null, [1, 2])).toBe(1);
-    expect(fitToRange(undefined, [1, 2])).toBe(1);
-  });
-
-  it('gives the min value when the number is less than the range', () => {
-    expect(fitToRange(-10, [-5, 5])).toBe(-5);
-    expect(fitToRange(0, [10, 100])).toBe(10);
-    expect(fitToRange(10, [100, 1000])).toBe(100);
-  });
-
-  it('gives the max value when the number is greater than the range', () => {
-    expect(fitToRange(-10, [-1000, -100])).toBe(-100);
-    expect(fitToRange(0, [-1000, -100])).toBe(-100);
-    expect(fitToRange(10, [0, 5])).toBe(5);
-  });
-
-  it('does not change the value when within range', () => {
-    expect(fitToRange(-10, [-1000, 0])).toBe(-10);
-    expect(fitToRange(0, [-1000, 100])).toBe(0);
-    expect(fitToRange(10, [0, 100])).toBe(10);
   });
 });

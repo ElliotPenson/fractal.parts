@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Attractor from './Attractor';
+import { fitToRange } from '../graphics/utilities';
 
 const renderMethod = 'progressive';
 const sierpinskiTriangle = {
@@ -53,6 +54,12 @@ class Sierpinski extends Component {
     });
   }
 
+  findSize() {
+    const margin = 150;
+    const [min, max] = [100, 350];
+    return fitToRange(window.innerWidth - margin, [min, max]);
+  }
+
   getFractal() {
     let { iterations } = this.state;
     const { parent, children } = sierpinskiTriangle;
@@ -64,7 +71,8 @@ class Sierpinski extends Component {
 
   render() {
     const fractal = this.getFractal();
-    return <Attractor fractal={fractal} width={250} height={250} />;
+    const size = this.findSize();
+    return <Attractor fractal={fractal} width={size} height={size} />;
   }
 }
 

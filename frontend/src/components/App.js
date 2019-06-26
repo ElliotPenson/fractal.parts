@@ -13,7 +13,7 @@ function App() {
         <div className="App-fractal">
           <Sierpinski />
         </div>
-        <p>Design and view beautiful fractals.</p>
+        <p>View and design beautiful fractals.</p>
         <Row>
           <Col span={12}>
             <Link to="/browse">
@@ -22,7 +22,9 @@ function App() {
           </Col>
           <Col span={12}>
             <Link to="/create">
-              <Button size="large">Create</Button>
+              <Button type="primary" size="large">
+                Create
+              </Button>
             </Link>
           </Col>
         </Row>

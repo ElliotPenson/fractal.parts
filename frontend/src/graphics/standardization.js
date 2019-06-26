@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { min } from 'mathjs';
 
-import { getCanvasSize } from './utilities';
+import { fitToRange, getCanvasSize } from './utilities';
 import { ITERATION_RANGE } from './attractor';
 
 /**
@@ -60,16 +60,4 @@ export function shift(shape, dx, dy) {
     draft.x += dx;
     draft.y += dy;
   });
-}
-
-export function fitToRange(number, [min, max]) {
-  if (number == null) {
-    return min;
-  } else if (number < min) {
-    return min;
-  } else if (number > max) {
-    return max;
-  } else {
-    return number;
-  }
 }

@@ -2,7 +2,8 @@ import {
   filter,
   reverse,
   convertToRadians,
-  convertToDegrees
+  convertToDegrees,
+  fitToRange
 } from '../utilities';
 
 describe('filter', () => {
@@ -47,5 +48,30 @@ describe('reverse', () => {
     expect(reverse([1, 2])).toEqual([2, 1]);
     expect(reverse([1, 2, 3])).toEqual([3, 2, 1]);
     expect(reverse([1, 1, 3])).toEqual([3, 1, 1]);
+  });
+});
+
+describe('fitToRange', () => {
+  it('gives the min value when number is null or undefined', () => {
+    expect(fitToRange(null, [1, 2])).toBe(1);
+    expect(fitToRange(undefined, [1, 2])).toBe(1);
+  });
+
+  it('gives the min value when the number is less than the range', () => {
+    expect(fitToRange(-10, [-5, 5])).toBe(-5);
+    expect(fitToRange(0, [10, 100])).toBe(10);
+    expect(fitToRange(10, [100, 1000])).toBe(100);
+  });
+
+  it('gives the max value when the number is greater than the range', () => {
+    expect(fitToRange(-10, [-1000, -100])).toBe(-100);
+    expect(fitToRange(0, [-1000, -100])).toBe(-100);
+    expect(fitToRange(10, [0, 5])).toBe(5);
+  });
+
+  it('does not change the value when within range', () => {
+    expect(fitToRange(-10, [-1000, 0])).toBe(-10);
+    expect(fitToRange(0, [-1000, 100])).toBe(0);
+    expect(fitToRange(10, [0, 100])).toBe(10);
   });
 });
