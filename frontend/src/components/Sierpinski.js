@@ -16,10 +16,8 @@ const sierpinskiTriangle = {
 class Sierpinski extends Component {
   constructor() {
     super();
-    this.state = {
-      iterations: 7,
-      reducingIterations: true
-    };
+    this.gen = oscillate(1, 7);
+    this.state = { iterations: this.gen.next().value };
   }
 
   componentDidMount() {
@@ -34,24 +32,10 @@ class Sierpinski extends Component {
 
   update() {
     const { iterations } = this.state;
-    const delay = [0, 400, 150, 100, 100, 100, 100, 4000][iterations];
+    const delay = [0, 400, 150, 100, 100, 100, 100, 3000][iterations];
     this.timer = setTimeout(() => {
-      this.step();
-      this.update();
+      this.setState({ iterations: this.gen.next().value }, () => this.update());
     }, delay);
-  }
-
-  step() {
-    this.setState(({ iterations, reducingIterations }) => {
-      if (reducingIterations) {
-        iterations -= 1;
-        reducingIterations = iterations !== 1;
-      } else {
-        iterations += 1;
-        reducingIterations = iterations === 7;
-      }
-      return { iterations: iterations % 8, reducingIterations };
-    });
   }
 
   findSize() {
@@ -73,6 +57,21 @@ class Sierpinski extends Component {
     const fractal = this.getFractal();
     const size = this.findSize();
     return <Attractor fractal={fractal} width={size} height={size} />;
+  }
+}
+
+export function* oscillate(min, max) {
+  let current = max;
+  let reducing = true;
+  while (true) {
+    yield current;
+    if (reducing) {
+      current--;
+      reducing = current !== min;
+    } else {
+      current++;
+      reducing = current === max;
+    }
   }
 }
 
