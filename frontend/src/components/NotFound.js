@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Typography, Icon } from 'antd';
 
 import './NotFound.css';
@@ -11,6 +12,10 @@ class NotFound extends Component {
       <div className="NotFound">
         <Icon type="file-exclamation" />
         <Title>Not Found.</Title>
+        <p>
+          This page does not exist. <Link to="/browse">Click here</Link> to
+          browse fractals.
+        </p>
       </div>
     );
   }

@@ -46,5 +46,6 @@ function serialize(fractal) {
 }
 
 function deserialize(fractal) {
-  return { ...fractal, body: JSON.parse(fractal.body) };
+  const { body = '{}' } = fractal;
+  return { ...fractal, body: JSON.parse(body) };
 }
