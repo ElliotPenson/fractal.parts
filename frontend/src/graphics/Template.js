@@ -2,6 +2,7 @@ import { Cursor, useCursor } from './Cursor';
 import { Key, isDeletion, reverse, getContext } from './utilities';
 import { Resizable, Base } from './Resizable';
 import { colors } from './colors';
+import { enableTouch, disableTouch } from './touch';
 
 const backgroundColor = '#F8F8F8';
 
@@ -13,6 +14,7 @@ export class Template {
     this.shapes = [this.parent];
     this.clipboard = null;
     this.colors = colors();
+    this.lastEvent = null;
   }
 
   get children() {
@@ -112,12 +114,14 @@ export class Template {
     for (const [type, listener] of this.listeners) {
       window.addEventListener(type, listener);
     }
+    enableTouch(this.canvas);
   }
 
   removeInteractivity() {
     for (const [type, listener] of this.listeners) {
       window.removeEventListener(type, listener);
     }
+    disableTouch(this.canvas);
   }
 
   get listeners() {
@@ -134,13 +138,16 @@ export class Template {
 
   mouseDownListener = event => {
     const { x, y } = findPosition(event, this.canvas);
+    this.lastEvent = event;
     this.pressMouse(x, y);
     this.draw();
   };
 
   mouseMoveListener = event => {
     const { x, y } = findPosition(event, this.canvas);
-    this.moveMouse(event.movementX, event.movementY, x, y, getKeypress(event));
+    const { deltaX, deltaY } = findMovement(event, this.lastEvent);
+    this.lastEvent = event;
+    this.moveMouse(deltaX, deltaY, x, y, getKeypress(event));
     this.draw();
   };
 
@@ -180,4 +187,15 @@ function findPosition(event, canvas) {
   const x = event.clientX - left;
   const y = event.clientY - top;
   return { x, y };
+}
+
+function findMovement(event, lastEvent) {
+  if (lastEvent) {
+    return {
+      deltaX: event.clientX - lastEvent.clientX,
+      deltaY: event.clientY - lastEvent.clientY
+    };
+  } else {
+    return {};
+  }
 }

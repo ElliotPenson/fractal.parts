@@ -5,8 +5,11 @@ const eventTypes = [
 ];
 
 const listeners = {};
-let lastPosition = null;
 
+/**
+ * Set touch event listeners that emit mouse events.
+ * @param {HTMLCanvasElement} canvas
+ */
 export function enableTouch(canvas) {
   for (const [touchEventType, mouseEventType] of eventTypes) {
     const listener = makeListener(mouseEventType, canvas);
@@ -24,21 +27,13 @@ export function disableTouch(canvas) {
 
 function makeListener(mouseEventType, canvas) {
   return event => {
-    const mouseEvent = buildMouseEvent(event, mouseEventType);
+    const mouseEvent = new MouseEvent(mouseEventType, findPosition(event));
     window.dispatchEvent(mouseEvent);
     if (event.target === canvas) {
-      event.preventDefault(); // prevent scrolling
+      // Stop other events (like scroll) from propagating.
+      event.preventDefault();
     }
-    const position = findPosition(event);
-    lastPosition = { ...position };
   };
-}
-
-function buildMouseEvent(touchEvent, mouseEventType) {
-  return new MouseEvent(mouseEventType, {
-    ...findPosition(touchEvent),
-    ...findMovement(touchEvent)
-  });
 }
 
 function findPosition(touchEvent) {
@@ -46,18 +41,6 @@ function findPosition(touchEvent) {
   if (touches.length > 0) {
     const { clientX, clientY } = touches[0];
     return { clientX, clientY };
-  } else {
-    return {};
-  }
-}
-
-function findMovement(touchEvent) {
-  if (lastPosition) {
-    const currentPosition = findPosition(touchEvent);
-    return {
-      movementX: currentPosition.clientX - lastPosition.clientX,
-      movementY: currentPosition.clientY - lastPosition.clientY
-    };
   } else {
     return {};
   }
