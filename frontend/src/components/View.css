@@ -1,12 +1,27 @@
 .View {
-  padding: 100px;
+  margin: 0 auto;
+  padding: 2em;
+  font-size: 1.8em;
+  max-width: 1000px;
 }
 
-.View h1 {
-  font-size: calc(20px + 2.5vmin);
+.View-header {
+  display: flex;
+}
+
+.View-header button:last-child {
+  margin-left: auto;
+}
+
+.View-header h1 {
+  font-size: 2em;
   margin-bottom: 10px;
 }
 
-.View p {
+.View-header p {
   font-size: calc(10px + 1vmin);
+}
+
+.View .hide {
+  display: none;
 }

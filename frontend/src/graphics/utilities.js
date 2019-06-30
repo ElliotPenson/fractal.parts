@@ -83,6 +83,12 @@ function getPixelRatio() {
   );
 }
 
+export function clear(canvas, context, color = 'white') {
+  const { width, height } = canvas;
+  context.fillStyle = color;
+  context.fillRect(0, 0, width, height);
+}
+
 export function fitToRange(number, [min, max]) {
   if (number == null) {
     return min;

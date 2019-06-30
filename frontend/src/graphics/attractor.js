@@ -3,10 +3,7 @@ import { pickRandom } from 'mathjs';
 import { findTransformation } from './Transformation';
 import { standardize } from './standardization';
 
-const colors = {
-  attractor: 'rgba(0, 0, 0, 0.85)',
-  background: 'white'
-};
+const color = 'rgba(0, 0, 0, 0.85)';
 
 export const RenderMethod = {
   RANDOM: 'random',
@@ -94,19 +91,13 @@ function findTransformations({ parent, children }) {
   return children.map(child => findTransformation(parent, child));
 }
 
-export function clear(canvas, context) {
-  const { width, height } = canvas;
-  context.fillStyle = colors.background;
-  context.fillRect(0, 0, width, height);
-}
-
 function drawShape(context, shape) {
   const { x, y, width, height } = shape;
-  context.fillStyle = colors.attractor;
+  context.fillStyle = color;
   context.fillRect(x, y, width, height);
 }
 
 function plotPoint(context, x, y) {
-  context.fillStyle = colors.attractor;
+  context.fillStyle = color;
   context.fillRect(x, y, 1, 1);
 }

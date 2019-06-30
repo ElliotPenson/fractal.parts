@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import TimeAgo from 'react-timeago';
-import { Typography } from 'antd';
+import { Switch, Typography } from 'antd';
 
 import NotFound from './NotFound';
 import Attractor from './Attractor';
+import Blueprint from './Blueprint';
 import { success } from './notifications';
 import { get } from '../api';
 
@@ -14,7 +15,7 @@ const { Title } = Typography;
 class View extends Component {
   constructor() {
     super();
-    this.state = { fractal: null, status: null };
+    this.state = { fractal: null, status: null, showBlueprint: false };
   }
 
   async componentDidMount() {
@@ -25,6 +26,7 @@ class View extends Component {
         this.displaySuccess();
       }
     } catch (error) {
+      console.log(error);
       this.setState({ status: error.response.status });
     }
   }
@@ -55,18 +57,36 @@ class View extends Component {
       return null;
     } else {
       const { title, created_at, views } = fractal;
+      const width = window.innerWidth - 500;
+      const height = window.innerHeight - 500;
       return (
         <div className="View">
-          <Title>{title}</Title>
-          <p>
-            Created <TimeAgo date={created_at} live={false} />. Viewed {views}{' '}
-            time{views === 1 ? '' : 's'}.
-          </p>
-          <Attractor
-            width={window.innerWidth}
-            height={window.innerHeight}
-            fractal={fractal}
-          />
+          <div className="View-header">
+            <div className="View-title">
+              <Title>{title}</Title>
+              <p>
+                Created <TimeAgo date={created_at} live={false} />. Viewed{' '}
+                {views} time
+                {views === 1 ? '' : 's'}.
+              </p>
+            </div>
+            <Switch
+              checkedChildren="Attractor"
+              unCheckedChildren="Template"
+              checked={!this.state.showBlueprint}
+              onChange={() =>
+                this.setState(({ showBlueprint }) => ({
+                  showBlueprint: !showBlueprint
+                }))
+              }
+            />
+          </div>
+          <div className={this.state.showBlueprint ? 'hide' : ''}>
+            <Attractor width={width} height={height} fractal={fractal} />
+          </div>
+          <div className={this.state.showBlueprint ? '' : 'hide'}>
+            <Blueprint width={width} height={height} fractal={fractal} />
+          </div>
         </div>
       );
     }
