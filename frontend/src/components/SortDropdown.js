@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, Icon, Menu } from 'antd';
+import { Button, Dropdown, Icon, Menu } from 'antd';
 
 export const Sort = Object.freeze({
   MOST_VIEWS: '-views',
@@ -9,10 +9,10 @@ export const Sort = Object.freeze({
 });
 
 const text = {
-  [Sort.MOST_VIEWS]: 'most viewed',
-  [Sort.LEAST_VIEWS]: 'least viewed',
-  [Sort.NEWEST]: 'newest',
-  [Sort.OLDEST]: 'oldest'
+  [Sort.MOST_VIEWS]: 'Most Viewed',
+  [Sort.LEAST_VIEWS]: 'Least Viewed',
+  [Sort.NEWEST]: 'Newest',
+  [Sort.OLDEST]: 'Oldest'
 };
 
 function SortDropdown({ value, onChange }) {
@@ -24,11 +24,11 @@ function SortDropdown({ value, onChange }) {
     </Menu>
   );
   return (
-    <Dropdown overlay={menu} trigger={['click']}>
-      <span>
+    <Dropdown overlay={menu} trigger={['click', 'hover']}>
+      <Button size="large">
         {text[value]}
         <Icon type="down" />
-      </span>
+      </Button>
     </Dropdown>
   );
 }

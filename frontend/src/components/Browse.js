@@ -45,19 +45,28 @@ class Browse extends Component {
     const loader = <div key="loader">Loading ...</div>;
     return (
       <div className="Browse">
-        <span className="Browse-title">Browse</span> by{' '}
-        <SortDropdown value={sort} onChange={this.handleSort} />
-        <InfiniteScroll loadMore={this.fetch} hasMore={hasMore} loader={loader}>
-          <Row>
-            {fractals.map(fractal => {
-              return (
-                <Col key={fractal.key} sm={24} md={12} lg={8}>
-                  <Card fractal={fractal} />
-                </Col>
-              );
-            })}
-          </Row>
-        </InfiniteScroll>
+        <Navbar />
+        <div className="Browse-body">
+          <div className="Browse-header">
+            <h1>Browse</h1>
+            <SortDropdown value={sort} onChange={this.handleSort} />
+          </div>
+          <InfiniteScroll
+            loadMore={this.fetch}
+            hasMore={hasMore}
+            loader={loader}
+          >
+            <Row>
+              {fractals.map(fractal => {
+                return (
+                  <Col key={fractal.key} sm={24} md={12} lg={8}>
+                    <Card fractal={fractal} />
+                  </Col>
+                );
+              })}
+            </Row>
+          </InfiniteScroll>
+        </div>
       </div>
     );
   }
