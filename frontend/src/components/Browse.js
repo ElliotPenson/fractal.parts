@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Col, Row } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 
+import Navbar from './Navbar';
 import Card from './Card';
 import SortDropdown, { Sort } from './SortDropdown';
 import { list } from '../api';

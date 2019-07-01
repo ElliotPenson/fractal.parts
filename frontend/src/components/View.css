@@ -1,7 +1,6 @@
-.View {
+.View-body {
   margin: 0 auto;
   padding: 2em;
-  font-size: 1.8em;
   max-width: 1000px;
 }
 

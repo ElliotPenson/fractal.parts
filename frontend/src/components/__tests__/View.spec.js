@@ -14,12 +14,4 @@ describe('<View/>', () => {
       document.createElement('div')
     );
   });
-
-  it("shows the fractal's title", () => {
-    const wrapper = mount(<View />);
-    const title = 'Example title';
-    wrapper.instance().setState({ fractal: { title } });
-    wrapper.update();
-    expect(wrapper).toIncludeText(title);
-  });
 });

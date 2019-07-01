@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, message, Tabs } from 'antd';
 import produce from 'immer';
 
+import Navbar from './Navbar';
 import Canvas from './Canvas';
 import EditableTitle from './EditableTitle';
 import SettingsDrawer from './SettingsDrawer';

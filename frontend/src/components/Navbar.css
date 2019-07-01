@@ -1,0 +1,21 @@
+nav {
+  display: flex;
+  border-bottom: 1px solid rgb(228, 228, 228);
+  padding: 0.75em 1.5em;
+  font-size: 1.2em;
+}
+
+nav .home {
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 500;
+  margin-right: 1em;
+}
+
+nav > a {
+  color: rgba(0, 0, 0, 0.5);
+  margin-right: 0.5em;
+}
+
+nav > a:hover {
+  color: rgba(0, 0, 0, 0.9);
+}

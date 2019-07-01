@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TimeAgo from 'react-timeago';
 import { Switch, Typography } from 'antd';
 
+import Navbar from './Navbar';
 import NotFound from './NotFound';
 import Attractor from './Attractor';
 import Blueprint from './Blueprint';
@@ -26,7 +27,6 @@ class View extends Component {
         this.displaySuccess();
       }
     } catch (error) {
-      console.log(error);
       this.setState({ status: error.response.status });
     }
   }
@@ -61,31 +61,34 @@ class View extends Component {
       const height = window.innerHeight - 500;
       return (
         <div className="View">
-          <div className="View-header">
-            <div className="View-title">
-              <Title>{title}</Title>
-              <p>
-                Created <TimeAgo date={created_at} live={false} />. Viewed{' '}
-                {views} time
-                {views === 1 ? '' : 's'}.
-              </p>
+          <Navbar />
+          <div className="View-body">
+            <div className="View-header">
+              <div className="View-title">
+                <Title>{title}</Title>
+                <p>
+                  Created <TimeAgo date={created_at} live={false} />. Viewed{' '}
+                  {views} time
+                  {views === 1 ? '' : 's'}.
+                </p>
+              </div>
+              <Switch
+                checkedChildren="Attractor"
+                unCheckedChildren="Template"
+                checked={!this.state.showBlueprint}
+                onChange={() =>
+                  this.setState(({ showBlueprint }) => ({
+                    showBlueprint: !showBlueprint
+                  }))
+                }
+              />
             </div>
-            <Switch
-              checkedChildren="Attractor"
-              unCheckedChildren="Template"
-              checked={!this.state.showBlueprint}
-              onChange={() =>
-                this.setState(({ showBlueprint }) => ({
-                  showBlueprint: !showBlueprint
-                }))
-              }
-            />
-          </div>
-          <div className={this.state.showBlueprint ? 'hide' : ''}>
-            <Attractor width={width} height={height} fractal={fractal} />
-          </div>
-          <div className={this.state.showBlueprint ? '' : 'hide'}>
-            <Blueprint width={width} height={height} fractal={fractal} />
+            <div className={this.state.showBlueprint ? 'hide' : ''}>
+              <Attractor width={width} height={height} fractal={fractal} />
+            </div>
+            <div className={this.state.showBlueprint ? '' : 'hide'}>
+              <Blueprint width={width} height={height} fractal={fractal} />
+            </div>
           </div>
         </div>
       );
