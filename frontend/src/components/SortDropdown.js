@@ -24,8 +24,8 @@ function SortDropdown({ value, onChange }) {
     </Menu>
   );
   return (
-    <Dropdown overlay={menu} trigger={['click', 'hover']}>
-      <Button size="large">
+    <Dropdown overlay={menu} trigger={['click']}>
+      <Button>
         {text[value]}
         <Icon type="down" />
       </Button>
