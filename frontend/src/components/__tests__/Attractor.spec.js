@@ -2,11 +2,12 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Attractor from '../Attractor';
+import FractalSkeleton from '../FractalSkeleton';
 
 describe('<Attractor/>', () => {
-  it('is empty when no fractal is given', () => {
+  it('displays a skeleton when no fractal is given', () => {
     const wrapper = shallow(<Attractor />);
-    expect(wrapper).toBeEmptyRender();
+    expect(wrapper).toContainMatchingElement(FractalSkeleton);
   });
 
   it('shows a canvas when given a fractal', () => {

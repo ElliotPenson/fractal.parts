@@ -1,9 +1,17 @@
 import React from 'react';
 import { Skeleton } from 'antd';
 
-function FractalSkeleton({ size }) {
+function FractalSkeleton({ className, size }) {
   const avatar = { shape: 'square', size };
-  return <Skeleton active avatar={avatar} paragraph={false} title={false} />;
+  return (
+    <Skeleton
+      active
+      className={className}
+      avatar={avatar}
+      paragraph={false}
+      title={false}
+    />
+  );
 }
 
 export default FractalSkeleton;

@@ -1,3 +1,7 @@
 .Card {
   padding: 30px;
 }
+
+.Card-attractor {
+  margin-bottom: 0.5em;
+}

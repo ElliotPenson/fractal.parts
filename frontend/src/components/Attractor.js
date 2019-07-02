@@ -35,11 +35,18 @@ class Attractor extends Component {
   };
 
   render() {
-    const { fractal, width, height } = this.props;
+    const { className, fractal, width, height } = this.props;
     if (!fractal || !fractal.body || !fractal.body.parent) {
-      return <FractalSkeleton size={width} />;
+      return <FractalSkeleton className={className} size={width} />;
     }
-    return <Canvas width={width} height={height} onRef={this.handleCanvas} />;
+    return (
+      <Canvas
+        className={className}
+        width={width}
+        height={height}
+        onRef={this.handleCanvas}
+      />
+    );
   }
 }
 

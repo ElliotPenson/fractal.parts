@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Col, Row } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import Navbar from './Navbar';
-import Card from './Card';
+import FractalRows from './FractalRows';
 import SortDropdown, { Sort } from './SortDropdown';
 import { list } from '../api';
 
@@ -40,9 +39,13 @@ class Browse extends Component {
     this.setState({ sort, page: 0, fractals: [], hasMore: true });
   };
 
+  makeLoader() {
+    const fractals = [...Array(3)].map((_, index) => `fractal${index}`);
+    return <FractalRows key={this.state.page} fractals={fractals} />;
+  }
+
   render() {
     const { fractals, sort, hasMore } = this.state;
-    const loader = <div key="loader">Loading ...</div>;
     return (
       <div className="Browse">
         <Navbar />
@@ -54,17 +57,10 @@ class Browse extends Component {
           <InfiniteScroll
             loadMore={this.fetch}
             hasMore={hasMore}
-            loader={loader}
+            loader={this.makeLoader()}
+            threshold={500}
           >
-            <Row>
-              {fractals.map(fractal => {
-                return (
-                  <Col key={fractal.key} sm={24} md={12} lg={8}>
-                    <Card fractal={fractal} />
-                  </Col>
-                );
-              })}
-            </Row>
+            <FractalRows fractals={fractals} />
           </InfiniteScroll>
         </div>
       </div>
