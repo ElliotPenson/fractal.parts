@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TimeAgo from 'react-timeago';
-import { Switch, Typography } from 'antd';
+import { Skeleton, Switch } from 'antd';
 
 import Navbar from './Navbar';
 import NotFound from './NotFound';
@@ -10,8 +10,6 @@ import { success } from './notifications';
 import { get } from '../api';
 
 import './View.css';
-
-const { Title } = Typography;
 
 class View extends Component {
   constructor() {
@@ -53,10 +51,8 @@ class View extends Component {
     const { fractal, status } = this.state;
     if (status === 404) {
       return <NotFound />;
-    } else if (!fractal) {
-      return null;
     } else {
-      const { title, created_at, views } = fractal;
+      const { title, created_at, views } = fractal || {};
       const width = window.innerWidth - 500;
       const height = window.innerHeight - 500;
       return (
@@ -64,24 +60,32 @@ class View extends Component {
           <Navbar />
           <div className="View-body">
             <div className="View-header">
-              <div className="View-title">
-                <Title>{title}</Title>
-                <p>
-                  Created <TimeAgo date={created_at} live={false} />. Viewed{' '}
-                  {views} time
-                  {views === 1 ? '' : 's'}.
-                </p>
-              </div>
-              <Switch
-                checkedChildren="Attractor"
-                unCheckedChildren="Template"
-                checked={!this.state.showBlueprint}
-                onChange={() =>
-                  this.setState(({ showBlueprint }) => ({
-                    showBlueprint: !showBlueprint
-                  }))
-                }
-              />
+              <Skeleton
+                active
+                loading={fractal == null}
+                paragraph={{ rows: 1 }}
+              >
+                <div className="View-title">
+                  <h1>{title}</h1>
+                  <p>
+                    Created <TimeAgo date={created_at} live={false} />. Viewed{' '}
+                    {views} time
+                    {views === 1 ? '' : 's'}.
+                  </p>
+                </div>
+
+                <Switch
+                  loading={fractal == null}
+                  checkedChildren="Attractor"
+                  unCheckedChildren="Template"
+                  checked={!this.state.showBlueprint}
+                  onChange={() =>
+                    this.setState(({ showBlueprint }) => ({
+                      showBlueprint: !showBlueprint
+                    }))
+                  }
+                />
+              </Skeleton>
             </div>
             <div className={this.state.showBlueprint ? 'hide' : ''}>
               <Attractor width={width} height={height} fractal={fractal} />
