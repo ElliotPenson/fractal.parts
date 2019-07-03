@@ -185,74 +185,70 @@ class Create extends Component {
     const { errors, isPublishing, settingsVisible, fractal } = this.state;
     return (
       <div className="Create">
-        <EditableTitle
-          value={fractal.title}
-          onChange={this.handleTitle}
-          hasError={!errors.title.isValid}
-          errorMessage={errors.title.message}
-        />
-        <Tabs
-          size="large"
-          onChange={this.handleTab}
-          tabBarExtraContent={
-            <Group>
-              <RedTooltip
-                visible={!errors.template.isValid}
-                message={errors.template.message}
-              >
-                <Button
-                  className="Create-add"
-                  size="large"
-                  onClick={this.handleAdd}
+        <Navbar />
+        <div className="Create-body">
+          <EditableTitle
+            value={fractal.title}
+            onChange={this.handleTitle}
+            hasError={!errors.title.isValid}
+            errorMessage={errors.title.message}
+          />
+          <Tabs
+            onChange={this.handleTab}
+            tabBarExtraContent={
+              <Group>
+                <RedTooltip
+                  visible={!errors.template.isValid}
+                  message={errors.template.message}
                 >
-                  Add
+                  <Button className="Create-add" onClick={this.handleAdd}>
+                    Add
+                  </Button>
+                </RedTooltip>
+                <Button
+                  onClick={() => this.setState({ settingsVisible: true })}
+                >
+                  Settings
                 </Button>
-              </RedTooltip>
-              <Button
-                size="large"
-                onClick={() => this.setState({ settingsVisible: true })}
-              >
-                Settings
-              </Button>
-              <Button
-                className="Create-publish"
-                size="large"
-                type="primary"
-                loading={isPublishing}
-                onClick={this.publish}
-              >
-                Publish
-              </Button>
-            </Group>
-          }
-        >
-          <TabPane tab="Template" key="template" forceRender>
-            <Canvas
-              className="Create-template"
-              width={window.innerWidth}
-              height="1000"
-              onRef={this.handleTemplate}
-            />
-          </TabPane>
-          <TabPane
-            tab={<span className="Create-preview">Preview</span>}
-            key="preview"
-            forceRender
+                <Button
+                  className="Create-publish"
+                  type="primary"
+                  loading={isPublishing}
+                  onClick={this.publish}
+                >
+                  Publish
+                </Button>
+              </Group>
+            }
           >
-            <Attractor
-              width={window.innerWidth}
-              height="1000"
-              fractal={fractal}
-            />
-          </TabPane>
-        </Tabs>
-        <SettingsDrawer
-          settings={fractal.body.settings}
-          visible={settingsVisible}
-          onClose={() => this.setState({ settingsVisible: false })}
-          onChange={this.handleSettings}
-        />
-        <Tour run={this.state.tourVisible} />
+            <TabPane tab="Template" key="template" forceRender>
+              <Canvas
+                className="Create-template"
+                width={window.innerWidth}
+                height="1000"
+                onRef={this.handleTemplate}
+              />
+            </TabPane>
+            <TabPane
+              tab={<span className="Create-preview">Preview</span>}
+              key="preview"
+              forceRender
+            >
+              <Attractor
+                width={window.innerWidth}
+                height="1000"
+                fractal={fractal}
+              />
+            </TabPane>
+          </Tabs>
+          <SettingsDrawer
+            settings={fractal.body.settings}
+            visible={settingsVisible}
+            onClose={() => this.setState({ settingsVisible: false })}
+            onChange={this.handleSettings}
+          />
+          <Tour run={this.state.tourVisible} />
+        </div>
       </div>
     );
   }
