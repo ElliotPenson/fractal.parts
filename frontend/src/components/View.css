@@ -10,6 +10,13 @@
 
 .View-header button:last-child {
   margin-left: auto;
+  margin-top: 20px;
+}
+
+@media (max-width: 750px) {
+  .View-header button:last-child {
+    margin-top: 10px;
+  }
 }
 
 .View .hide {

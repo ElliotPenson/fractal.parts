@@ -10,5 +10,11 @@
 
 .Browse-header button:last-child {
   margin-left: auto;
-  margin-top: 1em;
+  margin-top: 15px;
+}
+
+@media (max-width: 750px) {
+  .Browse-header button:last-child {
+    margin-top: 5px;
+  }
 }
