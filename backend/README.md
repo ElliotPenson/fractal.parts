@@ -2,6 +2,10 @@
 
 ![Backend Diagram](./backend-diagram.png)
 
+See the
+[CloudFormation template](https://github.com/ElliotPenson/fractal.parts/blob/master/backend/template.yaml)
+for more information.
+
 ## API
 
 | Method | Path            | Request Parameters        | Request Body | Response Body      |
