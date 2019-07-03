@@ -14,15 +14,6 @@
   justify-content: center;
 }
 
-.App h1 {
-  font-size: calc(40px + 3vmin);
-  margin-bottom: 0;
-}
-
-.App p {
-  font-size: calc(10px + 1vmin);
-}
-
 .App button {
   margin: 0 0.3em;
 }

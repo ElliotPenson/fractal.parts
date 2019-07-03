@@ -1,6 +1,6 @@
 .EditableTitle {
   color: rgba(0, 0, 0, 0.85);
-  font-size: calc(20px + 2.5vmin);
+  font-size: 3em;
   font-weight: 500;
   margin-bottom: 0.3em;
 }
@@ -13,4 +13,10 @@
   line-height: 0;
   font-weight: 500;
   width: 100%;
+}
+
+@media (max-width: 750px) {
+  .EditableTitle {
+    font-size: 2em;
+  }
 }

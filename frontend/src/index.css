@@ -1,6 +1,40 @@
 body {
   margin: 0;
   padding: 0;
-  /* -webkit-font-smoothing: antialiased; */
-  /* -moz-osx-font-smoothing: grayscale; */
+}
+
+p {
+  font-size: calc(10px + 1vmin);
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 0em;
+}
+
+.ant-skeleton-title {
+  height: 3em !important;
+}
+
+@media (max-width: 991px) {
+  h1 {
+    font-size: 3em;
+  }
+  .ant-skeleton-title {
+    height: 3em !important;
+  }
+}
+
+@media (max-width: 750px) {
+  h1 {
+    font-size: 2em;
+  }
+
+  .ant-skeleton-title {
+    height: 2em !important;
+  }
+
+  .ant-skeleton-paragraph {
+    /* TODO */
+  }
 }

@@ -12,15 +12,6 @@
   margin-left: auto;
 }
 
-.View-header h1 {
-  font-size: 2em;
-  margin-bottom: 10px;
-}
-
-.View-header p {
-  font-size: calc(10px + 1vmin);
-}
-
 .View .hide {
   display: none;
 }
