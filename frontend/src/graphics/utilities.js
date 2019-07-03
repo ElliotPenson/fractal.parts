@@ -83,6 +83,18 @@ function getPixelRatio() {
   );
 }
 
+/**
+ * Find the center x/y of a canvas.
+ * @returns {[number, number]}
+ */
+export function getCanvasCenter(canvas) {
+  const pixelRatio = getPixelRatio();
+  return [
+    0.5 * (canvas.width / pixelRatio),
+    0.5 * (canvas.height / pixelRatio)
+  ];
+}
+
 export function clear(canvas, context, color = 'white') {
   const { width, height } = canvas;
   context.fillStyle = color;

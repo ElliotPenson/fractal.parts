@@ -1,16 +1,26 @@
+import { min } from 'mathjs';
+
 import { Cursor, useCursor } from './Cursor';
-import { Key, isDeletion, reverse, getContext } from './utilities';
+import {
+  Key,
+  isDeletion,
+  reverse,
+  getContext,
+  getCanvasSize,
+  getCanvasCenter
+} from './utilities';
 import { Resizable, Base } from './Resizable';
 import { colors } from './colors';
 import { enableTouch, disableTouch } from './touch';
 
 const backgroundColor = '#F8F8F8';
+const maxBaseSize = '500';
 
 export class Template {
   constructor(canvas) {
     this.canvas = canvas;
     this.context = getContext(canvas);
-    this.parent = new Base(500, 500, 500, 500);
+    this.parent = this.createBase();
     this.shapes = [this.parent];
     this.clipboard = null;
     this.colors = colors();
@@ -108,6 +118,18 @@ export class Template {
     return reverse(this.shapes).reduce((toReturn, shape) => {
       return toReturn || shape.findAt(x, y);
     }, null);
+  }
+
+  createBase() {
+    const [x, y] = getCanvasCenter(this.canvas);
+    const { width, height } = getCanvasSize(this.canvas);
+    const padding = 25;
+    return new Base(
+      x,
+      y,
+      min(width - padding, maxBaseSize),
+      min(height - padding, maxBaseSize)
+    );
   }
 
   makeInteractive() {
