@@ -3,10 +3,6 @@ body {
   padding: 0;
 }
 
-p {
-  font-size: calc(10px + 1vmin);
-}
-
 h1 {
   font-size: 3em;
   margin-bottom: 0em;
@@ -16,13 +12,8 @@ h1 {
   height: 3em !important;
 }
 
-@media (max-width: 991px) {
-  h1 {
-    font-size: 3em;
-  }
-  .ant-skeleton-title {
-    height: 3em !important;
-  }
+p {
+  font-size: 1.7em;
 }
 
 @media (max-width: 750px) {
@@ -34,7 +25,7 @@ h1 {
     height: 2em !important;
   }
 
-  .ant-skeleton-paragraph {
-    /* TODO */
+  p {
+    font-size: 1.3em;
   }
 }
