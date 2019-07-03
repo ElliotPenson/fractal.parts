@@ -1,15 +1,5 @@
 Graphics UML Diagram
 
-             +------------+
-             | Controller |
-             +------------+
-             | template   |
-             | add(Shape) |
-             +------------+
-                    ▲
-                    ▼
-                    |
-                    |
             +--------------+
             |   Template   |
             +--------------+
@@ -25,7 +15,7 @@ Graphics UML Diagram
                     |
                     |
             +---------------+                  +--------------+
-            |     Shape     |        +---------|    Handle    |
+            |   Resizable   |        +---------|    Handle    |
             +---------------+        |         +--------------+
             | x, y          |        |         | draw()       |
             | width, height |        |         | pressMouse() |
@@ -37,14 +27,7 @@ Graphics UML Diagram
             | liftMouse()   |        +---------| Guide  |
             | moveMouse()   |                  +--------+
             +---------------+                  | draw() |
-                    |                          +--------+
-                    |
-      +-------------▲------------+
-      |             |            |
-+-----------+  +---------+  +----------+
-| Rectangle |  | Ellipse |  | Triangle |
-+-----------+  +---------+  +----------+
-
+                                               +--------+
 KEY:
 * Association: ---
 * Aggregation: ◁ ▷-
