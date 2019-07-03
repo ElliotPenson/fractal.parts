@@ -130,5 +130,89 @@
       }
     },
     "views": 100
+  },
+  {
+    "title": "Carpet",
+    "body": {
+      "parent": {
+        "color": "white",
+        "height": 6,
+        "rotation": 0,
+        "width": 6,
+        "x": 0,
+        "y": 0
+      },
+      "children": [
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "width": 2,
+          "height": 2,
+          "rotation": 0,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "width": 2,
+          "height": 2,
+          "rotation": 0,
+          "x": 2,
+          "y": 0
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "width": 2,
+          "height": 2,
+          "rotation": 0,
+          "x": 4,
+          "y": 0
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "width": 2,
+          "height": 2,
+          "rotation": 0,
+          "x": 0,
+          "y": 2
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "width": 2,
+          "height": 2,
+          "rotation": 0,
+          "x": 4,
+          "y": 2
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "width": 2,
+          "height": 2,
+          "rotation": 0,
+          "x": 0,
+          "y": 4
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "width": 2,
+          "height": 2,
+          "rotation": 0,
+          "x": 2,
+          "y": 4
+        },
+        {
+          "color": "rgba(24, 144, 255, 0.7)",
+          "width": 2,
+          "height": 2,
+          "rotation": 0,
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "settings": {
+        "iterations": 4,
+        "renderMethod": "progressive"
+      }
+    },
+    "views": 50
   }
 ]
