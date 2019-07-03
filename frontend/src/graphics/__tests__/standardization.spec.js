@@ -1,7 +1,7 @@
 import {
   moveToOrigin,
   resizeToCanvas,
-  constrainIterations,
+  setIterations,
   scale,
   shift
 } from '../standardization';
@@ -90,12 +90,12 @@ describe('resizeToCanvas', () => {
   });
 });
 
-describe('constrainIterations', () => {
+describe('setIterations', () => {
   it('constrains all render methods', () => {
     for (const method in RenderMethod) {
       const renderMethod = RenderMethod[method];
       const fractal = { settings: { iterations: 1000000000, renderMethod } };
-      const newFractal = constrainIterations(fractal);
+      const newFractal = setIterations(fractal);
       expect(newFractal.settings.iterations).toBeLessThan(
         fractal.settings.iterations
       );

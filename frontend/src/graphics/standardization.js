@@ -2,7 +2,8 @@ import produce from 'immer';
 import { min } from 'mathjs';
 
 import { fitToRange, getCanvasSize } from './utilities';
-import { ITERATION_RANGE } from './attractor';
+import { RenderMethod, ITERATION_RANGE } from './attractor';
+import { findIterations, numberOfPoints } from './iterations';
 
 /**
  * Users may create fractal templates of any form. This function moves,
@@ -13,7 +14,7 @@ import { ITERATION_RANGE } from './attractor';
 export function standardize(fractal, canvas) {
   fractal = moveToOrigin(fractal);
   fractal = resizeToCanvas(fractal, canvas);
-  fractal = constrainIterations(fractal);
+  fractal = setIterations(fractal);
   return fractal;
 }
 
@@ -37,13 +38,26 @@ export function resizeToCanvas(fractal, canvas) {
   });
 }
 
-export function constrainIterations(fractal) {
+export function setIterations(fractal) {
   return produce(fractal, draft => {
-    draft.settings.iterations = fitToRange(
-      draft.settings.iterations,
-      ITERATION_RANGE[draft.settings.renderMethod]
-    );
+    if (draft.settings.iterations == null) {
+      draft.settings.iterations = defaultIterations(fractal);
+    } else {
+      draft.settings.iterations = fitToRange(
+        draft.settings.iterations,
+        ITERATION_RANGE[draft.settings.renderMethod]
+      );
+    }
   });
+}
+
+function defaultIterations(fractal) {
+  const { settings, children } = fractal;
+  if (settings.renderMethod === RenderMethod.RANDOM) {
+    return numberOfPoints;
+  } else {
+    return findIterations(children.length);
+  }
 }
 
 export function scale(shape, factor) {

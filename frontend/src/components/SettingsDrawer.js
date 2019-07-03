@@ -2,12 +2,11 @@ import React from 'react';
 import { Col, Drawer, Row } from 'antd';
 
 import RenderMethodSelect from './RenderMethodSelect';
-import IterationsInput from './IterationsInput';
 
 import './SettingsDrawer.css';
 
 function SettingsDrawer({ settings, onClose, onChange, visible }) {
-  const { renderMethod, iterations } = settings;
+  const { renderMethod } = settings;
   return (
     <Drawer
       title="Settings"
@@ -24,18 +23,6 @@ function SettingsDrawer({ settings, onClose, onChange, visible }) {
           <RenderMethodSelect
             value={renderMethod}
             onChange={renderMethod => onChange({ renderMethod })}
-          />
-        </Col>
-      </Row>
-      <Row className="SettingsDrawer-row">
-        <Col className="SettingsDrawer-label" span={12}>
-          Iterations
-        </Col>
-        <Col span={12}>
-          <IterationsInput
-            value={iterations}
-            renderMethod={renderMethod}
-            onChange={iterations => onChange({ iterations })}
           />
         </Col>
       </Row>

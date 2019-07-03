@@ -36,7 +36,7 @@ class Create extends Component {
       fractal: {
         title: defaultTitle,
         body: {
-          settings: { renderMethod: RenderMethod.PROGRESSIVE, iterations: 6 }
+          settings: { renderMethod: RenderMethod.PROGRESSIVE }
         }
       }
     };

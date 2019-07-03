@@ -12,7 +12,7 @@ export const RenderMethod = {
 
 export const ITERATION_RANGE = {
   [RenderMethod.RANDOM]: [1000, 50000],
-  [RenderMethod.PROGRESSIVE]: [1, 10]
+  [RenderMethod.PROGRESSIVE]: [1, 7]
 };
 
 /**
@@ -65,7 +65,7 @@ function drawRandomly(context, shape, transformations, iterations) {
  */
 function getRenderer(fractal) {
   return (context, transformations) => {
-    const { settings, parent } = fractal;
+    let { settings, parent } = fractal;
     if (settings.renderMethod === RenderMethod.RANDOM) {
       drawRandomly(context, parent, transformations, settings.iterations);
     } else {
