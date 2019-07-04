@@ -14,7 +14,10 @@ import { colors } from './colors';
 import { enableTouch, disableTouch } from './touch';
 
 const backgroundColor = '#F8F8F8';
-const maxBaseSize = '500';
+const base = {
+  maxSize: '500',
+  padding: 70
+};
 
 export class Template {
   constructor(canvas) {
@@ -34,7 +37,8 @@ export class Template {
   add(shape) {
     if (!shape) {
       const { value: color } = this.colors.next();
-      shape = new Resizable(100, 100, 150, 150, color, 0, false);
+      const { x, y, width, height } = this.parent;
+      shape = new Resizable(x, y, 0.5 * width, 0.5 * height, color, 0, false);
     }
     this.shapes.push(shape);
   }
@@ -123,13 +127,8 @@ export class Template {
   createBase() {
     const [x, y] = getCanvasCenter(this.canvas);
     const { width, height } = getCanvasSize(this.canvas);
-    const padding = 25;
-    return new Base(
-      x,
-      y,
-      min(width - padding, maxBaseSize),
-      min(height - padding, maxBaseSize)
-    );
+    const size = min(min(width, height) - base.padding, base.maxSize);
+    return new Base(x, y, size, size);
   }
 
   makeInteractive() {
