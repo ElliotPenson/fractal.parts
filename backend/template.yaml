@@ -45,7 +45,7 @@ Globals:
         MetricsEnabled: true
         LoggingLevel: "INFO"
     Cors:
-      AllowHeaders: "'*'"
+      AllowHeaders: "'Content-Type'"
       AllowOrigin: "'*'"
 
 Resources:
