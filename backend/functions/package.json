@@ -21,7 +21,7 @@
   "homepage": "https://github.com/ElliotPenson/fractal.parts#readme",
   "dependencies": {
     "ajv": "^6.10.0",
-    "knex": "^0.16.5",
+    "knex": "^0.20.1",
     "mysql2": "^1.6.5"
   }
 }
